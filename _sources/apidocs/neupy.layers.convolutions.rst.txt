@@ -1,5 +1,5 @@
-neupy\.layers\.convolutions module
-==================================
+neupy.layers.convolutions module
+================================
 
 .. automodule:: neupy.layers.convolutions
     :members:

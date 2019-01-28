@@ -1,0 +1,349 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>neupy.init.Uniform &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../_static/plugins.js"></script>
+        <script src="../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <style media="screen" type="text/css">
+        img { max-width: 800px !important; }
+        img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
+        table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
+        div.highlight { margin-bottom: 20px !important; }
+
+        .limited-width { max-width: 800px; margin: auto; }
+        .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
+
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .search-input-container {
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .search-input-container input#search {
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          outline: none;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .search-input-container .icon {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40% !important;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
+            padding: 0;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        #results-list li {
+            background-color: #fff !important;
+            margin-bottom: 10px;
+            display: block !important;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+        #results-list span.tag {
+            display: inline-block;
+            padding: 3px 4px;
+            margin-right: 8px;
+            position: relative;
+            top: -2px;
+
+            background: #888;
+            color: #fff;
+
+            font-size: 0.75em;
+            font-weight: 600;
+            line-height: 1;
+            text-transform: uppercase;
+
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+        }
+    </style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../pages/model_zoo.html">Model Zoo</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
+    <div class="section" id="neupy-init-uniform">
+<h1>neupy.init.Uniform</h1>
+<dl class="class">
+<dt id="neupy.init.Uniform">
+<em class="property">class </em><span class="descclassname">neupy.init.</span><span class="descname">Uniform</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Initialize parameter sampling from the uniformal
+distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>minval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Minimum possible value.</p>
+</dd>
+<dt><strong>maxval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Maximum possible value.</p>
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.init.Uniform.sample">
+<span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../../docs/tutorials.html">tutorials</a> and <a href="../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature feel free to
+        <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
+        on Github
+    </p>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "neupy";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

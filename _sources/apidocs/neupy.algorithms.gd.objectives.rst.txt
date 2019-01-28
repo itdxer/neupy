@@ -1,0 +1,7 @@
+neupy.algorithms.gd.objectives module
+=====================================
+
+.. automodule:: neupy.algorithms.gd.objectives
+    :members:
+    :undoc-members:
+    :show-inheritance:

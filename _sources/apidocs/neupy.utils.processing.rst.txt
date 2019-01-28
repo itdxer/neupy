@@ -1,0 +1,7 @@
+neupy.utils.processing module
+=============================
+
+.. automodule:: neupy.utils.processing
+    :members:
+    :undoc-members:
+    :show-inheritance:

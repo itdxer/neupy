@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="next" title="Secondary" href="secondary.html" /><link rel="prev" title="Transfer Learning" href="transfer-learning.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Visualizations" href="secondary/visualizations.html" /><link rel="prev" title="Transfer Learning" href="transfer-learning.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -230,8 +237,8 @@
 <h1>Storage for Neural Networks</h1>
 <div class="section" id="save-and-load-layer-parameters">
 <h2>Save and load layer parameters</h2>
-<p>NeuPy allows to store network&#8217;s parameters in a hdf5 file.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
+<p>NeuPy allows to store network’s parameters in a hdf5 file.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">storage</span>
 
 <span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
     <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
@@ -243,7 +250,7 @@
 </pre></div>
 </div>
 <p>To be able to load parameters you need to have predefined network structure. Using layer names NeuPy can restore parameters from the hdf5 file.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">storage</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;/path/to/file.hdf5&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">storage</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;/path/to/file.hdf5&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>NeuPy supports other storage formats</p>
@@ -283,11 +290,11 @@
 <h2>Save and load algorithms</h2>
 <p>After successful learning you can save network and later re-use it. You can do it with external library - <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>. As a <span class="docutils literal"><span class="pre">pickle</span></span> library <span class="docutils literal"><span class="pre">dill</span></span> provides similar interface to serialize and de-serialize python objects. The main advantage of this is a functionality that can store a network class and attributes without additional modification to the classes.</p>
 <p>First of all you need to install <span class="docutils literal"><span class="pre">dill</span></span> library</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install dill&gt;<span class="o">=</span>0.2.3
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install dill&gt;<span class="o">=</span>0.2.3
 </pre></div>
 </div>
 <p>There is a simple example for network serialisation.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
@@ -313,7 +320,7 @@
 </pre></div>
 </div>
 <p>And then you can load it from the <span class="docutils literal"><span class="pre">network-storage.dill</span></span> file and try to reproduce the same error rate.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dill</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -337,8 +344,8 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
 </div>
 <div class="section" id="save-and-load-networks-with-fixed-architectures">
 <h2>Save and load networks with fixed architectures</h2>
-<p>For the neural networks with fixed architectures it&#8217;s possible to save and load your algorithms using <span class="docutils literal"><span class="pre">pickle</span></span> library.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<p>For the neural networks with fixed architectures it’s possible to save and load your algorithms using <span class="docutils literal"><span class="pre">pickle</span></span> library.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
 <span class="c1"># Initialize and train SOFM network</span>
@@ -355,7 +362,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
 </pre></div>
 </div>
 <p>Also, you can access all the parameters using <span class="docutils literal"><span class="pre">get_params</span></span> method (as in the scikit-learn).</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sofm</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sofm</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
 <span class="go">{&#39;n_inputs&#39;: 2,</span>
 <span class="go"> &#39;n_outputs&#39;: 4,</span>
 <span class="go"> &#39;weight&#39;: array([[0.75264576, 0.26932708, 0.72538974, 0.25271294],</span>
@@ -372,7 +379,7 @@ like <span class="docutils literal"><span class="pre">dumps</span></span> or <sp
         
         </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="transfer-learning.html">Transfer Learning</a></li>
-            <li class="right"><a href="secondary.html">Secondary</a> &raquo; </li>
+            <li class="right"><a href="secondary/visualizations.html">Visualizations</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">

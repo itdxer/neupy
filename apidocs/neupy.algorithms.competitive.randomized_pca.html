@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -237,14 +244,19 @@ implementation.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : 2d array-like</p>
-<p><strong>n_components</strong> : int</p>
-<blockquote>
-<div><p>Number of PCA components</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">2d array-like</span></dt>
+<dd></dd>
+<dt><strong>n_components</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of PCA components</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(eigenvectors, eigenvalues)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>(eigenvectors, eigenvalues)</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -260,25 +272,25 @@ approximates the range of A.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A: 2D array</strong></p>
-<blockquote>
-<div><p>The input data matrix</p>
-</div></blockquote>
-<p><strong>size: integer</strong></p>
-<blockquote>
-<div><p>Size of the return array</p>
-</div></blockquote>
-<p><strong>n_iter: integer</strong></p>
-<blockquote>
-<div><p>Number of power iterations used to stabilize the result</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>A: 2D array</strong></dt>
+<dd><p class="first last">The input data matrix</p>
+</dd>
+<dt><strong>size: integer</strong></dt>
+<dd><p class="first last">Size of the return array</p>
+</dd>
+<dt><strong>n_iter: integer</strong></dt>
+<dd><p class="first last">Number of power iterations used to stabilize the result</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Q: 2D array</p>
-<blockquote class="last">
-<div><p>A (size x size) projection matrix, the range of which
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>Q: 2D array</strong></dt>
+<dd><p class="first last">A (size x size) projection matrix, the range of which
 approximates well the range of the input matrix A.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -295,22 +307,21 @@ approximates well the range of the input matrix A.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>M: ndarray or sparse matrix</strong></p>
-<blockquote>
-<div><p>Matrix to decompose</p>
-</div></blockquote>
-<p><strong>n_components: int</strong></p>
-<blockquote>
-<div><p>Number of singular values and vectors to extract.</p>
-</div></blockquote>
-<p><strong>n_oversamples: int (default is 10)</strong></p>
-<blockquote class="last">
-<div><p>Additional number of random vectors to sample the range of M so as
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>M: ndarray or sparse matrix</strong></dt>
+<dd><p class="first last">Matrix to decompose</p>
+</dd>
+<dt><strong>n_components: int</strong></dt>
+<dd><p class="first last">Number of singular values and vectors to extract.</p>
+</dd>
+<dt><strong>n_oversamples: int (default is 10)</strong></dt>
+<dd><p class="first last">Additional number of random vectors to sample the range of M so as
 to ensure proper conditioning. The total number of random vectors
 used to find the range of M is n_components + n_oversamples. Smaller
 number can improve speed but can negatively impact the quality of
 approximation of singular vectors and singular values.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -330,16 +341,21 @@ value are always positive.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>u, v</strong> : ndarray</p>
-<blockquote>
-<div><p>u and v are the output of <cite>linalg.svd</cite> or
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>u, v</strong> <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
+<dd><p class="first last">u and v are the output of <cite>linalg.svd</cite> or
 <cite>sklearn.utils.extmath.randomized_svd</cite>, with matching inner
 dimensions so one can compute <cite>np.dot(u * s, v)</cite>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>u_adjusted, v_adjusted</strong> : arrays with the same dimensions</p>
-<p class="last">as the input.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>u_adjusted, v_adjusted</strong> <span class="classifier-delimiter">:</span> <span class="classifier">arrays with the same dimensions</span></dt>
+<dd></dd>
+<dt><strong>as the input.</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>

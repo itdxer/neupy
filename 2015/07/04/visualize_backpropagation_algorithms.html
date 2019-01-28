@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="prev" title="Predict prices for houses in the area of Boston" href="boston_house_prices_dataset.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="prev" title="Predict prices for houses in the area of Boston" href="boston_house_prices_dataset.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -260,13 +267,13 @@
     These type of visualizations can provide us with useful insights about the training process.
     </p>
     <br clear="right">
-</div><p>Typical neural networks have mullions of parameters and it&#8217;s quite difficult to visualize its training process. In the article, we visualize training of the network that has only 2 parameters. It allows us to explore different training algorithms and see how it behaves during the training.</p>
+</div><p>Typical neural networks have mullions of parameters and it’s quite difficult to visualize its training process. In the article, we visualize training of the network that has only 2 parameters. It allows us to explore different training algorithms and see how it behaves during the training.</p>
 <div class="section" id="checking-data">
 <h2><a class="toc-backref" href="#id4">Checking data</a></h2>
 <p>First of all we need to define simple dataset which contains 6 points with two features.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
     <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
     <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
     <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
@@ -274,7 +281,7 @@
     <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
     <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
 <span class="p">])</span>
-<span class="n">target_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
     <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
     <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
     <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
@@ -285,9 +292,9 @@
 </pre></div>
 </div>
 <p>So we can make a scatter plot and look closer at this dots.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">input_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">target_data</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -299,9 +306,9 @@
 </div>
 <div class="section" id="initialize-contour">
 <h2><a class="toc-backref" href="#id5">Initialize contour</a></h2>
-<p>I won&#8217;t  add all code related to the plots building in the article. In case if you are interested you can check the main script <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">here</a>.</p>
+<p>I won’t  add all code related to the plots building in the article. In case if you are interested you can check the main script <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">here</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/raw-contour-plot.png"><img alt="Approximation function contour plot" class="align-center" src="../../../_images/raw-contour-plot.png" style="width: 80%;" /></a>
-<p>The plot above shows error rate that depends on the network&#8217;s weights. The best result corresponds to the smallest error value. The best weights combination for this problem should be near the bottom right corner in the white area.</p>
+<p>The plot above shows error rate that depends on the network’s weights. The best result corresponds to the smallest error value. The best weights combination for this problem should be near the bottom right corner in the white area.</p>
 <p>Next, we are going to look at 5 algorithms based on the Backpropagation. They are:</p>
 <ul class="simple">
 <li>Gradient descent</li>
@@ -310,14 +317,14 @@
 <li>iRPROP+</li>
 <li>Gradient Descent + Golden Search</li>
 </ul>
-<p>Let&#8217;s define start point for our algorithms. I&#8217;ve chosen the <cite>(-4, -4)</cite> point, because at this point network gives bad results and it will be interesting to observe the learning progress from a bad initialization point. In the script you can set up any other starting point you like.</p>
+<p>Let’s define start point for our algorithms. I’ve chosen the <cite>(-4, -4)</cite> point, because at this point network gives bad results and it will be interesting to observe the learning progress from a bad initialization point. In the script you can set up any other starting point you like.</p>
 <p>This function will train the network until the error will be smaller than <cite>0.125</cite>. Every network starts at place with coordinates <cite>(-4, -4)</cite> and finishes near the point with the error value lower than <cite>0.125</cite>.</p>
 </div>
 <div class="section" id="id1">
 <h2><a class="toc-backref" href="#id6">Visualize algorithms based on the Backpropagation</a></h2>
 <div class="section" id="gradient-descent">
 <h3><a class="toc-backref" href="#id7">Gradient Descent</a></h3>
-<p>Let&#8217;s primarily check <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
+<p>Let’s primarily check <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/bp-steps.png"><img alt="Weight update steps for the Gradient Descent" src="../../../_images/bp-steps.png" style="width: 80%;" /></a>
 </div>
@@ -325,21 +332,21 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/bp-steps-zoom.png"><img alt="Zoomed weight update steps for the Gradient Descent" src="../../../_images/bp-steps-zoom.png" style="width: 80%;" /></a>
 </div>
-<p>Now we can see some information about gradient descent algorithm. All steps for gradient descent algorithm have approximately similar magnitude. Their direction doesn&#8217;t vary because contours in the zoomed picture are parallel to each other and in it we can see that there are still a lot of steps that are needed to be made to achieve the minimum. Also we can see that small vectors are perpendicular to the contour.</p>
-<p>The problem is that the step size is a very sensitive parameter for the gradient descent. In typical problem we won&#8217;t be able to visualize the learning progress and we won&#8217;t have an ability to see that our updates over the epochs are inefficient. For this result I&#8217;ve used step size equal to <span class="docutils literal"><span class="pre">0.3</span></span>, but if we increased it to <span class="docutils literal"><span class="pre">10</span></span> we would reach our goal in <span class="docutils literal"><span class="pre">25</span></span> steps. I haven&#8217;t added any improvements to make a fair comparison to other algorithms in the summary chapter.</p>
+<p>Now we can see some information about gradient descent algorithm. All steps for gradient descent algorithm have approximately similar magnitude. Their direction doesn’t vary because contours in the zoomed picture are parallel to each other and in it we can see that there are still a lot of steps that are needed to be made to achieve the minimum. Also we can see that small vectors are perpendicular to the contour.</p>
+<p>The problem is that the step size is a very sensitive parameter for the gradient descent. In typical problem we won’t be able to visualize the learning progress and we won’t have an ability to see that our updates over the epochs are inefficient. For this result I’ve used step size equal to <span class="docutils literal"><span class="pre">0.3</span></span>, but if we increased it to <span class="docutils literal"><span class="pre">10</span></span> we would reach our goal in <span class="docutils literal"><span class="pre">25</span></span> steps. I haven’t added any improvements to make a fair comparison to other algorithms in the summary chapter.</p>
 </div>
 <div class="section" id="momentum">
 <h3><a class="toc-backref" href="#id8">Momentum</a></h3>
-<p>Now let&#8217;s look at another very popular algorithm - <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
+<p>Now let’s look at another very popular algorithm - <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/momentum-steps.png"><img alt="Momentum steps" src="../../../_images/momentum-steps.png" style="width: 80%;" /></a>
 </div>
-<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> got to the value close to 0.125 by 92 steps, which is more than 8 times less than for the gradient descent. The basic idea behind <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm is that it accumulates gradients from the previous epochs. It means that if the gradient has the same direction after each epoch weight update vector magnitude will increase. But if the gradient stars changing its direction weight update vector magnitude will decrease. Check the figure again. Imagine that you&#8217;re standing at a skatepark. Than you throw a ball into a half-pipe in a way that makes it roll smoothly on the surface. While it rolls down the gravity force drags it down and it makes the ball roll faster and faster. Let&#8217;s get back to the <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm and try to find these properties in the plot.</p>
+<p><a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> got to the value close to 0.125 by 92 steps, which is more than 8 times less than for the gradient descent. The basic idea behind <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm is that it accumulates gradients from the previous epochs. It means that if the gradient has the same direction after each epoch weight update vector magnitude will increase. But if the gradient stars changing its direction weight update vector magnitude will decrease. Check the figure again. Imagine that you’re standing at a skatepark. Than you throw a ball into a half-pipe in a way that makes it roll smoothly on the surface. While it rolls down the gravity force drags it down and it makes the ball roll faster and faster. Let’s get back to the <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> algorithm and try to find these properties in the plot.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/momentum-steps-zoom.png"><img alt="Momentum steps zoom on increasing weight update size" src="../../../_images/momentum-steps-zoom.png" style="width: 80%;" /></a>
 </div>
-<p>When we zoom the plot we can see that the direction for weight update vectors is almost the same and gradient&#8217;s direction doesn&#8217;t change after every epoch. In the picture above the vector which is the last on the right is bigger than the first one on the same plot on the left. Since it always moves forward it speeds up.</p>
-<p>Let&#8217;s get back to the ball example. What happens when the ball reaches the pit of the half-pipe for the first time? Will it stop? Of course not. Ball gained enough speed for moving. So it will go up. But after that the ball will start to slow down and its amplitude will become smaller and smaller, because of the gravity force, that will continue to push it down to the pit and eventually it will stop to move. Let&#8217;s try to find the similar behavior in the same plot.</p>
+<p>When we zoom the plot we can see that the direction for weight update vectors is almost the same and gradient’s direction doesn’t change after every epoch. In the picture above the vector which is the last on the right is bigger than the first one on the same plot on the left. Since it always moves forward it speeds up.</p>
+<p>Let’s get back to the ball example. What happens when the ball reaches the pit of the half-pipe for the first time? Will it stop? Of course not. Ball gained enough speed for moving. So it will go up. But after that the ball will start to slow down and its amplitude will become smaller and smaller, because of the gravity force, that will continue to push it down to the pit and eventually it will stop to move. Let’s try to find the similar behavior in the same plot.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/momentum-steps-zoom-decrease.png"><img alt="Momentum steps zoom on decreasing weight update size" src="../../../_images/momentum-steps-zoom-decrease.png" style="width: 80%;" /></a>
 </div>
@@ -356,17 +363,17 @@
 <a class="reference internal image-reference" href="../../../_images/rprop-steps.png"><img alt="RPROP steps" src="../../../_images/rprop-steps.png" style="width: 80%;" /></a>
 </div>
 <p>This improvement looks impressive. Now we are able to see steps without zooming. We got almost the same value as before using just 20 steps, which is approximately 5 times less than <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a> and approximately 40 times less than <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">Gradient</span> <span class="pre">Descent</span></span></a>.</p>
-<p>Now we are going to figure out what are the main features of <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a>. We can notice just by looking at the plot above <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> has a unique step for each weight. There are just two steps for each weight in the input layer for this network. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> will increase the step size if gradient don&#8217;t change the sign compare to previous epoch, and it will decrease otherwise.</p>
-<p>Let&#8217;s check a few first weight updates.</p>
+<p>Now we are going to figure out what are the main features of <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a>. We can notice just by looking at the plot above <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> has a unique step for each weight. There are just two steps for each weight in the input layer for this network. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> will increase the step size if gradient don’t change the sign compare to previous epoch, and it will decrease otherwise.</p>
+<p>Let’s check a few first weight updates.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/rprop-first-11-steps.png"><img alt="RPROP first 11 steps" src="../../../_images/rprop-first-11-steps.png" style="width: 80%;" /></a>
 </div>
 <p>From the figure above you can see that first 11 updates have the same direction, so both steps increase their value after each iteration. For the first epoch steps are equal to the same value which we set up at network initialization step. In further iterations they increased by the same constant factor, so after six iteration they got bigger, but they are still equal because they move in one direction all the time.</p>
-<p>Now let&#8217;s check the next epochs from the figure below. At the 12th epoch gradient changed the direction, but steps are still the same in value. But we can clearly see that gradient changed the sign for the second weight. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> updated the step after weight had updated, so the step for the second weight should be smaller for the 13th epoch.</p>
+<p>Now let’s check the next epochs from the figure below. At the 12th epoch gradient changed the direction, but steps are still the same in value. But we can clearly see that gradient changed the sign for the second weight. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> updated the step after weight had updated, so the step for the second weight should be smaller for the 13th epoch.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/rprop-11th-to-14th-epochs.png"><img alt="RPROP from 11th to 14th steps" src="../../../_images/rprop-11th-to-14th-epochs.png" style="width: 80%;" /></a>
 </div>
-<p>Now let&#8217;s look at the 13th epoch. It shows us how gradient sign difference at the 12th epoch updated steps. Now the steps are not equal. From the picture above we can see that update on the second weight (y axis) is smaller than on the first weight (x axis).</p>
+<p>Now let’s look at the 13th epoch. It shows us how gradient sign difference at the 12th epoch updated steps. Now the steps are not equal. From the picture above we can see that update on the second weight (y axis) is smaller than on the first weight (x axis).</p>
 <p>At the 16th epoch gradient on y axis changed the sign again. Network decreased by constant factor and updated for the second weight at the 17th epoch would be smaller than at the 16th.</p>
 <p>To train your intuition you can check the other epochs updates and try to figure out how steps depend on the direction.</p>
 </div>
@@ -377,22 +384,22 @@
 <a class="reference internal image-reference" href="../../../_images/irprop-plus-steps.png"><img alt="iRPROP+ steps" src="../../../_images/irprop-plus-steps.png" style="width: 80%;" /></a>
 </div>
 <p>As in <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> make exactly the same first 11 steps.</p>
-<p>Now let&#8217;s look at the 12th step in the figure below.</p>
+<p>Now let’s look at the 12th step in the figure below.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/irprop-plus-second-part.png"><img alt="iRPROP+ second part" src="../../../_images/irprop-plus-second-part.png" style="width: 80%;" /></a>
 </div>
-<p>Second weight (on the y axis) didn&#8217;t change the value. At the same epoch <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> changed the gradient comparing to the previous epoch and just decreased step value after weight update whereas, <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> disabled weight update for current epoch (set it up to <cite>0</cite>). And of course it also decreased the step for the second weight. Also you can find that vector for the 12th epoch that looks smaller than for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm, because we ignored the second weight update. If we check the x axis update size we will find that it has the same value as in <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
-<p>At 13th epoch network again included second weight into the update process, because compared to the previous epoch gradient didn&#8217;t change its sign.</p>
+<p>Second weight (on the y axis) didn’t change the value. At the same epoch <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> changed the gradient comparing to the previous epoch and just decreased step value after weight update whereas, <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">iRPROP+</span></span></a> disabled weight update for current epoch (set it up to <cite>0</cite>). And of course it also decreased the step for the second weight. Also you can find that vector for the 12th epoch that looks smaller than for the <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm, because we ignored the second weight update. If we check the x axis update size we will find that it has the same value as in <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a> algorithm.</p>
+<p>At 13th epoch network again included second weight into the update process, because compared to the previous epoch gradient didn’t change its sign.</p>
 <p>The nice thing about this algorithm is that it tries to move in a new direction instead of going back and force and trying to redo updates from the previous epochs.</p>
 </div>
 <div class="section" id="gradient-descent-and-golden-search">
 <h3><a class="toc-backref" href="#id11">Gradient Descent and Golden Search</a></h3>
-<p>The last algorithm that I want to show is a <a class="reference internal" href="../../../apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>. This algorithm is not able to train a network by itself, but it can help other algorithms to do it better. I will use Gradient Descent to show the huge improvement that gives <a class="reference internal" href="../../../apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a>.</p>
+<p>The last algorithm that I want to show is a <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Newton's</span> <span class="pre">method</span></span></a>. This algorithm is not able to train a network by itself, but it can help other algorithms to do it better. I will use Gradient Descent to show the huge improvement that gives <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Newton's</span> <span class="pre">method</span></span></a>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/grad-descent-and-gold-search-steps.png"><img alt="Gradient Descent with Golden Search steps" src="../../../_images/grad-descent-and-gold-search-steps.png" style="width: 80%;" /></a>
 </div>
-<p>It took just two steps to reach the goal. Let&#8217;s check the first step. <a class="reference internal" href="../../../apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> helps to find the best step size that can be in a specified direction. So basically, it just tries multiple combinations until it finds the best one. As you can see from the plot the first step size is almost perfect for the specified direction. If you went farther you would increase the error.</p>
-<p>The main disadvantage of <a class="reference internal" href="../../../apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">Golden</span> <span class="pre">Search</span></span></a> is a time complexity. It will take a while to find a good step in specified direction. So for the more complicated networks it can take a lot of time to find a perfect step size.</p>
+<p>It took just two steps to reach the goal. Let’s check the first step. <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Newton's</span> <span class="pre">method</span></span></a> helps to find the best step size that can be in a specified direction. So basically, it just tries multiple combinations until it finds the best one. As you can see from the plot the first step size is almost perfect for the specified direction. If you went farther you would increase the error.</p>
+<p>The main disadvantage of <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Newton's</span> <span class="pre">method</span></span></a> is a time complexity. It will take a while to find a good step in specified direction. So for the more complicated networks it can take a lot of time to find a perfect step size.</p>
 </div>
 </div>
 <div class="section" id="bring-them-all-together">
@@ -404,7 +411,7 @@
 <div class="section" id="summary">
 <h2><a class="toc-backref" href="#id13">Summary</a></h2>
 <table border="1" class="docutils" id="id2">
-<caption><span class="caption-text">Summary table</caption>
+<caption><span class="caption-text">Summary table</span></caption>
 <colgroup>
 <col width="50%" />
 <col width="50%" />
@@ -436,7 +443,7 @@
 <a class="reference internal image-reference" href="../../../_images/compare-number-of-epochs.png"><img alt="Compare number of epochs" src="../../../_images/compare-number-of-epochs.png" style="width: 80%;" /></a>
 </div>
 <p>There is no perfect algorithm for neural network that can solve all problems. All of them have their own pros and cons. Some of the algorithms can be memory or computationally overwhelming and you have to choose an algorithm depending on the task you want to solve.</p>
-<p>All code is available at <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">GitHub</a>. You can play around with the script and set up different learning algorithms and hyperparameters. More algorithms you can find at NeuPy&#8217;s <a class="reference internal" href="../../../pages/cheatsheet.html#cheat-sheet"><span>Cheat sheet</span></a>.</p>
+<p>All code is available at <a class="reference external" href="https://github.com/itdxer/neupy/blob/master/examples/mlp/gd_algorithms_visualization.py">GitHub</a>. You can play around with the script and set up different learning algorithms and hyperparameters. More algorithms you can find at NeuPy’s <a class="reference internal" href="../../../pages/cheatsheet.html#cheat-sheet"><span class="std std-ref">Cheat sheet</span></a>.</p>
 </div>
 </div>
 

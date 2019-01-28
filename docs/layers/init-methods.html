@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Debug layer connections" href="debug.html" /><link rel="prev" title="Create custom layers" href="create-custom-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Debug layer connections" href="debug.html" /><link rel="prev" title="Create custom layers" href="create-custom-layers.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -228,89 +235,76 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="parameter-initialization-methods">
 <h1>Parameter Initialization Methods</h1>
-<p>We can set up different initialization method for layer parameters.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">init</span>
+<p>In the NeuPy, initialization methods per layer can be be modified using classes from the <span class="docutils literal"><span class="pre">init</span></span> module.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">init</span>
 
-<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">()),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">()),</span>
-    <span class="p">]</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">()),</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Normal</span><span class="p">()),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer has 10 inputs and 30 outputs which mean that this layer should have weight with shape <span class="docutils literal"><span class="pre">(10,</span> <span class="pre">30)</span></span>. During initialization, we don&#8217;t need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.</p>
-<p>It&#8217;s possible to set up any value for the weight as long as it has valid shape. Let&#8217;s do the same initialization procedure with manually generated weights.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span>
+<p>Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer expects 10 input features and generates 30 output features, which mean that this layer should have weight with shape <span class="docutils literal"><span class="pre">(10,</span> <span class="pre">30)</span></span>. During initialization, we don’t need to specify the shape of the parameter. This information would be provided to the initializer class during weight initialization procedure.</p>
+<p>It’s possible to set up any value for the weight as long as it has valid shape. We can do the same initialization procedure with manually generated weights.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">15</span><span class="p">)),</span>
-    <span class="p">]</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">15</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>Code above does the same type of the initialization as in the previous example, the only problem that we need to hard-code expected shape of the weights.</p>
-<p>More initialization methods you can find <a class="reference internal" href="../../pages/cheatsheet.html#init-methods"><span>here</span></a>.</p>
+<p>More initialization methods you can find <a class="reference internal" href="../../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>.</p>
 <div class="section" id="create-custom-initialization-methods">
 <h2>Create custom initialization methods</h2>
-<p>It&#8217;s very easy to create custom initialization method. All we need is just to inherit from the <span class="docutils literal"><span class="pre">init.Initializer</span></span> class and define <span class="docutils literal"><span class="pre">sample</span></span> method that accepts one argument (excluding the <span class="docutils literal"><span class="pre">self</span></span> argument). Argument will contain shape of the output tensor that we expect to get.</p>
-<p>In the example below we create custom initializer that samples weights from the exponential distribution.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">init</span>
+<p>It’s very easy to create custom initialization method. All we need is just to inherit from the <span class="docutils literal"><span class="pre">init.Initializer</span></span> class and define <span class="docutils literal"><span class="pre">sample</span></span> method that accepts one argument (excluding the <span class="docutils literal"><span class="pre">self</span></span> argument). Argument will contain shape of the output tensor that we expect to get.</p>
+<p>In the example below, we create custom initializer that samples weights from the exponential distribution.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">init</span>
 
-<span class="k">class</span> <span class="nc">Exponential</span><span class="p">(</span><span class="n">init</span><span class="o">.</span><span class="n">Initializer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+<span class="k">class</span> <span class="nc">Gamma</span><span class="p">(</span><span class="n">init</span><span class="o">.</span><span class="n">Initializer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
 
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
 
-<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">Exponential</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">Exponential</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)),</span>
-    <span class="p">]</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">Gamma</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)),</span>
+    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">Gamma</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>Notice that the <span class="docutils literal"><span class="pre">sample</span></span> method returns Tensorflow’s tensor. It’s possible to return numpy’s array, but in this case initialization might take more time, since we will need to generate weights per each variable sequentially.</p>
 </div>
 <div class="section" id="share-parameters-between-layers">
 <h2>Share parameters between layers</h2>
-<p>In some applications it might be useful to share parameters from other layers. In the example below, we initialize two hidden layers and each layer has exactly the same weight and bias.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<p>In some applications, it might be useful to share parameters some of the between layers. Tensorflow’s variable can be created in the code and passed to the layers that has to have shared parameters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">hidden_layer_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">hidden_layer_1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shared_weight</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;shared-weight&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">hidden_layer_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">hidden_layer_1</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
-<span class="gp">... </span>                             <span class="n">bias</span><span class="o">=</span><span class="n">hidden_layer_1</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hid1</span> <span class="o">=</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">shared_weight</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hid2</span> <span class="o">=</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">shared_weight</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span> <span class="o">&gt;</span> <span class="n">hidden_layer_2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">hid1</span> <span class="o">&gt;&gt;</span> <span class="n">hid2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
-<span class="go">Input(10) &gt; Relu(10) &gt; Relu(10)</span>
+<span class="go">(?, 10) -&gt; [... 3 layers ...] -&gt; (?, 10)</span>
 </pre></div>
 </div>
-<p>It works in the following way. First, we connected input layer to the hidden layer. This operation triggered parameter initialization for the first hidden layer.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hidden_layer_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">hidden_layer_1</span>
+<p>We can check that only 1 weight variables will be used during the training.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="go">[&#39;shared-weight:0&#39;, &#39;layer/relu-1/bias:0&#39;, &#39;layer/relu-2/bias:0&#39;]</span>
 </pre></div>
 </div>
-<p>Next, we associated parameters from the first hidden layer with parameters in the second layer.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hidden_layer_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">hidden_layer_1</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
-<span class="gp">... </span>                             <span class="n">bias</span><span class="o">=</span><span class="n">hidden_layer_1</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Notice that in this case weight and bias are instance of the <span class="docutils literal"><span class="pre">Variable</span></span> class from the Tensorflow.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hidden_layer_1</span><span class="o">.</span><span class="n">weight</span>
-<span class="go">&lt;tf.Variable &#39;layer/relu-1/weight:0&#39; shape=(10, 10) dtype=float32_ref&gt;</span>
-</pre></div>
-</div>
+<p>As we can see, only one weight variables is used, but two different biases were created per each layer, since we didn’t create separate variable for them.</p>
 </div>
 </div>
 

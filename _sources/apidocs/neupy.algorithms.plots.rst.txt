@@ -1,0 +1,7 @@
+neupy.algorithms.plots module
+=============================
+
+.. automodule:: neupy.algorithms.plots
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,6 @@
+neupy.layers.join
+=================
+
+.. currentmodule:: neupy.layers
+
+.. autofunction:: join

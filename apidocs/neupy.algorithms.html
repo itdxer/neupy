@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -265,14 +272,16 @@
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.adamax.html">neupy.algorithms.gd.adamax module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.base.html">neupy.algorithms.gd.base module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.conjgrad.html">neupy.algorithms.gd.conjgrad module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.errors.html">neupy.algorithms.gd.errors module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.hessdiag.html">neupy.algorithms.gd.hessdiag module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.hessian.html">neupy.algorithms.gd.hessian module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.lev_marq.html">neupy.algorithms.gd.lev_marq module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.momentum.html">neupy.algorithms.gd.momentum module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.objectives.html">neupy.algorithms.gd.objectives module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.quasi_newton.html">neupy.algorithms.gd.quasi_newton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.regularizers.html">neupy.algorithms.gd.regularizers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.rmsprop.html">neupy.algorithms.gd.rmsprop module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.rprop.html">neupy.algorithms.gd.rprop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.gd.step_updates.html">neupy.algorithms.gd.step_updates module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.gd.html#module-neupy.algorithms.gd">Module contents</a></li>
@@ -284,46 +293,28 @@
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.memory.base.html">neupy.algorithms.memory.base module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.memory.cmac.html">neupy.algorithms.memory.cmac module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.memory.discrete_hopfield_network.html">neupy.algorithms.memory.discrete_hopfield_network module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.memory.utils.html">neupy.algorithms.memory.utils module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.memory.html#module-neupy.algorithms.memory">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.minsearch.html">neupy.algorithms.minsearch package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.minsearch.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.minsearch.golden_search.html">neupy.algorithms.minsearch.golden_search module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.minsearch.wolfe.html">neupy.algorithms.minsearch.wolfe module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.minsearch.html#module-neupy.algorithms.minsearch">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.rbfn.html">neupy.algorithms.rbfn package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.rbfn.html#submodules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.rbfn.grnn.html">neupy.algorithms.rbfn.grnn module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.rbfn.learning.html">neupy.algorithms.rbfn.learning module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.rbfn.pnn.html">neupy.algorithms.rbfn.pnn module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.rbfn.rbf_kmeans.html">neupy.algorithms.rbfn.rbf_kmeans module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.rbfn.utils.html">neupy.algorithms.rbfn.utils module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.rbfn.html#module-neupy.algorithms.rbfn">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.regularization.html">neupy.algorithms.regularization package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.regularization.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.regularization.base.html">neupy.algorithms.regularization.base module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.regularization.max_norm.html">neupy.algorithms.regularization.max_norm module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.regularization.weight_decay.html">neupy.algorithms.regularization.weight_decay module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.regularization.weight_elimination.html">neupy.algorithms.regularization.weight_elimination module</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.regularization.html#module-neupy.algorithms.regularization">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.step_update.html">neupy.algorithms.step_update package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.step_update.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.step_update.base.html">neupy.algorithms.step_update.base module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.step_update.errdiff.html">neupy.algorithms.step_update.errdiff module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.step_update.leak_step.html">neupy.algorithms.step_update.leak_step module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.step_update.linear_search.html">neupy.algorithms.step_update.linear_search module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.step_update.search_then_converge.html">neupy.algorithms.step_update.search_then_converge module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neupy.algorithms.step_update.step_decay.html">neupy.algorithms.step_update.step_decay module</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="neupy.algorithms.step_update.html#module-neupy.algorithms.step_update">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -334,10 +325,9 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.base.html">neupy.algorithms.base module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.constructor.html">neupy.algorithms.constructor module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.plots.html">neupy.algorithms.plots module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.rbm.html">neupy.algorithms.rbm module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.summary_info.html">neupy.algorithms.summary_info module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.utils.html">neupy.algorithms.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="neupy.algorithms.signals.html">neupy.algorithms.signals module</a></li>
 </ul>
 </div>
 </div>

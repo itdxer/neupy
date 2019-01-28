@@ -1,0 +1,6 @@
+neupy.algorithms.l1
+===================
+
+.. currentmodule:: neupy.algorithms
+
+.. autofunction:: l1

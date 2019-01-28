@@ -1,5 +1,5 @@
-neupy\.layers\.reshape module
-=============================
+neupy.layers.reshape module
+===========================
 
 .. automodule:: neupy.layers.reshape
     :members:

@@ -18,7 +18,7 @@ Making Art with Growing Neural Gas
 Introduction
 ------------
 
-I've been trying to make that type of art style for quite some time. I applied `SOFM <http://neupy.com/apidocs/neupy.algorithms.competitive.sofm.html#neupy.algorithms.competitive.sofm.SOFM>`_ to the images, but in most cases it was unsuccessful, mostly because SOFM requires predefined size and structure of the network. With such a requirement it's difficult to construct tool that converts image to nice art style. Later, I've learned more about `Growing Neural Gas <http://neupy.com/apidocs/neupy.algorithms.competitive.growing_neural_gas.html#neupy.algorithms.competitive.growing_neural_gas.GrowingNeuralGas>`_ and it helped to resolve main issues with SOFM. In this article, I want to explain how this type of art style can be generated from the image. At the end, I will cover some of the similar, but less successful application with growing neural gas for image processing that I've been trying to develop.
+I've been trying to make that type of art style for quite some time. I applied :network:`SOFM` to the images, but in most cases it was unsuccessful, mostly because SOFM requires predefined size and structure of the network. With such a requirement it's difficult to construct tool that converts image to nice art style. Later, I've learned more about :network:`Growing Neural Gas <GrowingNeuralGas>` and it helped to resolve main issues with SOFM. In this article, I want to explain how this type of art style can be generated from the image. At the end, I will cover some of the similar, but less successful application with growing neural gas for image processing that I've been trying to develop.
 
 Image Processing Pipeline
 -------------------------

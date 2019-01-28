@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -237,18 +244,21 @@ per each dimension separately.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : array-like</p>
-<blockquote>
-<div><p>Array that contains grid of n-dimensional vectors.</p>
-</div></blockquote>
-<p><strong>center</strong> : tuple</p>
-<blockquote>
-<div><p>Index of the main neuron for which function returns
-distance to neuron&#8217;s neighbours.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>grid</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd><p class="first last">Array that contains grid of n-dimensional vectors.</p>
+</dd>
+<dt><strong>center</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Index of the main neuron for which function returns
+distance to neuron’s neighbours.</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of n-dimensional vectors</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>list of n-dimensional vectors</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -264,23 +274,25 @@ center within specified radius.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : 2d-arry</p>
-<blockquote>
-<div><p>Hexagon grid.</p>
-</div></blockquote>
-<p><strong>center</strong> : tuple</p>
-<blockquote>
-<div><p>Coordinates of the center neuron on the grid.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>grid</strong> <span class="classifier-delimiter">:</span> <span class="classifier">2d-arry</span></dt>
+<dd><p class="first last">Hexagon grid.</p>
+</dd>
+<dt><strong>center</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Coordinates of the center neuron on the grid.
 Should be a tuple with two integers: <span class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></span>.</p>
-</div></blockquote>
-<p><strong>radius</strong> : int</p>
-<blockquote>
-<div><p>Radius indetify which neurons around the center
+</dd>
+<dt><strong>radius</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Radius indetify which neurons around the center
 are neighbours.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">2d-array</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>2d-array</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -290,41 +302,41 @@ are neighbours.</p>
 <dl class="function">
 <dt id="neupy.algorithms.competitive.neighbours.find_neighbours_on_rect_grid">
 <span class="descclassname">neupy.algorithms.competitive.neighbours.</span><span class="descname">find_neighbours_on_rect_grid</span><span class="sig-paren">(</span><em>grid</em>, <em>center</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/neighbours.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Function find all neuron&#8217;s neighbours around specified
+<dd><p>Function find all neuron’s neighbours around specified
 center within a certain radius.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : array-like</p>
-<blockquote>
-<div><p>Array that contains grid of n-dimensional vectors.</p>
-</div></blockquote>
-<p><strong>center</strong> : tuple</p>
-<blockquote>
-<div><p>Index of the main neuron for which function returns
-distance to neuron&#8217;s neighbours.</p>
-</div></blockquote>
-<p><strong>radius</strong> : int</p>
-<blockquote>
-<div><p>Radius indetify which neurons around the center
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>grid</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd><p class="first last">Array that contains grid of n-dimensional vectors.</p>
+</dd>
+<dt><strong>center</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Index of the main neuron for which function returns
+distance to neuron’s neighbours.</p>
+</dd>
+<dt><strong>radius</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Radius indetify which neurons around the center
 are neighbours.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array-like</p>
-<blockquote class="last">
-<div><p>Return matrix with the same dimension as <span class="docutils literal"><span class="pre">grid</span></span>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like</strong></dt>
+<dd><p class="first last">Return matrix with the same dimension as <span class="docutils literal"><span class="pre">grid</span></span>
 where center element and it neighbours positions
 filled with value <span class="docutils literal"><span class="pre">1</span></span> and other as a <span class="docutils literal"><span class="pre">0</span></span> value.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms.competitive</span> <span class="kn">import</span> <span class="n">sofm</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms.competitive</span> <span class="k">import</span> <span class="n">sofm</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sofm</span><span class="o">.</span><span class="n">find_neighbours_on_rect_grid</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">grid</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
@@ -358,16 +370,17 @@ neuron from the center the lower step scaler it has.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : array-like</p>
-<p><strong>center</strong> : object</p>
-<blockquote>
-<div><p>Variable is going to be ignored. It&#8217;s defined
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>grid</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd></dd>
+<dt><strong>center</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Variable is going to be ignored. It’s defined
 only for compatibility with other functions</p>
-</div></blockquote>
-<p><strong>std</strong> : int, float</p>
-<blockquote class="last">
-<div><p>Gaussian standard deviation. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>std</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Gaussian standard deviation. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -387,19 +400,18 @@ with specified standard deviation.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : array-like</p>
-<blockquote>
-<div><p>Array that contains grid of n-dimensional vectors.</p>
-</div></blockquote>
-<p><strong>center</strong> : tuple</p>
-<blockquote>
-<div><p>Index of the main neuron for which function returns
-distance to neuron&#8217;s neighbours.</p>
-</div></blockquote>
-<p><strong>std</strong> : int, float</p>
-<blockquote class="last">
-<div><p>Gaussian standard deviation. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>grid</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd><p class="first last">Array that contains grid of n-dimensional vectors.</p>
+</dd>
+<dt><strong>center</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Index of the main neuron for which function returns
+distance to neuron’s neighbours.</p>
+</dd>
+<dt><strong>std</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Gaussian standard deviation. Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -415,15 +427,16 @@ Gaussian specified by the mean and standard deviation.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : array-like</p>
-<p><strong>mean</strong> : float</p>
-<blockquote>
-<div><p>Gaussian mean.</p>
-</div></blockquote>
-<p><strong>std</strong> : float</p>
-<blockquote class="last">
-<div><p>Gaussian standard deviation.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd></dd>
+<dt><strong>mean</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Gaussian mean.</p>
+</dd>
+<dt><strong>std</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Gaussian standard deviation.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -439,14 +452,18 @@ within specified radius on the hexagon grid.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>radius</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>radius</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array-like</p>
-<blockquote class="last">
-<div><p>2d-array that has number of rows equal to number
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like</strong></dt>
+<dd><p class="first last">2d-array that has number of rows equal to number
 of columns equal to <span class="docutils literal"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">radius</span> <span class="pre">+</span> <span class="pre">1</span></span></p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>

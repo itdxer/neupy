@@ -32,16 +32,16 @@ notebooks/.ipynb_checkpoints/*
 *.swo
 
 # Site
+site/apidocs/*
+site/modules/*
 site/blog/*
 site/drafts/*
 site/source/docs/*
 site/build/*
 
 # Examples
-examples/*
 examples/rbfn/music_speech/data/*
 notebooks/caltech_101_images/*
-examples/cnn/deeplab/dataset/*
 
 # Pickle files important for VIN example
 !examples/reinforcement_learning/vin/data/*.pickle

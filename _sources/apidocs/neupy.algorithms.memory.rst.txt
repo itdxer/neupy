@@ -1,5 +1,5 @@
-neupy\.algorithms\.memory package
-=================================
+neupy.algorithms.memory package
+===============================
 
 Submodules
 ----------
@@ -10,7 +10,6 @@ Submodules
    neupy.algorithms.memory.base
    neupy.algorithms.memory.cmac
    neupy.algorithms.memory.discrete_hopfield_network
-   neupy.algorithms.memory.utils
 
 Module contents
 ---------------

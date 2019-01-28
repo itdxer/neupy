@@ -1,0 +1,7 @@
+neupy.algorithms.signals module
+===============================
+
+.. automodule:: neupy.algorithms.signals
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Hyperparameter optimization for Neural Networks" href="../../../2016/12/17/hyperparameter_optimization_for_neural_networks.html" /><link rel="prev" title="The Art of SOFM" href="../13/sofm_art.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Hyperparameter optimization for Neural Networks" href="../../../2016/12/17/hyperparameter_optimization_for_neural_networks.html" /><link rel="prev" title="The Art of SOFM" href="../13/sofm_art.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -260,8 +267,8 @@
 </div>
 <div class="section" id="introduction">
 <h2><a class="toc-backref" href="#id2">Introduction</a></h2>
-<p>I was fascinated for a while with SOFM algorithm and that&#8217;s why I decided to write this article. The reason why I like it so much because it&#8217;s pretty simple and powerful approach that can be applied to solve different problems.</p>
-<p>I believe that it&#8217;s important to understand the idea behind any algorithm even if you don&#8217;t know how to build it. For this reason, I won&#8217;t give detailed explanation on how to build your own SOFM network. Instead, I will focus on the intuition behind this algorithm and applications where you can use it. If you want to build it yourself I recommend you to read <a class="reference external" href="http://hagan.okstate.edu/NNDesign.pdf">Neural Network Design</a> book.</p>
+<p>I was fascinated for a while with SOFM algorithm and that’s why I decided to write this article. The reason why I like it so much because it’s pretty simple and powerful approach that can be applied to solve different problems.</p>
+<p>I believe that it’s important to understand the idea behind any algorithm even if you don’t know how to build it. For this reason, I won’t give detailed explanation on how to build your own SOFM network. Instead, I will focus on the intuition behind this algorithm and applications where you can use it. If you want to build it yourself I recommend you to read <a class="reference external" href="http://hagan.okstate.edu/NNDesign.pdf">Neural Network Design</a> book.</p>
 </div>
 <div class="section" id="intuition-behind-sofm">
 <h2><a class="toc-backref" href="#id3">Intuition behind SOFM</a></h2>
@@ -270,33 +277,33 @@
 <a class="reference internal image-reference" href="../../../_images/sofm-grid.png"><img alt="SOFM grid" src="../../../_images/sofm-grid.png" style="width: 50%;" /></a>
 </div>
 <p>Each blue dot in the image is neuron and line between two neurons means that they are connected. We call this arrangement of neurons <em>grid</em>.</p>
-<p>Each neuron in the grid has two properties: position and connections to other neurons. We define connections before we start network training and position is the only thing that changes during the training. There are many ways to initialize position for the neurons, but the easiest one is just to do it randomly. After this initialization grid won&#8217;t look as nice as it looks on the image above, but with more training iteration problem can be solved.</p>
-<p>Let&#8217;s talk about training. In each training iteration we introduce some data point and we try to find neuron that closest to this point. Neuron that closest to this point we call <strong>neuron winner</strong>. But, instead of updating position of this neuron we find its <strong>neighbors</strong>. Note, that it&#8217;s not the same as closest neighbors. Before training we specify special parameter known as <strong>learning radius</strong>. It defines the radius within which we consider other neuron as a neighbors. On the image below you can see the same grid as before with neuron in center that we marked as a winner. You can see in the pictures that larger radius includes more neurons.</p>
+<p>Each neuron in the grid has two properties: position and connections to other neurons. We define connections before we start network training and position is the only thing that changes during the training. There are many ways to initialize position for the neurons, but the easiest one is just to do it randomly. After this initialization grid won’t look as nice as it looks on the image above, but with more training iteration problem can be solved.</p>
+<p>Let’s talk about training. In each training iteration we introduce some data point and we try to find neuron that closest to this point. Neuron that closest to this point we call <strong>neuron winner</strong>. But, instead of updating position of this neuron we find its <strong>neighbors</strong>. Note, that it’s not the same as closest neighbors. Before training we specify special parameter known as <strong>learning radius</strong>. It defines the radius within which we consider other neuron as a neighbors. On the image below you can see the same grid as before with neuron in center that we marked as a winner. You can see in the pictures that larger radius includes more neurons.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-learning-radius-comparison.png"><img alt="Compare SOFM learning radius size" src="../../../_images/sofm-learning-radius-comparison.png" style="width: 100%;" /></a>
 </div>
-<p>And at the end of the iteration we update our neuron winner and its neighbors positions. We change their position by pushing closer to the data point that we used to find neuron winner. We &#8220;push&#8221; winner neuron much closer to the data point compared to the neighbor neurons. In fact, the further the neighbors the less &#8220;push&#8221; it get&#8217;s towards the data point. You can see how we update neurons on the image below with different learning radius parameters.</p>
+<p>And at the end of the iteration we update our neuron winner and its neighbors positions. We change their position by pushing closer to the data point that we used to find neuron winner. We “push” winner neuron much closer to the data point compared to the neighbor neurons. In fact, the further the neighbors the less “push” it get’s towards the data point. You can see how we update neurons on the image below with different learning radius parameters.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-training-learning-radius-comparison.png"><img alt="Compare SOFM learning radius size" src="../../../_images/sofm-training-learning-radius-comparison.png" style="width: 100%;" /></a>
 </div>
 <p>You probably noticed that idea is very similar to k-means algorithm, but what makes it really special is the existing relations with other neurons.</p>
-<p>It&#8217;s easy to compare this algorithm to real world. Imagine that you try to put large tablecloth on the large table. First you put it so that it will partially cover table. Then you will go around and pull different sides of the tablecloth until you cover the table. But when you pull one side, another part of the tablecloth starts moving to the direction in which you pull it, just like it happens during the training in SOFM.</p>
+<p>It’s easy to compare this algorithm to real world. Imagine that you try to put large tablecloth on the large table. First you put it so that it will partially cover table. Then you will go around and pull different sides of the tablecloth until you cover the table. But when you pull one side, another part of the tablecloth starts moving to the direction in which you pull it, just like it happens during the training in SOFM.</p>
 </div>
 <div class="section" id="applications">
 <h2><a class="toc-backref" href="#id4">Applications</a></h2>
-<p>Surprisingly, this simple idea has a variety of applications. In this part of the article, I&#8217;ll cover a few most common applications.</p>
+<p>Surprisingly, this simple idea has a variety of applications. In this part of the article, I’ll cover a few most common applications.</p>
 <div class="section" id="clustering">
 <h3><a class="toc-backref" href="#id5">Clustering</a></h3>
-<p>Clustering is probably the most trivial application where you can use SOFM. In case of clustering, we treat every neuron as a centre of separate cluster. One of the problems is that during the training procedure when we pull one neuron closer to one of the cluster we will be forced to pull its neighbors as well. In order to avoid this issue, we need to break relations between neighbors, so that any update will not have influence on other neurons. If we set up this value as 0 it will mean that neuron winner doesn&#8217;t have any relations with other neurons which is exactly what we need for clustering.</p>
+<p>Clustering is probably the most trivial application where you can use SOFM. In case of clustering, we treat every neuron as a centre of separate cluster. One of the problems is that during the training procedure when we pull one neuron closer to one of the cluster we will be forced to pull its neighbors as well. In order to avoid this issue, we need to break relations between neighbors, so that any update will not have influence on other neurons. If we set up this value as 0 it will mean that neuron winner doesn’t have any relations with other neurons which is exactly what we need for clustering.</p>
 <p>In the image below you can see visualized two features from the iris dataset and there are three SOFM neurons colored in grey. As you can see it managed to find pretty good centers of the clusters.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python sofm_iris_clustering.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python sofm_iris_clustering.py
 </pre></div>
 </div>
 <br><div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-iris-clustering.png"><img alt="Clustering iris dataset using SOFM" src="../../../_images/sofm-iris-clustering.png" style="width: 100%;" /></a>
 </div>
-<p>Clustering application is the useful one, but it&#8217;s not very special one. If you try to run k-mean algorithm on the same dataset that I used in this example you should be able to get roughly the same result. I don&#8217;t see any advantages for SOFM with learning radius equal to 0 against k-means. I like to think about SOFM clustering application more like a debugging. When you are trying to find where your code breaks you can disable some parts of it and try to see if the specific function breaks. With SOFM we are disabling some parts in order to see how other things will behave without it.</p>
-<p>What would happen if we increase number of clusters? Let&#8217;s increase number of clusters from 3 to 20 and run clustering on the same data.</p>
+<p>Clustering application is the useful one, but it’s not very special one. If you try to run k-mean algorithm on the same dataset that I used in this example you should be able to get roughly the same result. I don’t see any advantages for SOFM with learning radius equal to 0 against k-means. I like to think about SOFM clustering application more like a debugging. When you are trying to find where your code breaks you can disable some parts of it and try to see if the specific function breaks. With SOFM we are disabling some parts in order to see how other things will behave without it.</p>
+<p>What would happen if we increase number of clusters? Let’s increase number of clusters from 3 to 20 and run clustering on the same data.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-20-clusters.png"><img alt="Clustering iris dataset using SOFM with 20 clusters" src="../../../_images/sofm-20-clusters.png" style="width: 100%;" /></a>
 </div>
@@ -304,12 +311,12 @@
 </div>
 <div class="section" id="space-approximation">
 <h3><a class="toc-backref" href="#id6">Space approximation</a></h3>
-<p>In the previous example, we tried to do a <strong>space approximation</strong>. Space approximation is similar to clustering, but the goal is here to find the minimum number of points that cover as much data as possible. Since it&#8217;s similar to clustering we can use SOFM here as well. But as we saw in the previous example data points wasn&#8217;t using space efficiently and some points were very close to each other and some are further. Now the problem is that clusters don&#8217;t know about existence of other clusters and they behave independently. To have more cooperative behavior between clusters we can enable learning radius in SOFM. Let&#8217;s try different example. I generated two-dimensional dataset in the shape of the moon that we will try to approximate using SOFM. First, let&#8217;s try to do it without increasing learning radius and applying the same micro-clustering technique as before.</p>
+<p>In the previous example, we tried to do a <strong>space approximation</strong>. Space approximation is similar to clustering, but the goal is here to find the minimum number of points that cover as much data as possible. Since it’s similar to clustering we can use SOFM here as well. But as we saw in the previous example data points wasn’t using space efficiently and some points were very close to each other and some are further. Now the problem is that clusters don’t know about existence of other clusters and they behave independently. To have more cooperative behavior between clusters we can enable learning radius in SOFM. Let’s try different example. I generated two-dimensional dataset in the shape of the moon that we will try to approximate using SOFM. First, let’s try to do it without increasing learning radius and applying the same micro-clustering technique as before.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-moon-topology-0-radius.png"><img alt="Learning moon topology with clustering" src="../../../_images/sofm-moon-topology-0-radius.png" style="width: 100%;" /></a>
 </div>
-<p>As you can see we have the same issue as we had with iris dataset. On the left side there are a few cluster centers that very close to each other and on the right side they are further apart. Now, let&#8217;s try to set up learning radius equal to 2 and let&#8217;s look what will happen.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python sofm_moon_topology.py
+<p>As you can see we have the same issue as we had with iris dataset. On the left side there are a few cluster centers that very close to each other and on the right side they are further apart. Now, let’s try to set up learning radius equal to 2 and let’s look what will happen.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python sofm_moon_topology.py
 </pre></div>
 </div>
 <br><div class="figure align-center">
@@ -318,7 +325,7 @@
 <p>You can see that cluster centers are more efficiently distributed along the moon-shaped cluster. Even if we remove data points from the plot the center cluster will give us good understanding about the shape of our original data.</p>
 <p>You might ask, what is the use of this application? One of the things that you can do is to use this approach in order to minimize the size of your data sample. The idea is that since feature map spreads out all over the space you can generate smaller dataset that will keep useful properties of the main one. It can be not only useful for training sample minimization, but also for other applications. For instance, in case if you have lots of unlabelled data and labelling can get expensive, you can use the same technique to find smaller sub-sample of the main dataset and label only this subset instead of the random sample.</p>
 <p>We can use more than one-dimensional grids in SOFM in order to be able to capture more complicated patterns. In the following example, you can see SOFM with two-dimensional feature map that approximates roughly 8,000 data points using only 100 features.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python sofm_compare_grid_types.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python sofm_compare_grid_types.py
 </pre></div>
 </div>
 <br><div class="figure align-center">
@@ -330,9 +337,9 @@
 <h3><a class="toc-backref" href="#id7">High-dimensional data visualization</a></h3>
 <p>We used SOFM with two-dimensional feature map in order to catch dimensional properties of the datasets with only two features. If we increase number of dimensions to three it still would be possible to visualize the result, but in four dimensions it will become a bit trickier.</p>
 <p>If we use two-dimensional grid and train SOFM over the high-dimensional data then we can encode network as a heat map where each neuron in the network will be represented by the average distance to its neighbors.</p>
-<p>As the example, let&#8217;s take a look at the <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html">breast cancer dataset</a> available in the <a class="reference external" href="http://scikit-learn.org">scikit-learn library</a>. This dataset has 30 features and two classes.</p>
-<p>Let&#8217;s look what we can get if we apply described method on the 30-dimensional data.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python sofm_heatmap_visualization.py
+<p>As the example, let’s take a look at the <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html">breast cancer dataset</a> available in the <a class="reference external" href="http://scikit-learn.org">scikit-learn library</a>. This dataset has 30 features and two classes.</p>
+<p>Let’s look what we can get if we apply described method on the 30-dimensional data.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python sofm_heatmap_visualization.py
 </pre></div>
 </div>
 <br><div class="figure align-center">
@@ -340,17 +347,17 @@
 </div>
 <p>For this example, I used SOFM with 20x20 feature map. Which basically means that we have 400 micro-clusters. Most of the micro-clusters has either blue squares or red circles and just a few of them has both or none of the classes.</p>
 <p>You can see how micro-clusters with blue squares are tended to be close to each other, and the same true for red circles. In fact, we can even draw simple bound that will separate two different classes from each other. Along this bound we can see some cases where micro-cluster has red and blue classes which means that at some places these samples sit very tight. In other cases, like in the left down corner, we can see parts that do not belong to any of the classes which means that there is a gap between data points.</p>
-<p>You can also notice that each cell in the heat map has different color. From the colorbar, we can see that black color encodes small numbers and white color encodes large numbers. Each cell has a number associated with it that defines average distance to neighbor clusters. The white color means that cluster is far away from it&#8217;s neighbors. Group of the red circles on the right side of the plot has white color, which means that this group is far from the main cluster.</p>
+<p>You can also notice that each cell in the heat map has different color. From the colorbar, we can see that black color encodes small numbers and white color encodes large numbers. Each cell has a number associated with it that defines average distance to neighbor clusters. The white color means that cluster is far away from it’s neighbors. Group of the red circles on the right side of the plot has white color, which means that this group is far from the main cluster.</p>
 <p>One problem is that color depends on the average distance which can be misleading in some cases. We can build a bit different visualization that will encode distance between two separate micro-clusters as a single value.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python sofm_heatmap_visualization.py --expanded-heatmap
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python sofm_heatmap_visualization.py --expanded-heatmap
 </pre></div>
 </div>
 <br><div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-heatmap-expanded.png"><img alt="Embedded 30-dimensional dataset using SOFM" src="../../../_images/sofm-heatmap-expanded.png" style="width: 100%;" /></a>
 </div>
-<p>Now between every feature and its neighbor there is an extra square. As in the previous example each square encodes distance between two neighboring features. We do not consider two features in the map as neighbors in case if they connected diagonally. That&#8217;s why all diagonal squares between two micro-clusters color in black. Diagonals are a bit more difficult to encode, because in this case we have two different cases. In order to visualize it we can also take an average of these distances.</p>
-<p>More interesting way to make this type of visualization can be with the use of images. In previous case, we use markers to encode two different classes. With images, we can use them directly as the way to represent the cluster. Let&#8217;s try to apply this idea on small dataset with images of digits from 0 to 9.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python sofm_digits.py
+<p>Now between every feature and its neighbor there is an extra square. As in the previous example each square encodes distance between two neighboring features. We do not consider two features in the map as neighbors in case if they connected diagonally. That’s why all diagonal squares between two micro-clusters color in black. Diagonals are a bit more difficult to encode, because in this case we have two different cases. In order to visualize it we can also take an average of these distances.</p>
+<p>More interesting way to make this type of visualization can be with the use of images. In previous case, we use markers to encode two different classes. With images, we can use them directly as the way to represent the cluster. Let’s try to apply this idea on small dataset with images of digits from 0 to 9.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python sofm_digits.py
 </pre></div>
 </div>
 <br><div class="figure align-center">
@@ -361,28 +368,28 @@
 <div class="section" id="visualize-pre-trained-vgg19-network">
 <h2><a class="toc-backref" href="#id8">Visualize pre-trained VGG19 network</a></h2>
 <p>Using the same techniques, we can look inside the deep neural networks. In this section, I will be looking on the pre-trained VGG19 network using ImageNet data. Only in this case, I decided to make it a bit more challenging. Instead of using data from ImageNet I decided to pick 9 classes of different animal species from <a class="reference external" href="http://www.vision.caltech.edu/Image_Datasets/Caltech101/">Caltech 101 dataset</a>. The interesting part is that there are a few species that are not in the ImageNet.</p>
-<p>The goal for this visualization is not only to see how the VGG19 network will separate different classes, but also to see if it would be able to extract some special features of the new classes that it hasn&#8217;t seen before. This information can be useful for the Transfer Learning, because from the visualization we should be able to see if network can separate unknown class from the other. If it will then it means there is no need to re-train all layers below the one which we are visualizing.</p>
+<p>The goal for this visualization is not only to see how the VGG19 network will separate different classes, but also to see if it would be able to extract some special features of the new classes that it hasn’t seen before. This information can be useful for the Transfer Learning, because from the visualization we should be able to see if network can separate unknown class from the other. If it will then it means there is no need to re-train all layers below the one which we are visualizing.</p>
 <p>From the Caltech 101 dataset I picked the following classes:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/caltech-101-animal-classes.png"><img alt="9 animal classes from the Caltech 101 dataset" src="../../../_images/caltech-101-animal-classes.png" style="width: 100%;" /></a>
 </div>
-<p>There are a few classes that hasn&#8217;t been used in ImageNet, namely Okapi, Wild cat and Platypus.</p>
+<p>There are a few classes that hasn’t been used in ImageNet, namely Okapi, Wild cat and Platypus.</p>
 <p>Data was prepared in the same way as it was done for the VGG19 during training on ImageNet data. I first removed final layer from the network. Now output for each image should be 4096-dimensional vector. Because of the large dimensional size, I used cosine similarity in order to find closest SOFM neurons (instead of euclidian which we used in all previous examples).</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/vgg19-sofm-dense-2-20x20.png"><img alt="Visualized feature space using pre-trained VGG19 and 9 animal classes from the Caltech 101 dataset" src="../../../_images/vgg19-sofm-dense-2-20x20.png" style="width: 100%;" /></a>
 </div>
-<p>Even without getting into the details it&#8217;s easy to see that SOFM produces pretty meaningful visualization. Similar species are close to each other in the visualization which means that the main properties was captured correctly.</p>
+<p>Even without getting into the details it’s easy to see that SOFM produces pretty meaningful visualization. Similar species are close to each other in the visualization which means that the main properties was captured correctly.</p>
 <p>We can also visualize output from the last layer. From the network, we only need to remove final Softmax layer in order to get raw activation values. Using this values, we can also visualize our data.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/vgg19-sofm.png"><img alt="Visualized feature space using pre-trained VGG19 and 9 animal classes from the Caltech 101 dataset" src="../../../_images/vgg19-sofm.png" style="width: 100%;" /></a>
 </div>
-<p>SOFM managed to identify high-dimensional structure pretty good. There are many interesting things that we can gain from this image. For instance, beaver and platypus share similar features. Since platypus wasn&#8217;t a part of the ImageNet dataset it is a reasonable mistake for the network to mix these species.</p>
+<p>SOFM managed to identify high-dimensional structure pretty good. There are many interesting things that we can gain from this image. For instance, beaver and platypus share similar features. Since platypus wasn’t a part of the ImageNet dataset it is a reasonable mistake for the network to mix these species.</p>
 <p>You probably noticed that there are many black squares in the image. Each square represents a gap between two micro-clusters. You can see how images of separate species are separated from other species with these gaps.</p>
 <p>You can also see that network learned to classify rotated and scaled images very similarly which tells us that it is robust against small transformations applied to the image. In the image below, we can see a few examples.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/vgg19-sofm-similar-examples.png"><img alt="Similar images tend to be closer to each other in high-dimensional space" src="../../../_images/vgg19-sofm-similar-examples.png" style="width: 100%;" /></a>
 </div>
-<p>There are also some things that shows us problems with VGG19 network.. For instance, look at the image of llama that really close to the cheetah&#8217;s images.</p>
+<p>There are also some things that shows us problems with VGG19 network.. For instance, look at the image of llama that really close to the cheetah’s images.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/vgg19-sofm-llama-similar-to-cheetah.png"><img alt="Llama close to cheetah in high dimensional space." src="../../../_images/vgg19-sofm-llama-similar-to-cheetah.png" style="width: 100%;" /></a>
 </div>
@@ -390,7 +397,7 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/llama-with-spots.jpg"><img alt="Llama with spots" src="../../../_images/llama-with-spots.jpg" style="width: 30%;" /></a>
 </div>
-<br><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">llama</span>                                    <span class="p">:</span> <span class="mf">31.18</span><span class="o">%</span>
+<br><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">llama</span>                                    <span class="p">:</span> <span class="mf">31.18</span><span class="o">%</span>
 <span class="n">cheetah</span><span class="p">,</span> <span class="n">chetah</span><span class="p">,</span> <span class="n">Acinonyx</span> <span class="n">jubatus</span>        <span class="p">:</span> <span class="mf">22.62</span><span class="o">%</span>
 <span class="n">tiger</span><span class="p">,</span> <span class="n">Panthera</span> <span class="n">tigris</span>                   <span class="p">:</span> <span class="mf">8.20</span><span class="o">%</span>
 <span class="n">lynx</span><span class="p">,</span> <span class="n">catamount</span>                          <span class="p">:</span> <span class="mf">7.34</span><span class="o">%</span>
@@ -401,11 +408,11 @@
 </div>
 <div class="section" id="summary">
 <h2><a class="toc-backref" href="#id9">Summary</a></h2>
-<p>In the article, I mentioned a few applications where SOFM can be used, but it&#8217;s not the full list. It can be also used for other applications like robotics or even for creating some beautiful pictures. It is fascinating how such a simple set of rules can be applied in order to solve very different problems.</p>
+<p>In the article, I mentioned a few applications where SOFM can be used, but it’s not the full list. It can be also used for other applications like robotics or even for creating some beautiful pictures. It is fascinating how such a simple set of rules can be applied in order to solve very different problems.</p>
 <p>Despite all the positive things that can be said about SOFM there are some problems that you encounter.</p>
 <ul class="simple">
 <li>There are many hyperparameters and selecting the right set of parameter can be tricky.</li>
-<li>SOFM doesn&#8217;t cover borders of the dataspace which means that area, volume or hypervolume of the data will be smaller than it is in real life. You can see it from the picture where we approximate circles.</li>
+<li>SOFM doesn’t cover borders of the dataspace which means that area, volume or hypervolume of the data will be smaller than it is in real life. You can see it from the picture where we approximate circles.</li>
 </ul>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-grid-types.png"><img alt="Compare hexagonal and rectangular grid types in SOFM" src="../../../_images/sofm-grid-types.png" style="width: 100%;" /></a>

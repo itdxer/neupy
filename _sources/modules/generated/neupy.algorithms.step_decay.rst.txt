@@ -1,0 +1,6 @@
+neupy.algorithms.step\_decay
+============================
+
+.. currentmodule:: neupy.algorithms
+
+.. autofunction:: step_decay

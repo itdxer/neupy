@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -228,320 +235,95 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="module-neupy.core.properties">
 <span id="neupy-core-properties-module"></span><h1>neupy.core.properties module</h1>
-<dl class="attribute">
+<dl class="class">
 <dt id="neupy.core.properties.BaseProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">BaseProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">BaseProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Base class for properties.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
 after initialization then exception will be triggered.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
 value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Name of the property. <span class="docutils literal"><span class="pre">None</span></span> in case if name
+wasn’t specified.</p>
+</dd>
+<dt><a class="reference internal" href="#neupy.core.properties.BaseProperty.expected_type" title="neupy.core.properties.BaseProperty.expected_type"><span class="xref py py-obj docutils literal"><span class="pre">expected_type</span></span></a> <span class="classifier-delimiter">:</span> <span class="classifier">tuple or object</span></dt>
+<dd><p class="first last">The most base type</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="5%" />
-<col width="95%" />
-</colgroup>
+<dl class="attribute">
+<dt id="neupy.core.properties.BaseProperty.expected_type">
+<span class="descname">expected_type</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>alias of <span class="xref py py-class docutils literal"><span class="pre">builtins.object</span></span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="neupy.core.properties.BaseProperty.validate">
+<span class="descname">validate</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Validate properties value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>name</td>
-<td>(str or None) Name of the property. <span class="docutils literal"><span class="pre">None</span></span> in case if name wasn&#8217;t specified.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>value</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="attribute">
+</dd></dl>
+
+<dl class="class">
 <dt id="neupy.core.properties.Property">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">Property</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">Property</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Simple and flexible class that helps indetify properties with
 specified type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>expected_type</strong> : object</p>
-<blockquote>
-<div><p>Valid data types.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>expected_type</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Valid data types.</p>
+</dd>
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
 after initialization then exception will be triggered.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
 value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.ArrayProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">ArrayProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Numpy array or matrix property.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.BoundedProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">BoundedProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Number property that have specified numerical bounds.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minval</strong> : float</p>
-<blockquote>
-<div><p>Minimum possible value for the property.</p>
-</div></blockquote>
-<p><strong>maxval</strong> : float</p>
-<blockquote>
-<div><p>Maximum possible value for the property.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.ProperFractionProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">ProperFractionProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Proper fraction property. Identify all possible numbers
-between zero and one.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.NumberProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">NumberProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Float or integer number property.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minval</strong> : float</p>
-<blockquote>
-<div><p>Minimum possible value for the property.</p>
-</div></blockquote>
-<p><strong>maxval</strong> : float</p>
-<blockquote>
-<div><p>Maximum possible value for the property.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.IntProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">IntProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Integer property.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minval</strong> : float</p>
-<blockquote>
-<div><p>Minimum possible value for the property.</p>
-</div></blockquote>
-<p><strong>maxval</strong> : float</p>
-<blockquote>
-<div><p>Maximum possible value for the property.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.TypedListProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">TypedListProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>List property that contains specified element types.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_elements</strong> : int</p>
-<blockquote>
-<div><p>Indentify fixed number of elements in list. <span class="docutils literal"><span class="pre">None</span></span>
-value mean that list can contains any number of
-elements. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>element_type</strong> : object or tuple</p>
-<blockquote>
-<div><p>There are could be defined valid list elementy type
-or a bunch of them as tuple.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.core.properties.ChoiceProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">ChoiceProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Property that can have discrete number of properties.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>choices</strong> : list, tuple or dict</p>
-<blockquote>
-<div><p>Stores all posible choices. Defines list of possible
-choices. If value specified as a dictionary than key
-would be just an alias to the expected value.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -549,117 +331,383 @@ value for the parameter. Defaults to <span class="docutils literal"><span class=
 </dd></dl>
 
 <dl class="class">
-<dt id="neupy.core.properties.WithdrawProperty">
-<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">WithdrawProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Defines inherited property that needs to
-be withdrawed.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="5%" />
-<col width="95%" />
-</colgroup>
+<dt id="neupy.core.properties.ArrayProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ArrayProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Numpy array or matrix property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>name</td>
-<td>(str or None) Name of the property. <span class="docutils literal"><span class="pre">None</span></span> in case if name wasn&#8217;t specified.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.core.properties.ArrayProperty.expected_type">
+<span class="descname">expected_type</span><em class="property"> = (&lt;class 'numpy.ndarray'&gt;, &lt;class 'numpy.matrixlib.defmatrix.matrix'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.BoundedProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">BoundedProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Number property that have specified numerical bounds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>minval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Minimum possible value for the property.</p>
+</dd>
+<dt><strong>maxval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Maximum possible value for the property.</p>
+</dd>
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.core.properties.BoundedProperty.validate">
+<span class="descname">validate</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Validate properties value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>value</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.ProperFractionProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ProperFractionProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Proper fraction property. Identify all possible numbers
+between zero and one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
+<dt id="neupy.core.properties.ProperFractionProperty.expected_type">
+<span class="descname">expected_type</span><em class="property"> = (&lt;class 'float'&gt;, &lt;class 'int'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.NumberProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">NumberProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Float or integer number property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>minval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Minimum possible value for the property.</p>
+</dd>
+<dt><strong>maxval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Maximum possible value for the property.</p>
+</dd>
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.core.properties.NumberProperty.expected_type">
+<span class="descname">expected_type</span><em class="property"> = (&lt;class 'int'&gt;, &lt;class 'float'&gt;, &lt;class 'numpy.floating'&gt;, &lt;class 'numpy.integer'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.IntProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">IntProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Integer property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>minval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Minimum possible value for the property.</p>
+</dd>
+<dt><strong>maxval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Maximum possible value for the property.</p>
+</dd>
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.core.properties.IntProperty.expected_type">
+<span class="descname">expected_type</span><em class="property"> = (&lt;class 'numbers.Integral'&gt;, &lt;class 'numpy.integer'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.TypedListProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">TypedListProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>List property that contains specified element types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>n_elements</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Indentify fixed number of elements in list. <span class="docutils literal"><span class="pre">None</span></span>
+value mean that list can contains any number of
+elements. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>element_type</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object or tuple</span></dt>
+<dd><p class="first last">There are could be defined valid list elementy type
+or a bunch of them as tuple.</p>
+</dd>
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.core.properties.TypedListProperty.expected_type">
+<span class="descname">expected_type</span><em class="property"> = (&lt;class 'list'&gt;, &lt;class 'tuple'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.core.properties.TypedListProperty.validate">
+<span class="descname">validate</span><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Validate properties value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>value</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.ChoiceProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ChoiceProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Property that can have discrete number of properties.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>choices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, tuple or dict</span></dt>
+<dd><p class="first last">Stores all posible choices. Defines list of possible
+choices. If value specified as a dictionary than key
+would be just an alias to the expected value.</p>
+</dd>
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+after initialization then exception will be triggered.
+Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.core.properties.ChoiceProperty.choices">
+<span class="descname">choices</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.core.properties.WithdrawProperty">
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">WithdrawProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Defines inherited property that needs to
+be withdrawed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Name of the property. <span class="docutils literal"><span class="pre">None</span></span> in case if name
+wasn’t specified.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
 <dt id="neupy.core.properties.ParameterProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">ParameterProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">ParameterProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>In addition to Numpy arrays and matrix property support also
 Tensorfow variables and NeuPy Initializers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
 after initialization then exception will be triggered.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
 value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="neupy.core.properties.ParameterProperty.expected_type">
+<span class="descname">expected_type</span><em class="property"> = (&lt;class 'numpy.ndarray'&gt;, &lt;class 'int'&gt;, &lt;class 'float'&gt;, &lt;class 'numpy.floating'&gt;, &lt;class 'numpy.integer'&gt;, &lt;class 'neupy.init.Initializer'&gt;, &lt;class 'tensorflow.python.ops.variables.VariableV1'&gt;, &lt;class 'tensorflow.python.framework.ops.Tensor'&gt;)</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
-<dl class="attribute">
-<dt id="neupy.core.properties.CallableProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">CallableProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Property for callable objects.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>expected_type</strong> : object</p>
-<blockquote>
-<div><p>Valid data types.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
-after initialization then exception will be triggered.
-Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
-value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="class">
 <dt id="neupy.core.properties.FunctionWithOptionsProperty">
-<span class="descclassname">neupy.core.properties.</span><span class="descname">FunctionWithOptionsProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><span class="descclassname">neupy.core.properties.</span><span class="descname">FunctionWithOptionsProperty</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/core/properties.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Property that helps select error function from
 available or define a new one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>choices</strong> : list, tuple or dict</p>
-<blockquote>
-<div><p>Stores all posible choices. Defines list of possible
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>choices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, tuple or dict</span></dt>
+<dd><p class="first last">Stores all posible choices. Defines list of possible
 choices. If value specified as a dictionary than key
 would be just an alias to the expected value.</p>
-</div></blockquote>
-<p><strong>default</strong> : object</p>
-<blockquote>
-<div><p>Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>required</strong> : bool</p>
-<blockquote>
-<div><p>If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
+</dd>
+<dt><strong>default</strong> <span class="classifier-delimiter">:</span> <span class="classifier">object</span></dt>
+<dd><p class="first last">Default property value. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>required</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If parameter equal to <span class="docutils literal"><span class="pre">True</span></span> and value is not defined
 after initialization then exception will be triggered.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
-<p><strong>allow_none</strong> : bool</p>
-<blockquote class="last">
-<div><p>When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
+</dd>
+<dt><strong>allow_none</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">When value is equal to <span class="docutils literal"><span class="pre">True</span></span> than <span class="docutils literal"><span class="pre">None</span></span> is a valid
 value for the parameter. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>

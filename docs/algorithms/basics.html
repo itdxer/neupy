@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Algorithms with constructible architecture" href="constructible-architecture.html" /><link rel="prev" title="Training Algorithms" href="../algorithms.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Algorithms with constructible architecture" href="constructible-architecture.html" /><link rel="prev" title="Training Algorithms" href="../algorithms.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -237,41 +244,36 @@
 <div class="section" id="initialization">
 <h2>Initialization</h2>
 <p>Initialization process is slightly different for networks with fixed and constructible architectures. Networks with fixed architecture have predefined structure and we need just to specify algorithm-specific parameters.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="n">sofm</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">SOFM</span><span class="p">(</span><span class="n">n_inputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_outputs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Notice, that we explicitly specified argument names during initialization. NeuPy doesn&#8217;t have defined order for the arguments and it will raise exception when there is no names associated with each argument.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Invalid initialization, because every additional</span>
+<p>Notice, that we explicitly specified argument names during initialization. NeuPy doesn’t have defined order for the arguments and it will raise exception when there is no names associated with each argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Invalid initialization, because every additional</span>
 <span class="c1"># argument require to have name specified explicitly</span>
 <span class="n">sofm</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">SOFM</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In contrast, network with constructible architectures require two basic steps. First, you need to define structure of the network. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-
-<span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
-<span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>When architecture defined we need to specify training algorithm. The initialization looks exactly the same as the one that we&#8217;ve seen for networks with fixed architectures. The only difference is that we have to specify our network structure as the first argument.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
-<span class="n">momentum</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<p>When architecture defined we need to specify training algorithm. The initialization looks exactly the same as the one that we’ve seen for networks with fixed architectures. The only difference is that we have to specify our network structure as the first argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>These two steps can be combined into one for simplicity.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">algorithms</span>
 
-<span class="n">momentum</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
     <span class="p">],</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
     <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -279,39 +281,39 @@
 </div>
 <div class="section" id="training">
 <h2>Training</h2>
-<p>Training looks the the same for all algorithms, with few exceptions for different algorithms, so you should refer to the documentation before training, in case you&#8217;re not familiar with the API.</p>
+<p>Training looks the the same for all algorithms, with few exceptions for different algorithms, so you should refer to the documentation before training, in case you’re not familiar with the API.</p>
 <p>To train neural network we need to use the <span class="docutils literal"><span class="pre">train</span></span> method (or <span class="docutils literal"><span class="pre">fit</span></span> which was added for <span class="docutils literal"><span class="pre">scikit-learn</span></span> compatibility).</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If we need to validate our training results with validation dataset we can pass it as an additional argument (that option available for most of the algorithms, but not all of them).</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To be able to see the output after each epoch we can set up <span class="docutils literal"><span class="pre">verbose=True</span></span> during network&#8217;s initialization.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<p>To be able to see the output after each epoch we can set up <span class="docutils literal"><span class="pre">verbose=True</span></span> during network’s initialization.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Or we can switch on <span class="docutils literal"><span class="pre">verbose</span></span> parameter after the initialization.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-
-<span class="n">nnet</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="n">nnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>If you want to run training in loop you have to change the way neupy outputs its training summary. It can be changed with the <span class="docutils literal"><span class="pre">summary</span></span> argument.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="n">nnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s1">&#39;inline&#39;</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="prediction">
 <h2>Prediction</h2>
-<p>To make a prediction we need to pass networks input to the <span class="docutils literal"><span class="pre">predict</span></span> method.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">nnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<p>To make a prediction we need to pass networks input to the <span class="docutils literal"><span class="pre">predict</span></span> method. This method can be called from the optimizer or network directly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When inputs are to big it’s possible to specify size of the batch of samples that will be propagated throught the network at once. At the end outputs will be combined into single array.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -1,5 +1,5 @@
-neupy\.datasets\.reber module
-=============================
+neupy.datasets.reber module
+===========================
 
 .. automodule:: neupy.datasets.reber
     :members:

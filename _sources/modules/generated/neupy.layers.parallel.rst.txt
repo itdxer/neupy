@@ -1,0 +1,6 @@
+neupy.layers.parallel
+=====================
+
+.. currentmodule:: neupy.layers
+
+.. autofunction:: parallel

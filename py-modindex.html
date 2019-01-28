@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="_static/plugins.js"></script>
         <script src="_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script><script type="text/javascript" src="_static/js/google_analytics.js"></script><script type="text/javascript" src="_static/js/script.js"></script><script type="text/javascript" src="_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script><script type="text/javascript" src="_static/js/google_analytics.js"></script><script type="text/javascript" src="_static/js/script.js"></script><script type="text/javascript" src="_static/js/copybutton.js"></script>
 
 
     <script type="text/javascript">
@@ -52,10 +53,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -324,11 +331,6 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.constructor.html#module-neupy.algorithms.constructor"><tt class="xref">neupy.algorithms.constructor</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.algorithms.gd.html#module-neupy.algorithms.gd"><tt class="xref">neupy.algorithms.gd</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
@@ -364,11 +366,6 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.gd.errors.html#module-neupy.algorithms.gd.errors"><tt class="xref">neupy.algorithms.gd.errors</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.algorithms.gd.hessdiag.html#module-neupy.algorithms.gd.hessdiag"><tt class="xref">neupy.algorithms.gd.hessdiag</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
@@ -389,7 +386,17 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.algorithms.gd.objectives.html#module-neupy.algorithms.gd.objectives"><tt class="xref">neupy.algorithms.gd.objectives</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.algorithms.gd.quasi_newton.html#module-neupy.algorithms.gd.quasi_newton"><tt class="xref">neupy.algorithms.gd.quasi_newton</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.algorithms.gd.regularizers.html#module-neupy.algorithms.gd.regularizers"><tt class="xref">neupy.algorithms.gd.regularizers</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -400,6 +407,11 @@
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.algorithms.gd.rprop.html#module-neupy.algorithms.gd.rprop"><tt class="xref">neupy.algorithms.gd.rprop</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.algorithms.gd.step_updates.html#module-neupy.algorithms.gd.step_updates"><tt class="xref">neupy.algorithms.gd.step_updates</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -429,7 +441,22 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.memory.utils.html#module-neupy.algorithms.memory.utils"><tt class="xref">neupy.algorithms.memory.utils</tt></a></td><td>
+       <a href="apidocs/neupy.algorithms.minsearch.html#module-neupy.algorithms.minsearch"><tt class="xref">neupy.algorithms.minsearch</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.algorithms.minsearch.golden_search.html#module-neupy.algorithms.minsearch.golden_search"><tt class="xref">neupy.algorithms.minsearch.golden_search</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.algorithms.minsearch.wolfe.html#module-neupy.algorithms.minsearch.wolfe"><tt class="xref">neupy.algorithms.minsearch.wolfe</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.algorithms.plots.html#module-neupy.algorithms.plots"><tt class="xref">neupy.algorithms.plots</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -444,17 +471,7 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.rbfn.learning.html#module-neupy.algorithms.rbfn.learning"><tt class="xref">neupy.algorithms.rbfn.learning</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.algorithms.rbfn.pnn.html#module-neupy.algorithms.rbfn.pnn"><tt class="xref">neupy.algorithms.rbfn.pnn</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.rbfn.rbf_kmeans.html#module-neupy.algorithms.rbfn.rbf_kmeans"><tt class="xref">neupy.algorithms.rbfn.rbf_kmeans</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -469,72 +486,7 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.regularization.html#module-neupy.algorithms.regularization"><tt class="xref">neupy.algorithms.regularization</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.regularization.base.html#module-neupy.algorithms.regularization.base"><tt class="xref">neupy.algorithms.regularization.base</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.regularization.max_norm.html#module-neupy.algorithms.regularization.max_norm"><tt class="xref">neupy.algorithms.regularization.max_norm</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.regularization.weight_decay.html#module-neupy.algorithms.regularization.weight_decay"><tt class="xref">neupy.algorithms.regularization.weight_decay</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.regularization.weight_elimination.html#module-neupy.algorithms.regularization.weight_elimination"><tt class="xref">neupy.algorithms.regularization.weight_elimination</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.step_update.html#module-neupy.algorithms.step_update"><tt class="xref">neupy.algorithms.step_update</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.step_update.base.html#module-neupy.algorithms.step_update.base"><tt class="xref">neupy.algorithms.step_update.base</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.step_update.errdiff.html#module-neupy.algorithms.step_update.errdiff"><tt class="xref">neupy.algorithms.step_update.errdiff</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.step_update.leak_step.html#module-neupy.algorithms.step_update.leak_step"><tt class="xref">neupy.algorithms.step_update.leak_step</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.step_update.linear_search.html#module-neupy.algorithms.step_update.linear_search"><tt class="xref">neupy.algorithms.step_update.linear_search</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.step_update.search_then_converge.html#module-neupy.algorithms.step_update.search_then_converge"><tt class="xref">neupy.algorithms.step_update.search_then_converge</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.step_update.step_decay.html#module-neupy.algorithms.step_update.step_decay"><tt class="xref">neupy.algorithms.step_update.step_decay</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.summary_info.html#module-neupy.algorithms.summary_info"><tt class="xref">neupy.algorithms.summary_info</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.algorithms.utils.html#module-neupy.algorithms.utils"><tt class="xref">neupy.algorithms.utils</tt></a></td><td>
+       <a href="apidocs/neupy.algorithms.signals.html#module-neupy.algorithms.signals"><tt class="xref">neupy.algorithms.signals</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -574,11 +526,6 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.core.base.html#module-neupy.core.base"><tt class="xref">neupy.core.base</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.core.config.html#module-neupy.core.config"><tt class="xref">neupy.core.config</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
@@ -599,11 +546,6 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.core.terminal.html#module-neupy.core.terminal"><tt class="xref">neupy.core.terminal</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.datasets.html#module-neupy.datasets"><tt class="xref">neupy.datasets</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
@@ -615,11 +557,6 @@
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.datasets.reber.html#module-neupy.datasets.reber"><tt class="xref">neupy.datasets.reber</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.environment.html#module-neupy.environment"><tt class="xref">neupy.environment</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -649,31 +586,6 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.layers.connections.html#module-neupy.layers.connections"><tt class="xref">neupy.layers.connections</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.layers.connections.base.html#module-neupy.layers.connections.base"><tt class="xref">neupy.layers.connections.base</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.layers.connections.graph.html#module-neupy.layers.connections.graph"><tt class="xref">neupy.layers.connections.graph</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.layers.connections.inline.html#module-neupy.layers.connections.inline"><tt class="xref">neupy.layers.connections.inline</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.layers.connections.utils.html#module-neupy.layers.connections.utils"><tt class="xref">neupy.layers.connections.utils</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.layers.convolutions.html#module-neupy.layers.convolutions"><tt class="xref">neupy.layers.convolutions</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
@@ -684,7 +596,7 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.layers.input.html#module-neupy.layers.input"><tt class="xref">neupy.layers.input</tt></a></td><td>
+       <a href="apidocs/neupy.layers.graph.html#module-neupy.layers.graph"><tt class="xref">neupy.layers.graph</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -719,42 +631,12 @@
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.layers.utils.html#module-neupy.layers.utils"><tt class="xref">neupy.layers.utils</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.optimizations.html#module-neupy.optimizations"><tt class="xref">neupy.optimizations</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.optimizations.golden_search.html#module-neupy.optimizations.golden_search"><tt class="xref">neupy.optimizations.golden_search</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.optimizations.wolfe.html#module-neupy.optimizations.wolfe"><tt class="xref">neupy.optimizations.wolfe</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.plots.html#module-neupy.plots"><tt class="xref">neupy.plots</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.plots.error_plot.html#module-neupy.plots.error_plot"><tt class="xref">neupy.plots.error_plot</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.plots.hinton.html#module-neupy.plots.hinton"><tt class="xref">neupy.plots.hinton</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="apidocs/neupy.plots.network_structure.html#module-neupy.plots.network_structure"><tt class="xref">neupy.plots.network_structure</tt></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -770,6 +652,26 @@
        <td></td>
        <td>&nbsp;&nbsp;&nbsp;
        <a href="apidocs/neupy.utils.html#module-neupy.utils"><tt class="xref">neupy.utils</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.utils.iters.html#module-neupy.utils.iters"><tt class="xref">neupy.utils.iters</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.utils.misc.html#module-neupy.utils.misc"><tt class="xref">neupy.utils.misc</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.utils.processing.html#module-neupy.utils.processing"><tt class="xref">neupy.utils.processing</tt></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&nbsp;&nbsp;&nbsp;
+       <a href="apidocs/neupy.utils.tf_utils.html#module-neupy.utils.tf_utils"><tt class="xref">neupy.utils.tf_utils</tt></a></td><td>
        <em></em></td></tr>
    </table>
 

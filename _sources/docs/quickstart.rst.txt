@@ -11,7 +11,7 @@ NeuPy provide very simple and intuitive interface for building neural networks. 
 .. code-block:: python
 
     from neupy.layers import *
-    network = Input(24) > Relu(12) > Softmax(10)
+    network = Input(24) >> Relu(12) >> Softmax(10)
 
 Inline connection is a suitable choice for very small networks. Large networks can be defined with the help of the ``join`` operator.
 

@@ -257,13 +257,13 @@ Let's define a function that trains the neural network and return prediction err
 
             step=0.001,
             batch_size=128,
-            error='categorical_crossentropy',
+            loss='categorical_crossentropy',
         )
         network.train(x_train, y_train, epochs=100)
 
         # Calculates categorical cross-entropy error between
         # predicted value for x_test and y_test value
-        return network.prediction_error(x_test, y_test)
+        return network.score(x_test, y_test)
 
 Let's import digits dataset from scikit-learn.
 
@@ -272,9 +272,9 @@ Let's import digits dataset from scikit-learn.
     import numpy as np
     from sklearn import datasets
     from sklearn.model_selection import train_test_split
-    from neupy import environment
+    from neupy import utils
 
-    environment.reproducible()
+    utils.reproducible()
 
     dataset = datasets.load_digits()
     n_samples = dataset.target.size
@@ -468,18 +468,17 @@ Let's make an example. We're going to use MNIST dataset.
     from sklearn import datasets, preprocessing
     from sklearn.model_selection import train_test_split
 
-    mnist = datasets.fetch_mldata('MNIST original')
+    X, y = datasets.fetch_openml('mnist_784', version=1, return_X_y=True)
 
-    target_scaler = preprocessing.OneHotEncoder()
-    target = mnist.target.reshape((-1, 1))
-    target = target_scaler.fit_transform(target).todense()
+    target_scaler = preprocessing.OneHotEncoder(sparse=False, categories='auto')
+    y = target_scaler.fit_transform(y.reshape(-1, 1))
 
-    data = mnist.data / 255.
-    data = data - data.mean(axis=0)
+    X /= 255.
+    X -= X.mean(axis=0)
 
     x_train, x_test, y_train, y_test = train_test_split(
-        data.astype(np.float32),
-        target.astype(np.float32),
+        X.astype(np.float32),
+        y.astype(np.float32),
         test_size=(1 / 7.)
     )
 
@@ -575,9 +574,9 @@ Next, we need to construct network based on the presented information. In our ca
     network = layers.Input(784)
 
     for layer_size in layer_sizes:
-        network = network > activation_layer(layer_size)
+        network = network >> activation_layer(layer_size)
 
-    network = network > layers.Dropout(proba) > layers.Softmax(10)
+    network = network >> layers.Dropout(proba) >> layers.Softmax(10)
 
 To learn more about layers in NeuPy you should check :ref:`documentation <layers-basics>`.
 
@@ -589,7 +588,7 @@ After that, we can define training algorithm for the network.
     from neupy.exceptions import StopTraining
 
     def on_epoch_end(network):
-        if network.errors.last() > 10:
+        if network.training_errors[-1] > 10:
             raise StopTraining("Training was interrupted. Error is to high.")
 
     mnet = algorithms.RMSProp(
@@ -598,10 +597,10 @@ After that, we can define training algorithm for the network.
         batch_size=batch_size,
         step=step,
 
-        error='categorical_crossentropy',
+        loss='categorical_crossentropy',
         shuffle_data=True,
 
-        epoch_end_signal=on_epoch_end,
+        signals=on_epoch_end,
     )
 
 All settings should be clear from the code. You can check :network:`RMSProp` documentation to find more information about its input parameters. In addition, I've added a simple rule that interrupts training when the error is too high. This is an example of a simple rule that can be changed.
@@ -616,7 +615,7 @@ And at the end of the function, we can check some information about the training
 
 .. code-block:: python
 
-    score = mnet.prediction_error(x_test, y_test)
+    score = mnet.score(x_test, y_test)
 
     y_predicted = mnet.predict(x_test).argmax(axis=1)
     accuracy = metrics.accuracy_score(y_test.argmax(axis=1), y_predicted)
@@ -626,7 +625,7 @@ And at the end of the function, we can check some information about the training
 
     return score
 
-You can see that I've used two evaluation metrics. First one is cross-entropy. NeuPy uses it as a validation error function when we call the ``prediction_error`` method. The second one is just a prediction accuracy.
+You can see that I've used two evaluation metrics. First one is cross-entropy. NeuPy uses it as a validation error function when we call the ``score`` method. The second one is just a prediction accuracy.
 
 And finally, we run hyperparameter optimization.
 

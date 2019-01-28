@@ -1,5 +1,5 @@
-neupy\.core\.docs module
-========================
+neupy.core.docs module
+======================
 
 .. automodule:: neupy.core.docs
     :members:

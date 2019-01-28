@@ -1,5 +1,18 @@
-neupy\.utils module
+neupy.utils package
 ===================
+
+Submodules
+----------
+
+.. toctree::
+
+   neupy.utils.iters
+   neupy.utils.misc
+   neupy.utils.processing
+   neupy.utils.tf_utils
+
+Module contents
+---------------
 
 .. automodule:: neupy.utils
     :members:

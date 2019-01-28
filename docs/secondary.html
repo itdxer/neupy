@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="next" title="Environments" href="secondary/environments.html" /><link rel="prev" title="Storage for Neural Networks" href="storage.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -231,15 +238,11 @@
 <p>This part of documentation contains secondary feature from NeuPy library.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="secondary/environments.html">Environments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="secondary/environments.html#reproducible-environment">Reproducible environment</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="secondary/visualizations.html">Visualizations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="secondary/visualizations.html#hinton-diagram">Hinton diagram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="secondary/visualizations.html#error-plot">Error plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secondary/visualizations.html#training-progress">Training progress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="secondary/visualizations.html#network-structure">Network structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="secondary/visualizations.html#saliency-map">Saliency Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secondary/visualizations.html#hinton-diagram">Hinton diagram</a></li>
 </ul>
 </li>
 </ul>
@@ -250,10 +253,7 @@
         
         
         
-        </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="storage.html">Storage for Neural Networks</a></li>
-            <li class="right"><a href="secondary/environments.html">Environments</a> &raquo; </li>
-        </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">

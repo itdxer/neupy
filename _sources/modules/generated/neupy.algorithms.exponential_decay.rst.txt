@@ -1,0 +1,6 @@
+neupy.algorithms.exponential\_decay
+===================================
+
+.. currentmodule:: neupy.algorithms
+
+.. autofunction:: exponential_decay

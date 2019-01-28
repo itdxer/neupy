@@ -1,0 +1,7 @@
+neupy.layers.graph module
+=========================
+
+.. automodule:: neupy.layers.graph
+    :members:
+    :undoc-members:
+    :show-inheritance:

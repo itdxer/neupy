@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -236,9 +243,9 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : {<span class="docutils literal"><span class="pre">sync</span></span>, <span class="docutils literal"><span class="pre">async</span></span>}</p>
-<blockquote>
-<div><p>Indentify pattern recovery mode.</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>mode</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">sync</span></span>, <span class="docutils literal"><span class="pre">async</span></span>}</span></dt>
+<dd><p class="first">Indentify pattern recovery mode.</p>
 <ul class="simple">
 <li><span class="docutils literal"><span class="pre">sync</span></span> mode tries to recover pattern using all
 values from the input vector.</li>
@@ -247,13 +254,18 @@ input vector and iteratively repeat this procedure.
 Number of iterations defines by the <span class="docutils literal"><span class="pre">n_times</span></span>
 parameter.</li>
 </ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
-</div></blockquote>
-<p><strong>n_times</strong> : int</p>
-<blockquote class="last">
-<div><p>Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">sync</span></span>.</p>
+</dd>
+<dt><strong>n_times</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Available only in <span class="docutils literal"><span class="pre">async</span></span> mode. Identify number
 of random trials. Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Property controls verbose output in terminal. The <span class="docutils literal"><span class="pre">True</span></span> value
+enables informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> - disable
+it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -270,10 +282,11 @@ of random trials. Defaults to <span class="docutils literal"><span class="pre">1
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>matrix</strong> : array-like</p>
-<blockquote class="last">
-<div><p>Matrix for validation.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>matrix</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd><p class="first last">Matrix for validation.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -292,7 +305,7 @@ of random trials. Defaults to <span class="docutils literal"><span class="pre">1
 
 <dl class="attribute">
 <dt id="neupy.algorithms.memory.base.DiscreteMemory.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;)), 'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'mode': Option(class_name='DiscreteMemory', value=ChoiceProperty(name=&quot;mode&quot;)), 'n_times': Option(class_name='DiscreteMemory', value=IntProperty(name=&quot;n_times&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/memory/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -1,5 +1,5 @@
-neupy\.layers\.pooling module
-=============================
+neupy.layers.pooling module
+===========================
 
 .. automodule:: neupy.layers.pooling
     :members:

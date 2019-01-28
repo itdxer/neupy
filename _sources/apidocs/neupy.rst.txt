@@ -11,19 +11,17 @@ Subpackages
     neupy.core
     neupy.datasets
     neupy.layers
-    neupy.optimizations
     neupy.plots
+    neupy.utils
 
 Submodules
 ----------
 
 .. toctree::
 
-   neupy.environment
    neupy.exceptions
    neupy.init
    neupy.storage
-   neupy.utils
 
 Module contents
 ---------------

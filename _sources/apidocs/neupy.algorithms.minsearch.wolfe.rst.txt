@@ -1,0 +1,7 @@
+neupy.algorithms.minsearch.wolfe module
+=======================================
+
+.. automodule:: neupy.algorithms.minsearch.wolfe
+    :members:
+    :undoc-members:
+    :show-inheritance:

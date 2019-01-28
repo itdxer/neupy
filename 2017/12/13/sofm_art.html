@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Self-Organizing Maps and Applications" href="../09/sofm_applications.html" /><link rel="prev" title="Create unique text-style with SOFM" href="../17/sofm_text_style.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Self-Organizing Maps and Applications" href="../09/sofm_applications.html" /><link rel="prev" title="Create unique text-style with SOFM" href="../17/sofm_text_style.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -242,7 +249,7 @@
     <br clear="right">
 </div><div class="section" id="introduction">
 <h2>Introduction</h2>
-<p>In this article, I just want to show how beautiful sometimes can be a neural network. I think, it&#8217;s quite rare that algorithm can not only extract knowledge from the data, but also produce something beautiful using exactly the same set of training rules without any modifications.</p>
+<p>In this article, I just want to show how beautiful sometimes can be a neural network. I think, it’s quite rare that algorithm can not only extract knowledge from the data, but also produce something beautiful using exactly the same set of training rules without any modifications.</p>
 </div>
 <div class="section" id="the-main-idea">
 <h2>The main idea</h2>
@@ -266,12 +273,12 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-4-dots-update.png"><img alt="SOFM symmetrically update weights" src="../../../_images/sofm-4-dots-update.png" style="width: 70%;" /></a>
 </div>
-<p>We can make patterns look more interestingly if we start moving data points around. Let&#8217;s now use only two points and put one on the left and one on the right side from the grid. We do the same SOFM update again, but as soon as it&#8217;s done we rotate two data points by 45 degrees counterclockwise. After repeating this process a few times, we can get another pattern.</p>
+<p>We can make patterns look more interestingly if we start moving data points around. Let’s now use only two points and put one on the left and one on the right side from the grid. We do the same SOFM update again, but as soon as it’s done we rotate two data points by 45 degrees counterclockwise. After repeating this process a few times, we can get another pattern.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-update-and-rotate.png"><img alt="SOFM symmetrically update weights rotating data points" src="../../../_images/sofm-update-and-rotate.png" style="width: 70%;" /></a>
 </div>
-<p>Black dots are two initial data points. And gray dots show places where we&#8217;ve seen these two data points after each new 45 degree rotation.</p>
-<p>It&#8217;s pretty cool that this simple approach can produce such a beautiful patterns. We can even define set of variables changing which we can generate different patterns.</p>
+<p>Black dots are two initial data points. And gray dots show places where we’ve seen these two data points after each new 45 degree rotation.</p>
+<p>It’s pretty cool that this simple approach can produce such a beautiful patterns. We can even define set of variables changing which we can generate different patterns.</p>
 </div>
 <div class="section" id="making-patterns-more-interesting">
 <h2>Making patterns more interesting</h2>
@@ -281,7 +288,7 @@
 <li>Learning radius</li>
 <li>Learning rate for the neighbour neurons</li>
 </ol>
-<p><strong>Learning rate</strong> defines by how much we will push neurons during the updated. If learning rate value is small then we won&#8217;t push it to far from the initial position.</p>
+<p><strong>Learning rate</strong> defines by how much we will push neurons during the updated. If learning rate value is small then we won’t push it to far from the initial position.</p>
 <p><strong>Learning radius</strong> defines how many neighbour neurons will be updated. The larger the radius the more neighbours would be updated after each iteration. If learning radius equal to zero then only one neuron will be updated.</p>
 <p>And the last one is a parameter that controls <strong>learning rate for the neighbour neurons</strong>. The larger the value the bigger update neighbour neurons will get.</p>
 </div>
@@ -308,12 +315,12 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/sofm-blob-pattern.png"><img alt="blob pattern generated by SOFM" src="../../../_images/sofm-blob-pattern.png" style="width: 50%;" /></a>
 </div>
-<p>In this example it&#8217;s harder to say what happened, but we have at least one clue.In the center of the grid there are three dots, arranged horizontally, that didn&#8217;t move after all updates. Knowing that there are nine dots in the row, we can conclude that learning radius was 2 or 3. We not sure which one, but if you see that there are just 5 dots left on their initial positions then it&#8217;s very likely that radius was 3 since we moved more neurons into new positions.</p>
-<p>I hope you got the idea. It&#8217;s not always possible to guess the exact values, but each pattern can reveal some clues about the algorithm&#8217;s set up.</p>
+<p>In this example it’s harder to say what happened, but we have at least one clue.In the center of the grid there are three dots, arranged horizontally, that didn’t move after all updates. Knowing that there are nine dots in the row, we can conclude that learning radius was 2 or 3. We not sure which one, but if you see that there are just 5 dots left on their initial positions then it’s very likely that radius was 3 since we moved more neurons into new positions.</p>
+<p>I hope you got the idea. It’s not always possible to guess the exact values, but each pattern can reveal some clues about the algorithm’s set up.</p>
 </div>
 <div class="section" id="further-reading">
 <h2>Further reading</h2>
-<p>If you want to learn more about SOFM, you can <a class="reference internal" href="../09/sofm_applications.html#sofm-applications"><span>check article</span></a> that covers basic ideas behind SOFM and some of the problems that can be solved with this algorithm.</p>
+<p>If you want to learn more about SOFM, you can <a class="reference internal" href="../09/sofm_applications.html#sofm-applications"><span class="std std-ref">check article</span></a> that covers basic ideas behind SOFM and some of the problems that can be solved with this algorithm.</p>
 </div>
 <div class="section" id="code">
 <h2>Code</h2>

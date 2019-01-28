@@ -1,5 +1,5 @@
-neupy\.algorithms\.gd\.rprop module
-===================================
+neupy.algorithms.gd.rprop module
+================================
 
 .. automodule:: neupy.algorithms.gd.rprop
     :members:

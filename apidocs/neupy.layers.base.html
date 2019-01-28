@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -231,67 +238,56 @@
 <dl class="class">
 <dt id="neupy.layers.base.BaseLayer">
 <em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">BaseLayer</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Base class for all layers.</p>
+<dd><p>Base class for the layers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
-will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
 </td>
 </tr>
-</tbody>
-</table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
-<td>Swith off trainig state.</td>
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
 </tr>
-<tr class="row-even"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
-<dt id="neupy.layers.base.BaseLayer.add_parameter">
-<span class="descname">add_parameter</span><span class="sig-paren">(</span><em>value</em>, <em>name</em>, <em>shape=None</em>, <em>trainable=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.base.BaseLayer.create_variables">
+<span class="descname">create_variables</span><span class="sig-paren">(</span><em>*input_shapes</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="neupy.layers.base.BaseLayer.global_identifiers_map">
-<span class="descname">global_identifiers_map</span><em class="property"> = {}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dl class="method">
+<dt id="neupy.layers.base.BaseLayer.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -309,150 +305,14 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="neupy.layers.base.BaseLayer.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return output base on the input value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="neupy.layers.base.BaseLayer.output_shape">
 <span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.layers.base.BaseLayer.validate">
-<span class="descname">validate</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Validate input shape value before assigning it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="neupy.layers.base.ParameterBasedLayer">
-<em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">ParameterBasedLayer</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Layer that creates weight and bias parameters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
-<blockquote>
-<div><p>Layer&#8217;s output size.</p>
-</div></blockquote>
-<p><strong>weight</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
-<blockquote>
-<div><p>Defines layer&#8217;s weights. Default initialization methods
-you can find <a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>.
-Defaults to <a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal()</span></span></a>.</p>
-</div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Tensorfow variable, scalar, Initializer or None</p>
-<blockquote>
-<div><p>Defines layer&#8217;s bias.
-Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
-<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
-The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
-do not add it into parameters list.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
-will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="31%" />
-<col width="69%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
-<td>Swith off trainig state.</td>
-</tr>
-<tr class="row-even"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
-</tr>
-</tbody>
-</table>
-<dl class="attribute">
-<dt id="neupy.layers.base.ParameterBasedLayer.bias">
-<span class="descname">bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.base.ParameterBasedLayer.bias_shape">
-<span class="descname">bias_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.layers.base.ParameterBasedLayer.initialize">
-<span class="descname">initialize</span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Initialize connection</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.base.ParameterBasedLayer.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='ParameterBasedLayer', value=IntProperty(name=&quot;size&quot;)), 'weight': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.base.ParameterBasedLayer.size">
-<span class="descname">size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.base.ParameterBasedLayer.weight">
-<span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.base.ParameterBasedLayer.weight_shape">
-<span class="descname">weight_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.base.BaseLayer.variable">
+<span class="descname">variable</span><span class="sig-paren">(</span><em>value</em>, <em>name</em>, <em>shape=None</em>, <em>trainable=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -460,10 +320,168 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dl class="class">
 <dt id="neupy.layers.base.Identity">
 <em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">Identity</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Residual skip connection.</p>
+<dd><p>Passes input through the layer without changes. Can be
+useful while defining residual networks in the network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
+</tr>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.layers.base.Identity.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.layers.base.Identity.options">
 <span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.base.Identity.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.base.Input">
+<em class="property">class </em><span class="descclassname">neupy.layers.base.</span><span class="descname">Input</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Layer defines network’s input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or tuple</span></dt>
+<dd><p class="first last">Shape of the input features per sample. Batch
+dimension has to be excluded from the shape.</p>
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Feedforward Neural Network (FNN)</p>
+<p>In the example, input layer defines network that expects
+2D inputs (matrices). In other words, input to the network
+should be set of samples combined into matrix where each sample
+has 10 dimensional vector associated with it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Convolutional Neural Network (CNN)</p>
+<p>In the example, input layer specified that we expect multiple
+28x28 image as an input and each image should have single
+channel (images with no color).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">Reshape</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
+</tr>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="neupy.layers.base.Input.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.Input.input_shape">
+<span class="descname">input_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.Input.options">
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'shape': Option(class_name='Input', value=TypedListProperty(name=&quot;shape&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.base.Input.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.base.Input.shape">
+<span class="descname">shape</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/base.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

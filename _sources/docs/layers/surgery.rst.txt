@@ -22,28 +22,28 @@ In NeuPy, it's possible to slice neural networks in order to get part of the net
     ...     Relu(50, name='relu-5'),
     ... )
     >>> network
-    Input(10) > Relu(20) > Relu(30) > Relu(40) > Relu(50)
+    (?, 10) -> [... 5 layers ...] -> (?, 50)
 
 The ``end`` method can change network's output layer. For example, we want to get output from the ``relu-4`` layer instead of the ``relu-5``.
 
 .. code-block:: python
 
     >>> network.end('relu-4')
-    Input(10) > Relu(20) > Relu(30) > Relu(40)
+    (?, 10) -> [... 4 layers ...] -> (?, 40)
 
 The same can be done for the input layers with help of the ``start`` method.
 
 .. code-block:: python
 
     >>> network.start('relu-2')
-    Relu(20) > Relu(30) > Relu(40) > Relu(50)
+    <unknown> -> [... 4 layers ...] -> (?, 50)
 
 These methods can be combined in sequence
 
 .. code-block:: python
 
     >>> network.start('relu-2').end('relu-4')
-    Relu(20) > Relu(30) > Relu(40)
+    <unknown> -> [... 3 layers ...] -> (?, 40)
 
 Also, it's possible to point into multiple input and output layers
 
@@ -51,18 +51,16 @@ Also, it's possible to point into multiple input and output layers
 
     >>> from neupy.layers import *
     >>>
-    >>> network = Input(10) > Relu(20, name='relu-2')
+    >>> network = Input(10) >> Relu(20, name='relu-2')
+    >>> output_1 = Relu(30, name='relu-3') >> Sigmoid(1)
+    >>> output_2 = Relu(40, name='relu-4') >> Sigmoid(2)
     >>>
-    >>> output_1 = Relu(30, name='relu-3') > Sigmoid(1)
-    >>> output_2 = Relu(40, name='relu-4') > Sigmoid(2)
-    >>>
-    >>> network = network > [output_1, output_2]
-    >>>
+    >>> network = network >> (output_1 | output_2)
     >>> network
-    10 -> [... 6 layers ...] -> [(1,), (2,)]
+    (?, 10) -> [... 6 layers ...] -> [(?, 1), (?, 2)]
     >>>
     >>> network.end('relu-3', 'relu-4')
-    10 -> [... 4 layers ...] -> [(30,), (40,)]
+    (?, 10) -> [... 4 layers ...] -> [(?, 30), (?, 40)]
 
 Layer instance can be used as identifiers for the slicing method instead of the names.
 
@@ -74,12 +72,12 @@ Layer instance can be used as identifiers for the slicing method instead of the 
     >>> relu_2 = Relu(20)
     >>> relu_3 = Relu(30)
     >>>
-    >>> network = input_layer > relu_2 > relu_3
+    >>> network = input_layer >> relu_2 >> relu_3
     >>> network
-    Input(10) > Relu(20) > Relu(30)
+    (?, 10) -> [... 3 layers ...] -> (?, 30)
     >>>
     >>> network.end(relu_2)
-    Input(10) > Relu(20)
+    (?, 10) -> [... 2 layers ...] -> (?, 20)
 
 .. raw:: html
 
@@ -101,10 +99,10 @@ Each name is a unique identifier for the layer inside of the network. Any layer 
     ... )
     >>>
     >>> network.layer('relu-0')
-    Relu(8)
+    Relu(8, alpha=0, weight=HeNormal(gain=2), bias=Constant(0), name='relu-0')
     >>>
     >>> network.layer('relu-1')
-    Relu(5)
+    Relu(5, alpha=0, weight=HeNormal(gain=2), bias=Constant(0), name='relu-1')
 
 
 Exception will be triggered in case if layer with specified name wasn't defined in the network.

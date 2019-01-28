@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="prev" title="Quick start" href="quickstart.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -232,13 +239,13 @@
 <h2>Tutorial Articles</h2>
 <p>There are a few articles that can help you to start working with NeuPy. They provide a solution to different problems and explain each step of the overall process.</p>
 <ul class="simple">
-<li><a class="reference internal" href="../2016/11/12/mnist_classification.html#mnist-classification"><span>Image classification, MNIST digits</span></a></li>
-<li><a class="reference internal" href="../2015/07/04/boston_house_prices_dataset.html#boston-house-price"><span>Predict prices for houses in the area of Boston</span></a></li>
+<li><a class="reference internal" href="../2016/11/12/mnist_classification.html#mnist-classification"><span class="std std-ref">Image classification, MNIST digits</span></a></li>
+<li><a class="reference internal" href="../2015/07/04/boston_house_prices_dataset.html#boston-house-price"><span class="std std-ref">Predict prices for houses in the area of Boston</span></a></li>
 </ul>
 </div>
 <div class="section" id="code-examples">
 <h2>Code Examples</h2>
-<p>NeuPy is very intuitive and it&#8217;s easy to read and understand the code. To learn more about different Neural Network types you can check these code examples.</p>
+<p>NeuPy is very intuitive and it’s easy to read and understand the code. To learn more about different Neural Network types you can check these code examples.</p>
 <table class="limited-width" border="1">
     <tr>
       <td colspan="2" style="text-align: center;">
@@ -498,7 +505,10 @@
         
         
         
-        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="quickstart.html">Quick start</a></li>
+            <li class="right"></li>
+        </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">

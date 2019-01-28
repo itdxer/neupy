@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Surgery" href="surgery.html" /><link rel="prev" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Surgery" href="surgery.html" /><link rel="prev" title="Parameter Initialization Methods" href="init-methods.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -228,181 +235,95 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="debug-layer-connections">
 <h1>Debug layer connections</h1>
-<div class="section" id="explore-connection-shapes">
-<h2>Explore connection shapes</h2>
-<p>The simplest way to debug network is just to explore input and output shapes.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span>
-<span class="go">Input(10) &gt; Relu(5) &gt; Softmax(3)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">input_shape</span>
-<span class="go">(10,)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span><span class="o">.</span><span class="n">output_shape</span>
-<span class="go">(3,)</span>
+<div class="section" id="input-and-output-shapes">
+<h2>Input and output shapes</h2>
+<p>The simplest way to debug network is just to explore input and output shapes. Basic information about network’s input and output shapes can be seen when network printed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">(?, 10) -&gt; [... 3 layers ...] -&gt; (?, 3)</span>
 </pre></div>
 </div>
-<p>The <span class="docutils literal"><span class="pre">input_shape</span></span> and <span class="docutils literal"><span class="pre">output_shape</span></span> properties store information about expected shape of the network&#8217;s input and it&#8217;s output shape after propagation. Notice that shapes do not store information about batch size. In our example, we might assume that we want to propagate 7 samples and network expects input matrix with shape <span class="docutils literal"><span class="pre">(7,</span> <span class="pre">10)</span></span> and for this input it will output matrix with shape <span class="docutils literal"><span class="pre">(7,</span> <span class="pre">3)</span></span>.</p>
-<p>Every layer in the network also has information about input and output shapes. We can check each layer separately.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">connection</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Input shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Output shape: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">output_shape</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">()</span>
-<span class="gp">...</span>
-<span class="go">Input(10)</span>
-<span class="go">Input shape: (10,)</span>
-<span class="go">Output shape: (10,)</span>
-
-<span class="go">Relu(5)</span>
-<span class="go">Input shape: (10,)</span>
-<span class="go">Output shape: (5,)</span>
-
-<span class="go">Softmax(3)</span>
-<span class="go">Input shape: (5,)</span>
-<span class="go">Output shape: (3,)</span>
+<p>In addition, network has two attributes that can provide with direct access to the information about input and output shapes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">input_shape</span>
+<span class="go">TensorShape([Dimension(None), Dimension(10)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">output_shape</span>
+<span class="go">TensorShape([Dimension(None), Dimension(3)])</span>
 </pre></div>
 </div>
-<p>For the networks that have parallel connection NeuPy will topologically sort all layers first and then presented one by one during the iteration.</p>
+<p>Notice that output shapes in the network specified using <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/TensorShape">TensorShape</a> class from Tensorflow library.</p>
 </div>
-<div class="section" id="visualize-connections">
-<h2>Visualize connections</h2>
-<p>For the debugging, it&#8217;s useful to explore network&#8217;s architecture. It&#8217;s possible to visualize network in the form of a graph. Let&#8217;s say we have this network.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<div class="section" id="visualize-networks">
+<h2>Visualize networks</h2>
+<p>Information about input and output shapes from each layer can be visualized with <span class="docutils literal"><span class="pre">show</span></span> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
 
-    <span class="p">[[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">)),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="n">parallel</span><span class="p">([</span>
+        <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+        <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
     <span class="p">],</span> <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(),</span>
-    <span class="p">]],</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">(),</span>
+        <span class="n">Convolution</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+    <span class="p">]),</span>
+    <span class="n">Concatenate</span><span class="p">(),</span>
 
-    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">Reshape</span><span class="p">(),</span>
+    <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
 <span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>To be able to visualize it we can just use <a class="reference internal" href="../../apidocs/neupy.plots.network_structure.html#module-neupy.plots.network_structure" title="neupy.plots.network_structure"><span class="xref py py-class docutils literal"><span class="pre">network_structure</span></span></a> function.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">network_structure</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
-</pre></div>
-</div>
-<br><a class="reference internal image-reference" href="../../_images/layer-structure-debug.png"><img alt="Debug network structure" class="align-center" src="../../_images/layer-structure-debug.png" style="width: 90%;" /></a>
+<a class="reference internal image-reference" href="../../_images/layer-structure-debug.png"><img alt="Debug network structure" class="align-center" src="../../_images/layer-structure-debug.png" style="width: 90%;" /></a>
 <p>This function will pop-up PDF file with a graph that defines all layers and relations between them. In addition, it shows input and output shape per each layer.</p>
-<p>Instead of showing pop-up preview we can simply save it in the separate file.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">network_structure</span><span class="p">(</span>
-    <span class="n">connection</span><span class="p">,</span>
-    <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;connection.pdf&#39;</span><span class="p">,</span>
-    <span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>Function also works for the training algorithms with constructible architectures. It just automatically extracts architecture from the algorithm and visualizes it.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">plots</span>
-
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">network_structure</span><span class="p">(</span><span class="n">nnet</span><span class="p">)</span>
-</pre></div>
-</div>
-<br><a class="reference internal image-reference" href="../../_images/network-structure-debug.png"><img alt="Debug network structure" class="align-center" src="../../_images/network-structure-debug.png" style="width: 60%;" /></a>
-</div>
+<br></div>
 <div class="section" id="count-number-of-parameters">
 <h2>Count number of parameters</h2>
-<p>The <span class="docutils literal"><span class="pre">count_parameters</span></span> function allow to go through the network and count total number of parameters in it.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<p>The <span class="docutils literal"><span class="pre">n_parameters</span></span> attribute returns number of parameters in the network</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>  <span class="c1"># weight: 10 * 5, bias: 5, total: 55</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>  <span class="c1"># weight:  5 * 2, bias: 2, total: 12</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>  <span class="c1"># weight: 10 * 5, bias: 5, total: 55</span>
+<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>  <span class="c1"># weight:  5 * 2, bias: 2, total: 12</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">count_parameters</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">n_parameters</span>
 <span class="go">67</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="iterate-through-all-network-parameters">
 <h2>Iterate through all network parameters</h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers.utils</span> <span class="kn">import</span> <span class="n">iter_parameters</span>
+<p>Networks variables can be accessed from the <span class="docutils literal"><span class="pre">variables</span></span> attribute.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">(?, 1) -&gt; [... 3 layers ...] -&gt; (?, 3)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
-<span class="go">Input(1) &gt; Sigmoid(2) &gt; Sigmoid(3)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">layer</span><span class="p">,</span> <span class="n">attrname</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">iter_parameters</span><span class="p">(</span><span class="n">network</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="c1"># Each parameter is tensorflow variable</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Layer: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Name: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attrname</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Parameter: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parameter</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">varname</span><span class="p">),</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Layer: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Name: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">varname</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Variable: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">()</span>
 <span class="gp">...</span>
-<span class="go">Layer: Sigmoid(2)</span>
+<span class="go">Layer: sigmoid-1</span>
 <span class="go">Name: weight</span>
-<span class="go">Parameter: &lt;tf.Variable &#39;layer/sigmoid-3/weight:0&#39; shape=(1, 2) dtype=float32_ref&gt;</span>
+<span class="go">Variable: &lt;tf.Variable &#39;layer/sigmoid-1/weight:0&#39; shape=(1, 2) dtype=float32_ref&gt;</span>
 
-<span class="go">Layer: Sigmoid(2)</span>
+<span class="go">Layer: sigmoid-1</span>
 <span class="go">Name: bias</span>
-<span class="go">Parameter: &lt;tf.Variable &#39;layer/sigmoid-3/bias:0&#39; shape=(2,) dtype=float32_ref&gt;</span>
+<span class="go">Variable: &lt;tf.Variable &#39;layer/sigmoid-1/bias:0&#39; shape=(2,) dtype=float32_ref&gt;</span>
 
-<span class="go">Layer: Sigmoid(3)</span>
+<span class="go">Layer: sigmoid-2</span>
 <span class="go">Name: weight</span>
-<span class="go">Parameter: &lt;tf.Variable &#39;layer/sigmoid-4/weight:0&#39; shape=(2, 3) dtype=float32_ref&gt;</span>
+<span class="go">Variable: &lt;tf.Variable &#39;layer/sigmoid-2/weight:0&#39; shape=(2, 3) dtype=float32_ref&gt;</span>
 
-<span class="go">Layer: Sigmoid(3)</span>
+<span class="go">Layer: sigmoid-2</span>
 <span class="go">Name: bias</span>
-<span class="go">Parameter: &lt;tf.Variable &#39;layer/sigmoid-4/bias:0&#39; shape=(3,) dtype=float32_ref&gt;</span>
+<span class="go">Variable: &lt;tf.Variable &#39;layer/sigmoid-2/bias:0&#39; shape=(3,) dtype=float32_ref&gt;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="exploring-graph-connections">
-<h2>Exploring graph connections</h2>
-<p>Any relation between layers is stored in the graph. To be able to debug connections we can check network&#8217;s graph to make sure that all connections defined correctly.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">input_layer</span><span class="o">.</span><span class="n">graph</span>
-<span class="go">[(Input(10), [])]</span>
-</pre></div>
-</div>
-<p>Since layer is not connected to any other layer the graph is empty. We can define network with more layers and check it&#8217;s graph.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">input_layer</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="p">[[</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">],</span> <span class="p">[</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">]],</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">graph</span>
-<span class="go">[(Input(10), [Relu(10), Relu(30)]),</span>
-<span class="go"> (Relu(10), [Relu(20)]),</span>
-<span class="go"> (Relu(20), [Concatenate()]),</span>
-<span class="go"> (Relu(30), [Concatenate()]),</span>
-<span class="go"> (Concatenate(), [])]</span>
-</pre></div>
-</div>
-<p>The graph has formatted representation. If we need to access it directly then we should check the <span class="docutils literal"><span class="pre">forward_graph</span></span> attribute.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">forward_graph</span>
-<span class="go">OrderedDict([(Input(10), [Relu(10), Relu(30)]), (Relu(10),</span>
-<span class="go">[Relu(20)]), (Relu(20), [Concatenate()]), (Relu(30),</span>
-<span class="go">[Concatenate()]), (Concatenate(), [])])</span>
-</pre></div>
-</div>
-<p><strong>Do not try to modify graph</strong>. Modifications can break relations between layers. This feature is only available for debugging.</p>
+<p>In case if variables in the network don’t have defined parameters, the <span class="docutils literal"><span class="pre">variables</span></span> method will go through the layers in the network and trigger <span class="docutils literal"><span class="pre">create_variables</span></span> method per each layer.</p>
 </div>
 </div>
 

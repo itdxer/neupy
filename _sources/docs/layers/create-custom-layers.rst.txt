@@ -6,21 +6,24 @@ Create custom layers
 Element-wise transformation
 ---------------------------
 
-The simplest type of layers is the one that doesn't modify a shape of the input value. In order to construct this layer we need to inherit from the ``BaseLayer`` class and define the ``output`` method.
+The simplest type of layers is the one that doesn't modify a shape of the input value. In order to construct this layer, we need to inherit from the ``Identity`` class and define the ``output`` method.
 
 .. code-block:: python
 
-    from neupy import layers
+    from neupy.layers import *
 
-    class Double(layers.BaseLayer):
-        def output(self, input_value):
-            return 2 * input_value
+    class Double(Identity):
+        def output(self, input, **kwargs):
+            return 2 * input
 
 Now this layer can be used in the network.
 
 .. code-block:: python
 
-    layers.Input(10) > Double()
+    >>> Input(10) >> Double()
+    (?, 10) -> [... 2 layers ...] -> (?, 10)
+
+Notice that output expects ``**kwargs`` argument as well. NeuPy allows to propagate extra information through the network in the form of an argument. For example, variable ``training`` might be passed through every ``output`` method in order to control behavior of the network.
 
 Layers with activation function
 -------------------------------
@@ -32,129 +35,135 @@ Layers with activation function is a special type of layers. It can behave in tw
     layers.Relu()  # relu(x)
     layers.Relu(10)  # relu(W * x + b)
 
-To be able to construct your own layer with custom activation function you need to inherit from the ``ActivationLayer`` class and specify the ``activation_function`` method.
+To be able to construct your own layer with custom activation function you need to inherit from the ``Linear`` layer class and specify the ``activation_function`` method.
 
 .. code-block:: python
 
     import tensorflow as tf
-    from neupy import layers
+    from neupy.layers import *
 
-    class Square(layers.ActivationLayer):
-        def activation_function(self, input_value):
-            return tf.square(input_value)
+    class Square(Linear):
+        def activation_function(self, input):
+            return tf.square(input)
 
 Also, notice that in this example we use **Tensorflow**. NeuPy uses Tensorflow as a computational backend for the constructible neural networks and we need to specify all operations using functions from the Tensorflow.
 
-Layer that modify input shape
------------------------------
+Layer that modifies input shape
+-------------------------------
 
-Layers with activation function can apply linear transformation and change output shape of the matrix. All the information can be derived from the input layer and specified output size. In other cases in order to work with layers that modify shape of the input tensor we need to define one extra property called ``output_shape``.
-
-In the example below, we define layer that calculate mean of the input over last dimension.
+Layers that apply transformations that can modify shape of the input should be build on top of the base class for all layers, called ``BaseLayer``.
 
 .. code-block:: python
 
     import tensorflow as tf
-    from neupy import layers
+    from neupy.layers import *
 
-    class Mean(layers.BaseLayer):
-        @property
-        def output_shape(self):
-            # converts: (28, 28, 1) -> (28, 28, 1)
-            # converts: (10,) -> (1,)
-            return self.input_shape[:-1] or (1,)
+    class Mean(BaseLayer):
+        def output(self, input, **kwargs):
+            return tf.reduce_mean(input, axis=-1, keepdims=True)
 
-        def output(self, input_value):
-            return tf.reduce_mean(input_value, axis=-1)
-
-Notice from the example that we can access the ``input_shape`` property. This property derived from the layer that has been attached to this layer. It's not always available since NeuPy allows arbitrary order of the layers during the definition this information might not be available and it might be useful to add extra check that ensures that information about input shape is available and return ``None`` otherwise.
+The problem with this approach is that we don't know in advance what transformation to the input's shape this layer has applied.
 
 .. code-block:: python
 
-    class Mean(layers.BaseLayer):
-        @property
-        def output_shape(self):
-            if not self.input_shape:
-                return None
+    >>> Input((10, 10, 2)) >> Mean()
+    (?, 10, 10, 2) -> [... 2 layers ...] -> <unknown>
 
-            # converts: (28, 28, 1) -> (28, 28, 1)
-            # converts: (10,) -> (1,)
-            return self.input_shape[:-1] or (1,)
+The only case when it's a problem is when one of the subsequent layer might depend on the expected input shapes values. For example, when we want to initialize weights for one of the layers, expected input shape will be important information. In order to add this information to the layer we can add extra method, called ``get_output_shape``.
+
+.. code-block:: python
+
+    class Mean(BaseLayer):
+        def get_output_shape(self, input_shape):
+            # Input and output shapes from the layer has to be an instance
+            # of the TensorShape class provided by tensorflow library.
+            input_shape = tf.TensorShape(input_shape)
+            output_shape = input_shape[:-1].concatenate(1)
+            return output_shape
+
+        def output(self, input, **kwargs):
+            return tf.reduce_mean(input, axis=-1, keepdims=True)
+
+.. code-block:: python
+
+    >>> Input((10, 10, 2)) >> Mean()
+    (?, 10, 10, 2) -> [... 2 layers ...] -> (?, 10, 10, 1)
+    >>> Input((10, 10, 18)) >> Mean()
+    (?, 10, 10, 18) -> [... 2 layers ...] -> (?, 10, 10, 1)
 
 Layer that accepts multiple inputs
 ----------------------------------
 
-Layers like :layer:`Concatenate` accept multiple inputs and combine them into single tensor. To be able to modify multiple inputs we need to make a small modification in the ``output`` method. We can create layer that concatenate it's inputs over last dimension.
+Layers like :layer:`Concatenate` accept multiple inputs and it combines them into single tensor. To be able to modify multiple inputs we need specify fixed set of expected input variables or as undefined.
 
 .. code-block:: python
 
-    import copy
     import tensorflow as tf
-    from neupy import layers
-
-    class Concatenate(layers.BaseLayer):
-        axis = -1
-
-        @property
-        def output_shape(self):
-            if self.input_shape:
-                # With copy function we make sure the any modification to
-                # the list won't effect original list of shapes.
-                input_shapes = copy.copy(self.input_shape)
-                output_shape = list(input_shapes.pop(0))
-
-                for input_shape in input_shapes:
-                    output_shape[self.axis] += input_shape[self.axis]
-
-                return tuple(output_shape)
-
-        def output(self, *input_values):
-            return tf.concat(input_values, axis=self.axis)
-
-Notice from the example that we use the ``input_shape`` property as a list. This property stores shapes from each input layer.
-
-Validate input shape
---------------------
-
-Not all relations between layers are suitable. For instance, we are not able to apply max pooling to the matrix. For this cases we need to have an ability to validate input shape and trigger error that will inform us about the problem.
-
-.. code-block:: python
-
-    from neupy import layers
+    from neupy.layers import *
     from neupy.exceptions import LayerConnectionError
 
-    class Pooling(layers.BaseLayer):
-        def validate(self, input_shape):
-            if len(input_shape) != 3:
-                raise LayerConnectionError("Invalid connection")
+    class Multiply(BaseLayer):
+        def get_output_shape(self, *input_shapes):
+            first_shape = input_shapes[0]
 
-We can use any type of exception, not only ``LayerConnectionError``.
+            for shape in input_shapes:
+                if not shape.is_compatible_with(first_shape):
+                    raise LayerConnectionError("Invalid inputs")
+
+            return first_shape
+
+        def output(self, *inputs, **kwargs):
+            return reduce(tf.multiply, inputs)
+
+Notice that we also added exception in case if there is something wrong with input connections. The ``get_output_shape`` method triggers each time layer added to the network, so it's possible that one of the inputs hasn't been defined yet.
+
+.. code-block:: python
+
+    >>> (Input((10, 10, 2)) | Input((10, 10, 2))) >> Multiply()
+    [(?, 10, 10, 2), (?, 10, 10, 2)] -> [... 3 layers ...] -> (?, 10, 10, 2)
+    >>>
+    >>> (Input((10, 10, 2)) | Relu()) >> Multiply()
+    [(?, 10, 10, 2), <unknown>] -> [... 3 layers ...] -> (?, 10, 10, 2)
+    >>>
+    >>> (Input((10, 10, 2)) | Input((10, 10, 4))) >> Multiply()
+    ...
+    LayerConnectionError: Invalid inputs...
 
 Add parameters to the layer
 ---------------------------
+
+In case if layer requires to have parameters the ``create_variables`` method has to be specified.
 
 Some layers might have parameters that has to be trained. For example, we can create layer that multiples input be some matrix ``W``.
 
 .. code-block:: python
 
     import tensorflow as tf
-    from neupy import layers
+    from neupy import init
+    from neupy.layers import *
 
-    class Wx(layers.BaseLayer):
-        def initialize(self):
-            super(Wx, self).initialize()
-            n_input_features = self.input_shape[0]
+    class Wx(BaseLayer):
+        def __init__(self, outsize, name=None):
+            self.outsize = outsize
+            super(Wx, self).__init__(name=name)
 
-            self.add_parameter(
+        def get_output_shape(self, input_shape):
+            n_samples, n_input_features = input_shape
+            return tf.TensorShape([n_samples, self.outsize])
+
+        def create_variables(self, input_shape):
+            _, n_input_features = input_shape
+            self.weight = self.variable(
                 name='weight',
 
                 # By default, we assume that every input will have 10
                 # features, but in perfect case input and output shapes
                 # might be parameterized by the user.
-                shape=(n_input_features, 10),
+                shape=(n_input_features.value, self.outsize),
 
                 # Default initialization method for parameters. It can
-                # be pre-generated matrix instead of initializer.
+                # be pre-generated matrix or tensorflow's variables instead
+                # of initializer.
                 value=init.Uniform(),
 
                 # Make sure that parameter will be learned during the
@@ -163,7 +172,16 @@ Some layers might have parameters that has to be trained. For example, we can cr
                 trainable=True,
             )
 
-        def output(self, input_value):
-            return tf.matmul(self.weight, input_value)
+        def output(self, input, **kwargs):
+            return tf.matmul(self.weight, input)
 
-Initialization method triggers when the layer receives input shape from the layer that has been attached to it.
+.. code-block:: python
+
+    >>> network = Input(5) >> Wx(10)
+    >>> network
+    (?, 5) -> [... 2 layers ...] -> (?, 10)
+
+The ``self.variable`` method not only creates variable, but it also registers variable as network's parameter.
+
+    >>> list(network.variables.values())
+    [<tf.Variable 'layer/wx-5/weight:0' shape=(5, 10) dtype=float32_ref>]

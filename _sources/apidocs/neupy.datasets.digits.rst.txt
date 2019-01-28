@@ -1,5 +1,5 @@
-neupy\.datasets\.digits module
-==============================
+neupy.datasets.digits module
+============================
 
 .. automodule:: neupy.datasets.digits
     :members:

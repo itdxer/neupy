@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Visualize Algorithms based on the backpropagation" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfield Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Visualize Algorithms based on the backpropagation" href="visualize_backpropagation_algorithms.html" /><link rel="prev" title="Discrete Hopfield Network" href="../../09/20/discrete_hopfield_network.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -236,7 +243,7 @@
     </p>
 </div><p>Boston house prices is a classical example of the regression problem. This article shows how to make a simple data processing and train neural network for house price forecasting.</p>
 <p>Dataset can be downloaded from many different resources. In order to simplify this process we will use scikit-learn library. It will download and extract and the data for us.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
 <span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span>
@@ -364,9 +371,9 @@
     </tr>
   </tbody>
 </table><p>Data contains 14 columns.
-The last column <span class="docutils literal"><span class="pre">MEDV</span></span> is a median value of owner-occupied homes in $1000&#8217;s. The goal is to predict this value. Other columns we can use for neural network training.</p>
-<p>It&#8217;s quite hard to understand data just from the column names. Scikit-learn also provides description.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+The last column <span class="docutils literal"><span class="pre">MEDV</span></span> is a median value of owner-occupied homes in $1000’s. The goal is to predict this value. Other columns we can use for neural network training.</p>
+<p>It’s quite hard to understand data just from the column names. Scikit-learn also provides description.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -384,9 +391,9 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 <li><span class="docutils literal"><span class="pre">B</span></span> - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town</li>
 <li><span class="docutils literal"><span class="pre">LSTAT</span></span> - % lower status of the population</li>
 </ul>
-<p>There are 13 continuous attributes (including &#8220;class&#8221; attribute &#8220;MEDV&#8221;) and 1 binary-valued attribute. There are no columns that have multiple categories, which simplifies initial data processing..</p>
+<p>There are 13 continuous attributes (including “class” attribute “MEDV”) and 1 binary-valued attribute. There are no columns that have multiple categories, which simplifies initial data processing..</p>
 <p>From the table above you can notice that every column has values in different scales. It might slow down or completely break networks convergence. In order to fix this issue, we should normalize values in every column. One of the simplest way to do it is to map every value into range between 0 and 1, where maximum value in every column will be equal to 1 and the smallest one - to 0.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
 
 <span class="n">data_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span>
 <span class="n">target_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">MinMaxScaler</span><span class="p">()</span>
@@ -450,12 +457,12 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
     </tr>
   </tbody>
 </table><p>Neural networks are prune to overfitting and we always need to have validation dataset that we will use to assess networks performance after the training.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">environment</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">utils</span>
 
 <span class="c1"># Make sure that split between train and</span>
 <span class="c1"># validation datasets will be reproducible</span>
-<span class="n">environment</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
 
 <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
     <span class="c1"># 85% of the data we will use for training</span>
@@ -465,7 +472,7 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 </pre></div>
 </div>
 <p>Since we have all the data the last thing that we need is a neural network. We can design simple network with only one hidden layer.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Number of features that we want</span>
 <span class="c1"># to use during the training</span>
@@ -492,10 +499,10 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Now that we have the our network we can use one of the large <a class="reference external" href="../../../pages/cheatsheet.html#algorithms">training algorithms supported by neupy</a>. Our datasets is quite small and network has small number of parameters. For cases like this we can take advantage of the more algorithms that can converge much faster. I&#8217;ll use <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a>, but you can feel free to experiment with different algorithms.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<p>Now that we have the our network we can use one of the large <a class="reference external" href="../../../pages/cheatsheet.html#algorithms">training algorithms supported by neupy</a>. Our datasets is quite small and network has small number of parameters. For cases like this we can take advantage of the more algorithms that can converge much faster. I’ll use <a class="reference internal" href="../../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a>, but you can feel free to experiment with different algorithms.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
-<span class="n">lmnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LevenbergMarquardt</span><span class="p">(</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">LevenbergMarquardt</span><span class="p">(</span>
     <span class="c1"># First argument has to be neural network</span>
     <span class="n">network</span><span class="p">,</span>
 
@@ -511,59 +518,47 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
 </pre></div>
 </div>
 <p>Output after initialization might look like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Main</span> <span class="n">information</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>Main information
 
-<span class="p">[</span><span class="n">ALGORITHM</span><span class="p">]</span> <span class="n">LevenbergMarquardt</span>
+[ALGORITHM] LevenbergMarquardt
 
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">epoch_end_signal</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">show_epoch</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">shuffle_data</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">train_end_signal</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">addons</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">error</span> <span class="o">=</span> <span class="n">mse</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="p">[</span><span class="n">OPTION</span><span class="p">]</span> <span class="n">mu_update_factor</span> <span class="o">=</span> <span class="mf">1.2</span>
+[OPTION] loss = mse
+[OPTION] mu = 0.01
+[OPTION] mu_update_factor = 1.2
+[OPTION] show_epoch = 5
+[OPTION] shuffle_data = False
+[OPTION] signals = None
+[OPTION] target = Tensor(&quot;placeholder/target/sigmoid-10:0&quot;, shape=(?, 1), dtype=float32)
+[OPTION] verbose = True
 
-<span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initializing</span> <span class="n">Tensorflow</span> <span class="n">variables</span> <span class="ow">and</span> <span class="n">functions</span><span class="o">.</span>
-<span class="p">[</span><span class="n">TENSORFLOW</span><span class="p">]</span> <span class="n">Initialization</span> <span class="n">finished</span> <span class="n">successfully</span><span class="o">.</span> <span class="n">It</span> <span class="n">took</span> <span class="mf">0.46</span> <span class="n">seconds</span>
+[TENSORFLOW] Initializing Tensorflow variables and functions.
+[TENSORFLOW] Initialization finished successfully. It took 0.30 seconds
 </pre></div>
 </div>
-<p>And finally, we can use our data in order to train the network. In addition, neupy allows to specify validation datasets. It won&#8217;t use it for training. Instead, at the end of every epoch it will use validation data to estimate network forecasting performance on the unseen data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lmnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<p>And finally, we can use our data in order to train the network. In addition, neupy allows to specify validation datasets. It won’t use it for training. Instead, at the end of every epoch it will use validation data to estimate network forecasting performance on the unseen data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Output during the training might look like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Start</span> <span class="n">training</span>
-
-<span class="p">[</span><span class="n">TRAINING</span> <span class="n">DATA</span><span class="p">]</span> <span class="n">shapes</span><span class="p">:</span> <span class="p">(</span><span class="mi">430</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
-<span class="p">[</span><span class="n">TEST</span> <span class="n">DATA</span><span class="p">]</span> <span class="n">shapes</span><span class="p">:</span> <span class="p">(</span><span class="mi">76</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
-<span class="p">[</span><span class="n">TRAINING</span><span class="p">]</span> <span class="n">Total</span> <span class="n">epochs</span><span class="p">:</span> <span class="mi">30</span>
-
-<span class="o">---------------------------------------------------------</span>
-<span class="o">|</span>    <span class="n">Epoch</span>    <span class="o">|</span>  <span class="n">Train</span> <span class="n">err</span>  <span class="o">|</span>  <span class="n">Valid</span> <span class="n">err</span>  <span class="o">|</span>    <span class="n">Time</span>     <span class="o">|</span>
-<span class="o">---------------------------------------------------------</span>
-<span class="o">|</span>           <span class="mi">1</span> <span class="o">|</span>    <span class="mf">0.079689</span> <span class="o">|</span>    <span class="mf">0.037351</span> <span class="o">|</span>      <span class="mi">376</span> <span class="n">ms</span> <span class="o">|</span>
-<span class="o">|</span>           <span class="mi">5</span> <span class="o">|</span>   <span class="mf">0.0097019</span> <span class="o">|</span>    <span class="mf">0.014112</span> <span class="o">|</span>       <span class="mi">73</span> <span class="n">ms</span> <span class="o">|</span>
-<span class="o">|</span>          <span class="mi">10</span> <span class="o">|</span>    <span class="mf">0.011091</span> <span class="o">|</span>    <span class="mf">0.011521</span> <span class="o">|</span>       <span class="mi">76</span> <span class="n">ms</span> <span class="o">|</span>
-<span class="o">|</span>          <span class="mi">15</span> <span class="o">|</span>   <span class="mf">0.0045973</span> <span class="o">|</span>   <span class="mf">0.0092206</span> <span class="o">|</span>       <span class="mi">72</span> <span class="n">ms</span> <span class="o">|</span>
-<span class="o">|</span>          <span class="mi">20</span> <span class="o">|</span>    <span class="mf">0.003823</span> <span class="o">|</span>   <span class="mf">0.0098822</span> <span class="o">|</span>       <span class="mi">75</span> <span class="n">ms</span> <span class="o">|</span>
-<span class="o">|</span>          <span class="mi">25</span> <span class="o">|</span>   <span class="mf">0.0031455</span> <span class="o">|</span>   <span class="mf">0.0087205</span> <span class="o">|</span>       <span class="mi">71</span> <span class="n">ms</span> <span class="o">|</span>
-<span class="o">|</span>          <span class="mi">30</span> <span class="o">|</span>   <span class="mf">0.0025977</span> <span class="o">|</span>   <span class="mf">0.0095658</span> <span class="o">|</span>       <span class="mi">74</span> <span class="n">ms</span> <span class="o">|</span>
-<span class="o">---------------------------------------------------------</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#1 : [224 ms] train: 0.046980, valid: 0.032002</span>
+<span class="c1">#5 : [76 ms] train: 0.009437, valid: 0.013484</span>
+<span class="c1">#10 : [75 ms] train: 0.007141, valid: 0.010253</span>
+<span class="c1">#15 : [77 ms] train: 0.004664, valid: 0.008936</span>
+<span class="c1">#20 : [75 ms] train: 0.003780, valid: 0.009333</span>
+<span class="c1">#25 : [75 ms] train: 0.003117, valid: 0.008975</span>
+<span class="c1">#30 : [77 ms] train: 0.002608, valid: 0.009507</span>
 </pre></div>
 </div>
-<p>It&#8217;s also useful to visualize network training progress using line plot. In the figure below you can see two lines. One line shows training error and the other one validation error.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">lmnet</span><span class="p">)</span>
+<p>It’s also useful to visualize network training progress using line plot. In the figure below you can see two lines. One line shows training error and the other one validation error.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../../../_images/cgnet-error-plot.png"><img alt="Levenberg Marquardt training progress" src="../../../_images/cgnet-error-plot.png" style="width: 80%;" /></a>
 </div>
 <p>We typically want to see decrease for the validation error. The training error might be useful during debugging. For example, it might be used in order to see if network overfits.</p>
-<p>During the training we used mean squared error as a loss function on the scaled prediction values. We can use different function in order to measure network&#8217;s forecasting performance. For example, we can use Root Means Squared Logarithmic Error (RMSLE) and compare prediction to the exact value that were scaled back to the original scale.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<p>During the training we used mean squared error as a loss function on the scaled prediction values. We can use different function in order to measure network’s forecasting performance. For example, we can use Root Means Squared Logarithmic Error (RMSLE) and compare prediction to the exact value that were scaled back to the original scale.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="k">def</span> <span class="nf">rmsle</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">):</span>
     <span class="n">log_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">expected</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -571,7 +566,7 @@ The last column <span class="docutils literal"><span class="pre">MEDV</span></sp
     <span class="n">squared_log_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">log_expected</span> <span class="o">-</span> <span class="n">log_predicted</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">squared_log_error</span><span class="p">))</span>
 
-<span class="n">y_predict</span> <span class="o">=</span> <span class="n">lmnet</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y_predict</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span>
     <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
     <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_predict</span><span class="p">),</span>

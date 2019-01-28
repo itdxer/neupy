@@ -1,5 +1,5 @@
-neupy\.algorithms\.associative\.kohonen module
-==============================================
+neupy.algorithms.associative.kohonen module
+===========================================
 
 .. automodule:: neupy.algorithms.associative.kohonen
     :members:

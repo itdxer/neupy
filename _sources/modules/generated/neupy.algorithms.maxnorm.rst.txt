@@ -1,0 +1,6 @@
+neupy.algorithms.maxnorm
+========================
+
+.. currentmodule:: neupy.algorithms
+
+.. autofunction:: maxnorm

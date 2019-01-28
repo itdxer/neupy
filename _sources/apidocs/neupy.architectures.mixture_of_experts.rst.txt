@@ -1,5 +1,5 @@
-neupy\.architectures\.mixture\_of\_experts module
-=================================================
+neupy.architectures.mixture\_of\_experts module
+===============================================
 
 .. automodule:: neupy.architectures.mixture_of_experts
     :members:

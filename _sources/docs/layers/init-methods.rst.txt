@@ -1,35 +1,31 @@
 Parameter Initialization Methods
 ================================
 
-We can set up different initialization method for layer parameters.
+In the NeuPy, initialization methods per layer can be be modified using classes from the ``init`` module.
 
 .. code-block:: python
 
-    from neupy import layers, algorithms, init
+    from neupy.layers import *
+    from neupy import init
 
-    gdnet = algorithms.GradientDescent(
-        [
-            layers.Input(10),
-            layers.Sigmoid(30, weight=init.Normal()),
-            layers.Sigmoid(15, weight=init.Normal()),
-        ]
+    network = join(
+        Input(10),
+        Sigmoid(30, weight=init.Normal()),
+        Sigmoid(15, weight=init.Normal()),
     )
 
-Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer has 10 inputs and 30 outputs which mean that this layer should have weight with shape ``(10, 30)``. During initialization, we don't need to specify the shape of the parameter. This information would be provided to the Initializer class during layer initialization step.
+Initialization class has an ability to generate parameters based on the specified shape. For instance, a first sigmoid layer expects 10 input features and generates 30 output features, which mean that this layer should have weight with shape ``(10, 30)``. During initialization, we don't need to specify the shape of the parameter. This information would be provided to the initializer class during weight initialization procedure.
 
-It's possible to set up any value for the weight as long as it has valid shape. Let's do the same initialization procedure with manually generated weights.
+It's possible to set up any value for the weight as long as it has valid shape. We can do the same initialization procedure with manually generated weights.
 
 .. code-block:: python
 
     import numpy as np
-    from neupy import layers, algorithms
 
-    gdnet = algorithms.GradientDescent(
-        [
-            layers.Input(10),
-            layers.Sigmoid(30, weight=np.random.randn(10, 30)),
-            layers.Sigmoid(15, weight=np.random.randn(30, 15)),
-        ]
+    network = join(
+        Input(10),
+        Sigmoid(30, weight=np.random.randn(10, 30)),
+        Sigmoid(15, weight=np.random.randn(30, 15)),
     )
 
 Code above does the same type of the initialization as in the previous example, the only problem that we need to hard-code expected shape of the weights.
@@ -41,64 +37,53 @@ Create custom initialization methods
 
 It's very easy to create custom initialization method. All we need is just to inherit from the ``init.Initializer`` class and define ``sample`` method that accepts one argument (excluding the ``self`` argument). Argument will contain shape of the output tensor that we expect to get.
 
-In the example below we create custom initializer that samples weights from the exponential distribution.
+In the example below, we create custom initializer that samples weights from the exponential distribution.
 
 .. code-block:: python
 
-    import numpy as np
-    from neupy import layers, algorithms, init
+    import tensorflow as tf
+    from neupy.layers import *
+    from neupy import init
 
-    class Exponential(init.Initializer):
-        def __init__(self, scale=0.01):
-            self.scale = scale
+    class Gamma(init.Initializer):
+        def __init__(self, alpha=0.01):
+            self.alpha = alpha
 
         def sample(self, shape):
-            return np.random.exponential(self.scale, size=shape)
+            return tf.random.gamma(shape, self.alpha)
 
-    gdnet = algorithms.GradientDescent(
-        [
-            layers.Input(10),
-            layers.Sigmoid(30, weight=Exponential(scale=0.02)),
-            layers.Sigmoid(15, weight=Exponential(scale=0.05)),
-        ]
+    network = join(
+        Input(10),
+        Sigmoid(30, weight=Gamma(alpha=0.02)),
+        Sigmoid(15, weight=Gamma(alpha=0.05)),
     )
+
+Notice that the ``sample`` method returns Tensorflow's tensor. It's possible to return numpy's array, but in this case initialization might take more time, since we will need to generate weights per each variable sequentially.
 
 Share parameters between layers
 -------------------------------
 
-In some applications it might be useful to share parameters from other layers. In the example below, we initialize two hidden layers and each layer has exactly the same weight and bias.
+In some applications, it might be useful to share parameters some of the between layers. Tensorflow's variable can be created in the code and passed to the layers that has to have shared parameters.
 
 .. code-block:: python
 
-    >>> from neupy import layers
+    >>> import tensorflow as tf
+    >>> from neupy.layers import *
     >>>
-    >>> hidden_layer_1 = layers.Relu(10)
-    >>> network = layers.Input(10) > hidden_layer_1
+    >>> shared_weight = tf.Variable(tf.ones((10, 10)), name='shared-weight')
     >>>
-    >>> hidden_layer_2 = layers.Relu(10, weight=hidden_layer_1.weight,
-    ...                              bias=hidden_layer_1.bias)
+    >>> hid1 = Relu(10, weight=shared_weight)
+    >>> hid2 = Relu(10, weight=shared_weight)
     >>>
-    >>> network = network > hidden_layer_2
+    >>> network = Input(10) >> hid1 >> hid2
     >>> network
-    Input(10) > Relu(10) > Relu(10)
+    (?, 10) -> [... 3 layers ...] -> (?, 10)
 
-It works in the following way. First, we connected input layer to the hidden layer. This operation triggered parameter initialization for the first hidden layer.
-
-.. code-block:: python
-
-    >>> hidden_layer_1 = layers.Relu(10)
-    >>> network = layers.Input(10) > hidden_layer_1
-
-Next, we associated parameters from the first hidden layer with parameters in the second layer.
+We can check that only 1 weight variables will be used during the training.
 
 .. code-block:: python
 
-    >>> hidden_layer_2 = layers.Relu(10, weight=hidden_layer_1.weight,
-    ...                              bias=hidden_layer_1.bias)
+    >>> [v.name for v in network.variables.values()]
+    ['shared-weight:0', 'layer/relu-1/bias:0', 'layer/relu-2/bias:0']
 
-Notice that in this case weight and bias are instance of the ``Variable`` class from the Tensorflow.
-
-.. code-block:: python
-
-    >>> hidden_layer_1.weight
-    <tf.Variable 'layer/relu-1/weight:0' shape=(10, 10) dtype=float32_ref>
+As we can see, only one weight variables is used, but two different biases were created per each layer, since we didn't create separate variable for them.

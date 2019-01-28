@@ -1,5 +1,5 @@
-neupy\.storage module
-=====================
+neupy.storage module
+====================
 
 .. automodule:: neupy.storage
     :members:

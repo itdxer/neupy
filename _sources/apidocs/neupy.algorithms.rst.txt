@@ -1,5 +1,5 @@
-neupy\.algorithms package
-=========================
+neupy.algorithms package
+========================
 
 Subpackages
 -----------
@@ -10,9 +10,8 @@ Subpackages
     neupy.algorithms.competitive
     neupy.algorithms.gd
     neupy.algorithms.memory
+    neupy.algorithms.minsearch
     neupy.algorithms.rbfn
-    neupy.algorithms.regularization
-    neupy.algorithms.step_update
 
 Submodules
 ----------
@@ -20,10 +19,9 @@ Submodules
 .. toctree::
 
    neupy.algorithms.base
-   neupy.algorithms.constructor
+   neupy.algorithms.plots
    neupy.algorithms.rbm
-   neupy.algorithms.summary_info
-   neupy.algorithms.utils
+   neupy.algorithms.signals
 
 Module contents
 ---------------

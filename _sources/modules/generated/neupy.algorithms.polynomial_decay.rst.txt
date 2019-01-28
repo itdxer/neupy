@@ -1,0 +1,6 @@
+neupy.algorithms.polynomial\_decay
+==================================
+
+.. currentmodule:: neupy.algorithms
+
+.. autofunction:: polynomial_decay

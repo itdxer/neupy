@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Train network on GPU" href="train-on-gpu.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Train network on GPU" href="train-on-gpu.html" /><link rel="prev" title="Basics" href="basics.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -236,81 +243,64 @@
 <li><a class="reference internal" href="#train-networks-with-multiple-inputs" id="id3">Train networks with multiple inputs</a></li>
 <li><a class="reference internal" href="#algorithms" id="id4">Algorithms</a></li>
 <li><a class="reference internal" href="#loss-functions" id="id5">Loss functions</a></li>
-<li><a class="reference internal" href="#add-ons" id="id6">Add-ons</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="specify-network-structure">
 <h2><a class="toc-backref" href="#id2">Specify network structure</a></h2>
-<p>There are three ways to define relations between layers. We can define network&#8217;s architecture separately from the training algorithm.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<p>There are two ways to define relations between layers. We can define network’s architecture separately from the training algorithm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-<span class="p">)</span>
-
-<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="n">network</span><span class="p">,</span>
-    <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+    <span class="n">network</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>Or, we can set up a list of layers that define sequential relations between layers.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
-<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+        <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+        <span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
     <span class="p">],</span>
     <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>This is just a syntax simplification that allows to avoid using <span class="docutils literal"><span class="pre">layer.join</span></span> function.</p>
-<p>Small networks can be defined with a help of inline operator.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
-<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">bpnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-    <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-    <span class="n">shuffle_data</span><span class="o">=</span><span class="bp">True</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<p>This is just a syntax simplification that allows to avoid using <span class="docutils literal"><span class="pre">join</span></span> function and inline connections.</p>
 </div>
 <div class="section" id="train-networks-with-multiple-inputs">
 <h2><a class="toc-backref" href="#id3">Train networks with multiple inputs</a></h2>
 <p>NeuPy allows to train networks with multiple inputs.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
-        <span class="p">[[</span>
+        <span class="n">parallel</span><span class="p">([</span>
             <span class="c1"># 3 categorical inputs</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">n_unique_categories</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
+            <span class="n">Input</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">Embedding</span><span class="p">(</span><span class="n">n_unique_categories</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+            <span class="n">Reshape</span><span class="p">(),</span>
         <span class="p">],</span> <span class="p">[</span>
             <span class="c1"># 17 numerical inputs</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">17</span><span class="p">),</span>
-        <span class="p">]],</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">(),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">Input</span><span class="p">(</span><span class="mi">17</span><span class="p">),</span>
+        <span class="p">]),</span>
+        <span class="n">Concatenate</span><span class="p">(),</span>
+        <span class="n">Relu</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span>
+        <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
     <span class="p">],</span>
 
     <span class="n">step</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">error</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">load_train_data</span><span class="p">()</span>
@@ -318,49 +308,35 @@
 
 <span class="c1"># Categorical variable should be the first, because</span>
 <span class="c1"># categorical input layer was defined first in the network</span>
-<span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">([</span><span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">],</span> <span class="n">y_train</span><span class="p">,</span>
-              <span class="p">[</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">],</span> <span class="n">y_test</span><span class="p">,</span>
-              <span class="n">epochs</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
-<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>From the example above, you can see that we specified first layer as a list of lists. Each list has small sequence of layers specified and each sequence starts with the <span class="docutils literal"><span class="pre">Input</span></span> layer. This list of lists is just simple syntax sugar around the <span class="docutils literal"><span class="pre">parallel</span></span> function. Exactly the same architecture can be rewritten in the following way.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">parallel</span><span class="p">([</span>
-            <span class="c1"># 3 categorical inputs</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">n_unique_categories</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(),</span>
-        <span class="p">],</span> <span class="p">[</span>
-            <span class="c1"># 17 numerical inputs</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">17</span><span class="p">),</span>
-        <span class="p">]),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">(),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="p">]</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">],</span> <span class="n">y_train</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">],</span> <span class="n">y_test</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The training and prediction looks slightly different as well.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">([</span><span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">],</span> <span class="n">y_train</span><span class="p">,</span>
-              <span class="p">[</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">],</span> <span class="n">y_test</span><span class="p">,</span>
-              <span class="n">epochs</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
-<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">])</span>
+<p>Network in the example above has two inputs. Order of the inputs is important since first specified layer in the network will correspond to the first networks input. It’s tru for the <span class="docutils literal"><span class="pre">train</span></span>, <span class="docutils literal"><span class="pre">score</span></span> and <span class="docutils literal"><span class="pre">predict</span></span> methods</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">x_train_cat</span><span class="p">,</span> <span class="n">x_train_num</span><span class="p">],</span> <span class="n">y_train</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">],</span> <span class="n">y_test</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">score</span><span class="p">([</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">],</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="n">y_predicted</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test_cat</span><span class="p">,</span> <span class="n">x_test_num</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Input we specified as a list where number of values equal to the number of input layers in the network. The order in the list is also important. We defined first input layer for categorical variables and therefore we need to pass it as the first element to the input list. The same is true for the <span class="docutils literal"><span class="pre">predict</span></span> method.</p>
+<p>Notice that <span class="docutils literal"><span class="pre">predict</span></span> method expects multiple inputs, unlike <span class="docutils literal"><span class="pre">score</span></span> and <span class="docutils literal"><span class="pre">train</span></span> methods. It’s because for other methods it’s important to differentiate between inputs and targets.</p>
 </div>
 <div class="section" id="algorithms">
 <h2><a class="toc-backref" href="#id4">Algorithms</a></h2>
-<p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span>Cheat sheet</span></a> if you want to learn more about them.</p>
-<p>Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> work better for small networks and they would be extremely slow for networks with millions parameters. In addition, it&#8217;s important to note that not all algorithms are possible to train with mini-batches. Algorithms like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> don&#8217;t work with mini-batches.</p>
+<p>NeuPy supports lots of different training algorithms based on the backpropagation. You can check <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-backprop-algorithms"><span class="std std-ref">Cheat sheet</span></a> if you want to learn more about them.</p>
+<p>Before using these algorithms you must understand that not all of them are suitable for all problems. Some of the methods like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">Levenberg-Marquardt</span></span></a> or <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> work better for small networks and they would be extremely slow for networks with millions parameters. In addition, it’s important to note that not all algorithms are possible to train with mini-batches. Algorithms like <a class="reference internal" href="../../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">Conjugate</span> <span class="pre">Gradient</span></span></a> don’t work with mini-batches.</p>
 </div>
 <div class="section" id="loss-functions">
 <h2><a class="toc-backref" href="#id5">Loss functions</a></h2>
-<p>NeuPy has many different <a class="reference internal" href="../../pages/cheatsheet.html#cheatsheet-error-function"><span>loss functions</span></a>. These loss functions can be specified specified as a string.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
+<p>NeuPy has many different <span class="xref std std-ref">loss functions</span>. These loss functions can be specified specified as a string.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
     <span class="p">[</span>
@@ -369,12 +345,12 @@
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
     <span class="p">],</span>
-    <span class="n">error</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Also, it&#8217;s possible to create custom loss functions. Loss function should have two mandatory arguments, namely expected and predicted values.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<p>Also, it’s possible to create custom loss functions. Loss function should have two mandatory arguments, namely expected and predicted values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
 
 <span class="k">def</span> <span class="nf">mean_absolute_error</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">):</span>
@@ -388,78 +364,11 @@
         <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
         <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
     <span class="p">],</span>
-    <span class="n">error</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">,</span>
+    <span class="n">loss</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>Loss function should return a scalar, because during the training output from the loss function will be used as a variable with respect to which we are differentiating.</p>
-</div>
-<div class="section" id="add-ons">
-<h2><a class="toc-backref" href="#id6">Add-ons</a></h2>
-<p>Algorithms with constructible architectures allow to use additional update rules for parameter regularization and learning rate updates. For instance, we want to add <a class="reference internal" href="../../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">Weight</span> <span class="pre">Decay</span></span></a> regularization and we want to minimize step monotonically after each epoch.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
-
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-    <span class="p">],</span>
-    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-
-    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">,</span>
-            <span class="n">algorithms</span><span class="o">.</span><span class="n">StepDecay</span><span class="p">]</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>Both <a class="reference internal" href="../../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a> and <a class="reference internal" href="../../apidocs/neupy.algorithms.step_update.step_decay.html#neupy.algorithms.step_update.step_decay.StepDecay" title="neupy.algorithms.step_update.step_decay.StepDecay"><span class="xref py py-class docutils literal"><span class="pre">StepDecay</span></span></a> algorithms have additional parameters. In case if we need to modify them we can add them to the training algorithm.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
-
-<span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-    <span class="p">],</span>
-
-    <span class="c1"># Parameters from GradientDescent</span>
-    <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-
-    <span class="c1"># Parameters from StepDecay</span>
-    <span class="n">reduction_freq</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-
-    <span class="c1"># Parameters from WeightDecay</span>
-    <span class="n">decay_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-
-    <span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">,</span>
-            <span class="n">algorithms</span><span class="o">.</span><span class="n">StepDecay</span><span class="p">]</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>NeuPy doesn&#8217;t allow to use multiple regularizations and step update add-ons for training algorithm.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="p">[</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">],</span>
-<span class="gp">... </span>    <span class="n">addons</span><span class="o">=</span><span class="p">[</span>
-<span class="gp">... </span>        <span class="n">algorithms</span><span class="o">.</span><span class="n">WeightDecay</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="n">algorithms</span><span class="o">.</span><span class="n">WeightElimination</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gt">Traceback (most recent call last):</span>
-
-<span class="go">ValueError: There can be only one add-on class with type &#39;Regularization&#39;</span>
-</pre></div>
-</div>
 </div>
 </div>
 

@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -231,108 +238,99 @@
 <dl class="class">
 <dt id="neupy.layers.reshape.Reshape">
 <em class="property">class </em><span class="descclassname">neupy.layers.reshape.</span><span class="descname">Reshape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Reshapes input tensor.</p>
+<dd><p>Layer reshapes input tensor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple or list</p>
-<blockquote>
-<div><p>New feature shape. The <span class="docutils literal"><span class="pre">-1</span></span> value means that this value
-will be computed from the total size that remains. If you need
-to get the output feature with more that 2 dimensions then you can
-set up new feature shape using tuples or list. Defaults to <span class="docutils literal"><span class="pre">[-1]</span></span>.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
-will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">New feature shape. If one dimension specified with the <span class="docutils literal"><span class="pre">-1</span></span> value
+that this dimension will be computed from the total size that remains.
+Defaults to <span class="docutils literal"><span class="pre">-1</span></span>.</p>
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Covert 4D input to 2D</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">Reshape</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">input_shape</span>
-<span class="go">(2, 5, 5)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">output_shape</span>
-<span class="go">(50,)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Reshape</span><span class="p">()</span>
+<span class="go">(?, 2, 5, 5) -&gt; [... 2 layers ...] -&gt; (?, 50)</span>
 </pre></div>
 </div>
 <p>Convert 3D to 4D</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">Reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">input_shape</span>
-<span class="go">(5, 4)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">output_shape</span>
-<span class="go">(5, 2, 2)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">(?, 5, 4) -&gt; [... 2 layers ...] -&gt; (?, 5, 2, 2)</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
-<td>Swith off trainig state.</td>
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
 </tr>
-<tr class="row-even"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="neupy.layers.reshape.Reshape.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.layers.reshape.Reshape.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'shape': Option(class_name='Reshape', value=NewShapeProperty(name=&quot;shape&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'shape': Option(class_name='Reshape', value=TypedListProperty(name=&quot;shape&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.reshape.Reshape.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Reshape the feature space for the input value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong> : array-like or Tensorfow variable</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or Tensorfow variable</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.reshape.Reshape.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.reshape.Reshape.shape">
@@ -344,74 +342,74 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dl class="class">
 <dt id="neupy.layers.reshape.Transpose">
 <em class="property">class </em><span class="descclassname">neupy.layers.reshape.</span><span class="descname">Transpose</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Transposes input. Permutes the dimensions according to <span class="docutils literal"><span class="pre">perm</span></span>.</p>
+<dd><p>Layer transposes input tensor. Permutes the dimensions according
+to the <span class="docutils literal"><span class="pre">perm</span></span> parameter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>perm</strong> : tuple or list</p>
-<blockquote>
-<div><p>A permutation of the dimensions of the input tensor. Layer cannot
-transpose batch dimension and using <span class="docutils literal"><span class="pre">0</span></span> in the list of
-permuted dimensions is not allowed.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
-will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>perm</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple or list</span></dt>
+<dd><p class="first last">A permutation of the dimensions of the input tensor.</p>
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">Transpose</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">input_shape</span>
-<span class="go">(7, 11)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">output_shape</span>
-<span class="go">(11, 7)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Transpose</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="go">(?, 7, 11) -&gt; [... 2 layers ...] -&gt; (?, 11, 7)</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
-<td>Swith off trainig state.</td>
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
 </tr>
-<tr class="row-even"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="neupy.layers.reshape.Transpose.fail_if_shape_invalid">
+<span class="descname">fail_if_shape_invalid</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.reshape.Transpose.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.layers.reshape.Transpose.options">
 <span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'perm': Option(class_name='Transpose', value=TypedListProperty(name=&quot;perm&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
@@ -419,41 +417,13 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 
 <dl class="method">
 <dt id="neupy.layers.reshape.Transpose.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return output base on the input value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.reshape.Transpose.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.reshape.Transpose.perm">
 <span class="descname">perm</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.layers.reshape.Transpose.validate">
-<span class="descname">validate</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/reshape.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Validate input shape value before assigning it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
 
 </dd></dl>
 

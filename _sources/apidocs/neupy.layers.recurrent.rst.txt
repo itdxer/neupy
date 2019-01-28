@@ -1,5 +1,5 @@
-neupy\.layers\.recurrent module
-===============================
+neupy.layers.recurrent module
+=============================
 
 .. automodule:: neupy.layers.recurrent
     :members:

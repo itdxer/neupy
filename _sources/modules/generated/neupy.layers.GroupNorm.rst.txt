@@ -1,0 +1,6 @@
+neupy.layers.GroupNorm
+======================
+
+.. currentmodule:: neupy.layers
+
+.. autoclass:: GroupNorm

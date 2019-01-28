@@ -1,0 +1,18 @@
+neupy.algorithms.minsearch package
+==================================
+
+Submodules
+----------
+
+.. toctree::
+
+   neupy.algorithms.minsearch.golden_search
+   neupy.algorithms.minsearch.wolfe
+
+Module contents
+---------------
+
+.. automodule:: neupy.algorithms.minsearch
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -236,66 +243,61 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : tuple of int</p>
-<blockquote>
-<div><p>Filter shape. In should be defined as a tuple with three
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple of int</span></dt>
+<dd><p class="first last">Filter shape. In should be defined as a tuple with three
 integers <span class="docutils literal"><span class="pre">(filter</span> <span class="pre">rows,</span> <span class="pre">filter</span> <span class="pre">columns,</span> <span class="pre">output</span> <span class="pre">channels)</span></span>.</p>
-</div></blockquote>
-<p><strong>padding</strong> : {<span class="docutils literal"><span class="pre">same</span></span>, <span class="docutils literal"><span class="pre">valid</span></span>}, int, tuple</p>
-<blockquote>
-<div><p>Zero padding for the input tensor.</p>
+</dd>
+<dt><strong>padding</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">same</span></span>, <span class="docutils literal"><span class="pre">valid</span></span>}, int, tuple</span></dt>
+<dd><p class="first">Zero padding for the input tensor.</p>
 <ul class="simple">
-<li><span class="docutils literal"><span class="pre">valid</span></span> - Padding won&#8217;t be added to the tensor. Result will be
+<li><span class="docutils literal"><span class="pre">valid</span></span> - Padding won’t be added to the tensor. Result will be
 the same as for <span class="docutils literal"><span class="pre">padding=0</span></span></li>
 <li><span class="docutils literal"><span class="pre">same</span></span> - Padding will depend on the number of rows and columns
 in the filter. This padding makes sure that image with the
-<span class="docutils literal"><span class="pre">stride=1</span></span> won&#8217;t change its width and height. It&#8217;s the same as
+<span class="docutils literal"><span class="pre">stride=1</span></span> won’t change its width and height. It’s the same as
 <span class="docutils literal"><span class="pre">padding=(filter</span> <span class="pre">rows</span> <span class="pre">//</span> <span class="pre">2,</span> <span class="pre">filter</span> <span class="pre">columns</span> <span class="pre">//</span> <span class="pre">2)</span></span>.</li>
 <li>Custom value for the padding can be specified as an integer, like
 <span class="docutils literal"><span class="pre">padding=1</span></span> or it can be specified as a tuple when different
 dimensions have different padding values, for example
 <span class="docutils literal"><span class="pre">padding=(2,</span> <span class="pre">3)</span></span>.</li>
 </ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">valid</span></span>.</p>
-</div></blockquote>
-<p><strong>stride</strong> : tuple with ints, int.</p>
-<blockquote>
-<div><p>Stride size. Defaults to <span class="docutils literal"><span class="pre">(1,</span> <span class="pre">1)</span></span></p>
-</div></blockquote>
-<p><strong>dilation</strong> : int, tuple</p>
-<blockquote>
-<div><p>Rate for the fiter upsampling. When <span class="docutils literal"><span class="pre">dilation</span> <span class="pre">&gt;</span> <span class="pre">1</span></span> layer will
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">valid</span></span>.</p>
+</dd>
+<dt><strong>stride</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with ints, int.</span></dt>
+<dd><p class="first last">Stride size. Defaults to <span class="docutils literal"><span class="pre">(1,</span> <span class="pre">1)</span></span></p>
+</dd>
+<dt><strong>dilation</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, tuple</span></dt>
+<dd><p class="first last">Rate for the fiter upsampling. When <span class="docutils literal"><span class="pre">dilation</span> <span class="pre">&gt;</span> <span class="pre">1</span></span> layer will
 become diated convolution (or atrous convolution). Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>weight</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
-<blockquote>
-<div><p>Defines layer&#8217;s weights. Shape of the weight will be equal to
+</dd>
+<dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
+<dd><p class="first last">Defines layer’s weights. Shape of the weight will be equal to
 <span class="docutils literal"><span class="pre">(filter</span> <span class="pre">rows,</span> <span class="pre">filter</span> <span class="pre">columns,</span> <span class="pre">input</span> <span class="pre">channels,</span> <span class="pre">output</span> <span class="pre">channels)</span></span>.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
-<a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal(gain=2)</span></span></a>.</p>
-</div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Tensorfow variable, scalar, Initializer or None</p>
-<blockquote>
-<div><p>Defines layer&#8217;s bias.
-Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
-<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../modules/generated/neupy.init.HeNormal.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal(gain=2)</span></span></a>.</p>
+</dd>
+<dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">1D array-like, Tensorfow variable, scalar, Initializer or None</span></dt>
+<dd><p class="first last">Defines layer’s bias. Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../modules/generated/neupy.init.Constant.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
-will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>2D Convolution</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">layers</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
@@ -304,57 +306,57 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 </pre></div>
 </div>
 <p>1D Convolution</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">Reshape</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>  <span class="c1"># convert 3D to 4D</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">Reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>  <span class="c1"># convert 4D back to 3D</span>
 <span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">(?, 30, 10) -&gt; [... 4 layers ...] -&gt; (?, 28, 16)</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
-<td>Swith off trainig state.</td>
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
 </tr>
-<tr class="row-even"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="neupy.layers.convolutions.Convolution.bias_shape">
-<span class="descname">bias_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.convolutions.Convolution.bias">
+<span class="descname">bias</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.convolutions.Convolution.create_variables">
+<span class="descname">create_variables</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -363,32 +365,28 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.layers.convolutions.Convolution.find_output_from_input_shape">
-<span class="descname">find_output_from_input_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.convolutions.Convolution.expected_output_shape">
+<span class="descname">expected_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.convolutions.Convolution.fail_if_shape_invalid">
+<span class="descname">fail_if_shape_invalid</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.convolutions.Convolution.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.convolutions.Convolution.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='Convolution', value=TypedListProperty(name=&quot;size&quot;)), 'weight': Option(class_name='Convolution', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'padding': Option(class_name='Convolution', value=PaddingProperty(name=&quot;padding&quot;)), 'stride': Option(class_name='Convolution', value=Spatial2DProperty(name=&quot;stride&quot;)), 'dilation': Option(class_name='Convolution', value=Spatial2DProperty(name=&quot;dilation&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='Convolution', value=ParameterProperty(name=&quot;bias&quot;)), 'dilation': Option(class_name='Convolution', value=Spatial2DProperty(name=&quot;dilation&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'padding': Option(class_name='Convolution', value=PaddingProperty(name=&quot;padding&quot;)), 'size': Option(class_name='Convolution', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='Convolution', value=Spatial2DProperty(name=&quot;stride&quot;)), 'weight': Option(class_name='Convolution', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.convolutions.Convolution.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return output base on the input value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.convolutions.Convolution.output_shape">
-<span class="descname">output_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -411,28 +409,9 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <span class="descname">stride</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="neupy.layers.convolutions.Convolution.validate">
-<span class="descname">validate</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Validate input shape value before assigning it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_shape</strong> : tuple with int</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="neupy.layers.convolutions.Convolution.weight">
 <span class="descname">weight</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.convolutions.Convolution.weight_shape">
-<span class="descname">weight_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -440,145 +419,124 @@ will be generated automatically. Defaults to <span class="docutils literal"><spa
 <dl class="class">
 <dt id="neupy.layers.convolutions.Deconvolution">
 <em class="property">class </em><span class="descclassname">neupy.layers.convolutions.</span><span class="descname">Deconvolution</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Deconvolution layer. It&#8217;s commonly called like this in the literature,
-but it&#8217;s just gradient of the convolution and not actual deconvolution.</p>
+<dd><p>Deconvolution layer (also known as Transposed Convolution.).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : tuple of int</p>
-<blockquote>
-<div><p>Filter shape. In should be defined as a tuple with three
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple of int</span></dt>
+<dd><p class="first last">Filter shape. In should be defined as a tuple with three
 integers <span class="docutils literal"><span class="pre">(filter</span> <span class="pre">rows,</span> <span class="pre">filter</span> <span class="pre">columns,</span> <span class="pre">output</span> <span class="pre">channels)</span></span>.</p>
-</div></blockquote>
-<p><strong>padding</strong> : {<span class="docutils literal"><span class="pre">same</span></span>, <span class="docutils literal"><span class="pre">valid</span></span>}, int, tuple</p>
-<blockquote>
-<div><p>Zero padding for the input tensor.</p>
+</dd>
+<dt><strong>padding</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">same</span></span>, <span class="docutils literal"><span class="pre">valid</span></span>}, int, tuple</span></dt>
+<dd><p class="first">Zero padding for the input tensor.</p>
 <ul class="simple">
-<li><span class="docutils literal"><span class="pre">valid</span></span> - Padding won&#8217;t be added to the tensor. Result will be
+<li><span class="docutils literal"><span class="pre">valid</span></span> - Padding won’t be added to the tensor. Result will be
 the same as for <span class="docutils literal"><span class="pre">padding=0</span></span></li>
 <li><span class="docutils literal"><span class="pre">same</span></span> - Padding will depend on the number of rows and columns
 in the filter. This padding makes sure that image with the
-<span class="docutils literal"><span class="pre">stride=1</span></span> won&#8217;t change its width and height. It&#8217;s the same as
+<span class="docutils literal"><span class="pre">stride=1</span></span> won’t change its width and height. It’s the same as
 <span class="docutils literal"><span class="pre">padding=(filter</span> <span class="pre">rows</span> <span class="pre">//</span> <span class="pre">2,</span> <span class="pre">filter</span> <span class="pre">columns</span> <span class="pre">//</span> <span class="pre">2)</span></span>.</li>
 <li>Custom value for the padding can be specified as an integer, like
 <span class="docutils literal"><span class="pre">padding=1</span></span> or it can be specified as a tuple when different
 dimensions have different padding values, for example
 <span class="docutils literal"><span class="pre">padding=(2,</span> <span class="pre">3)</span></span>.</li>
 </ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">valid</span></span>.</p>
-</div></blockquote>
-<p><strong>stride</strong> : tuple with ints, int.</p>
-<blockquote>
-<div><p>Stride size. Defaults to <span class="docutils literal"><span class="pre">(1,</span> <span class="pre">1)</span></span></p>
-</div></blockquote>
-<p><strong>weight</strong> : array-like, Tensorfow variable, scalar or Initializer</p>
-<blockquote>
-<div><p>Defines layer&#8217;s weights. Shape of the weight will be equal to
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">valid</span></span>.</p>
+</dd>
+<dt><strong>stride</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple with ints, int.</span></dt>
+<dd><p class="first last">Stride size. Defaults to <span class="docutils literal"><span class="pre">(1,</span> <span class="pre">1)</span></span></p>
+</dd>
+<dt><strong>dilation</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, tuple</span></dt>
+<dd><p class="first last">Rate for the fiter upsampling. When <span class="docutils literal"><span class="pre">dilation</span> <span class="pre">&gt;</span> <span class="pre">1</span></span> layer will
+become diated convolution (or atrous convolution). Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
+<dd><p class="first last">Defines layer’s weights. Shape of the weight will be equal to
 <span class="docutils literal"><span class="pre">(filter</span> <span class="pre">rows,</span> <span class="pre">filter</span> <span class="pre">columns,</span> <span class="pre">output</span> <span class="pre">channels,</span> <span class="pre">input</span> <span class="pre">channels)</span></span>.
 Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
-<a class="reference internal" href="neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal(gain=2)</span></span></a>.</p>
-</div></blockquote>
-<p><strong>bias</strong> : 1D array-like, Tensorfow variable, scalar, Initializer or None</p>
-<blockquote>
-<div><p>Defines layer&#8217;s bias.
-Default initialization methods you can find
-<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span>here</span></a>. Defaults to
-<a class="reference internal" href="neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../modules/generated/neupy.init.HeNormal.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal(gain=2)</span></span></a>.</p>
+</dd>
+<dt><strong>bias</strong> <span class="classifier-delimiter">:</span> <span class="classifier">1D array-like, Tensorfow variable, scalar, Initializer or None</span></dt>
+<dd><p class="first last">Defines layer’s bias. Default initialization methods you can find
+<a class="reference internal" href="../pages/cheatsheet.html#init-methods"><span class="std std-ref">here</span></a>. Defaults to
+<a class="reference internal" href="../modules/generated/neupy.init.Constant.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant(0)</span></span></a>.
 The <span class="docutils literal"><span class="pre">None</span></span> value excludes bias from the calculations and
 do not add it into parameters list.</p>
-</div></blockquote>
-<p><strong>name</strong> : str or None</p>
-<blockquote class="last">
-<div><p>Layer&#8217;s identifier. If name is equal to <span class="docutils literal"><span class="pre">None</span></span> than name
-will be generated automatically. Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span>
-<span class="gp">... </span>    <span class="n">layers</span><span class="o">.</span><span class="n">Deconvolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">Deconvolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
 <span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
+<span class="go">(?, 28, 28, 3) -&gt; [... 3 layers ...] -&gt; (?, 28, 28, 1)</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="17%" />
-<col width="83%" />
-</colgroup>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>input_shape</td>
-<td>(tuple) Layer&#8217;s input shape.</td>
-</tr>
-<tr class="row-even"><td>output_shape</td>
-<td>(tuple) Layer&#8217;s output shape.</td>
-</tr>
-<tr class="row-odd"><td>training_state</td>
-<td>(bool) Defines whether layer in training state or not.</td>
-</tr>
-<tr class="row-even"><td>parameters</td>
-<td>(dict) Trainable parameters.</td>
-</tr>
-<tr class="row-odd"><td>graph</td>
-<td>(LayerGraph instance) Graphs that stores all relations between layers.</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>disable_training_state()</td>
-<td>Swith off trainig state.</td>
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
 </tr>
-<tr class="row-even"><td>initialize()</td>
-<td>Set up important configurations related to the layer.</td>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
-<dt id="neupy.layers.convolutions.Deconvolution.dilation">
-<span class="descname">dilation</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dl class="method">
+<dt id="neupy.layers.convolutions.Deconvolution.create_variables">
+<span class="descname">create_variables</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.layers.convolutions.Deconvolution.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'size': Option(class_name='Convolution', value=TypedListProperty(name=&quot;size&quot;)), 'weight': Option(class_name='Convolution', value=ParameterProperty(name=&quot;weight&quot;)), 'bias': Option(class_name='ParameterBasedLayer', value=ParameterProperty(name=&quot;bias&quot;)), 'padding': Option(class_name='Convolution', value=PaddingProperty(name=&quot;padding&quot;)), 'stride': Option(class_name='Convolution', value=Spatial2DProperty(name=&quot;stride&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'bias': Option(class_name='Convolution', value=ParameterProperty(name=&quot;bias&quot;)), 'dilation': Option(class_name='Convolution', value=Spatial2DProperty(name=&quot;dilation&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'padding': Option(class_name='Convolution', value=PaddingProperty(name=&quot;padding&quot;)), 'size': Option(class_name='Convolution', value=TypedListProperty(name=&quot;size&quot;)), 'stride': Option(class_name='Convolution', value=Spatial2DProperty(name=&quot;stride&quot;)), 'weight': Option(class_name='Convolution', value=ParameterProperty(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.convolutions.Deconvolution.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return output base on the input value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_value</strong></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="neupy.layers.convolutions.Deconvolution.output_shape_per_dim">
 <span class="descname">output_shape_per_dim</span><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="neupy.layers.convolutions.Deconvolution.weight_shape">
-<span class="descname">weight_shape</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/convolutions.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

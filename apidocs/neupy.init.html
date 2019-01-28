@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -235,12 +242,12 @@
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
@@ -252,24 +259,27 @@
 <dl class="method">
 <dt id="neupy.init.Initializer.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -286,11 +296,12 @@ Defaults to <span class="docutils literal"><span class="pre">False</span></span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : float, int</p>
-<blockquote class="last">
-<div><p>All parameters in the tensor will be equal to
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>value</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float, int</span></dt>
+<dd><p class="first last">All parameters in the tensor will be equal to
 this value. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -298,36 +309,39 @@ this value. Defaults to <span class="docutils literal"><span class="pre">0</span
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.Constant.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -344,19 +358,18 @@ Defaults to <span class="docutils literal"><span class="pre">False</span></span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mean</strong> : int, float</p>
-<blockquote>
-<div><p>Mean of the normal distribution.</p>
-</div></blockquote>
-<p><strong>std</strong> : int, float</p>
-<blockquote>
-<div><p>Standard deviation of the normal distribution.</p>
-</div></blockquote>
-<p><strong>seed</strong> : None or int</p>
-<blockquote class="last">
-<div><p>Random seed. Integer value will make results reproducible.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>mean</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Mean of the normal distribution.</p>
+</dd>
+<dt><strong>std</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Standard deviation of the normal distribution.</p>
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -364,36 +377,39 @@ Defaults to <span class="docutils literal"><span class="pre">None</span></span>.
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.Normal.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -411,19 +427,18 @@ distribution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minval</strong> : int, float</p>
-<blockquote>
-<div><p>Minimum possible value.</p>
-</div></blockquote>
-<p><strong>maxval</strong> : int, float</p>
-<blockquote>
-<div><p>Maximum possible value.</p>
-</div></blockquote>
-<p><strong>seed</strong> : None or int</p>
-<blockquote class="last">
-<div><p>Random seed. Integer value will make results reproducible.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>minval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Minimum possible value.</p>
+</dd>
+<dt><strong>maxval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Maximum possible value.</p>
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -431,36 +446,39 @@ Defaults to <span class="docutils literal"><span class="pre">None</span></span>.
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.Uniform.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -477,23 +495,24 @@ Defaults to <span class="docutils literal"><span class="pre">False</span></span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>scale</strong> : int, float</p>
-<blockquote>
-<div><p>Scales output matrix by a specified factor.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>scale</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, float</span></dt>
+<dd><p class="first last">Scales output matrix by a specified factor.
 Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>seed</strong> : None or int</p>
-<blockquote>
-<div><p>Random seed. Integer value will make results reproducible.
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
-<blockquote class="last">
-<div><p>In case if tensor shape has more than 2
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>ValueError</strong></dt>
+<dd><p class="first last">In case if tensor shape has more than 2
 dimensions.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -501,36 +520,39 @@ dimensions.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.Orthogonal.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -548,17 +570,17 @@ normal distribution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>gain</strong> : float</p>
-<blockquote>
-<div><p>Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>gain</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
 is a suitable choice for layers that have Relu non-linearity.
 Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>seed</strong> : None or int</p>
-<blockquote class="last">
-<div><p>Random seed. Integer value will make results reproducible.
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -572,36 +594,39 @@ Performance on ImageNet Classification, 2015.</dd>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.HeNormal.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -619,17 +644,17 @@ uniformal distribution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>gain</strong> : float</p>
-<blockquote>
-<div><p>Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>gain</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
 is a suitable choice for layers that have Relu non-linearity.
 Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>seed</strong> : None or int</p>
-<blockquote class="last">
-<div><p>Random seed. Integer value will make results reproducible.
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -643,36 +668,39 @@ Performance on ImageNet Classification, 2015.</dd>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.HeUniform.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -690,17 +718,17 @@ normal distribution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>gain</strong> : float</p>
-<blockquote>
-<div><p>Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>gain</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
 is a suitable choice for layers that have Relu non-linearity.
 Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>seed</strong> : None or int</p>
-<blockquote class="last">
-<div><p>Random seed. Integer value will make results reproducible.
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -713,36 +741,39 @@ Defaults to <span class="docutils literal"><span class="pre">None</span></span>.
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.XavierNormal.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -760,17 +791,17 @@ on uniform distribution.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>gain</strong> : float</p>
-<blockquote>
-<div><p>Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>gain</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Scales variance of the distribution by this factor. Value <span class="docutils literal"><span class="pre">2</span></span>
 is a suitable choice for layers that have Relu non-linearity.
 Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>seed</strong> : None or int</p>
-<blockquote class="last">
-<div><p>Random seed. Integer value will make results reproducible.
+</dd>
+<dt><strong>seed</strong> <span class="classifier-delimiter">:</span> <span class="classifier">None or int</span></dt>
+<dd><p class="first last">Random seed. Integer value will make results reproducible.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -783,36 +814,39 @@ Defaults to <span class="docutils literal"><span class="pre">None</span></span>.
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="16%" />
+<col width="84%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>sample(shape, return_array=False)</td>
-<td>Returns tensorflow&#8217;s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
+<tr class="row-odd"><td><strong>sample(shape, return_array=False)</strong></td>
+<td>Returns tensorflow’s tensor or numpy array with specified shape. Type of the object depends on the <span class="docutils literal"><span class="pre">return_array</span></span> value. Numpy array will be returned when <span class="docutils literal"><span class="pre">return_array=True</span></span> and tensor otherwise.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="neupy.init.XavierUniform.sample">
 <span class="descname">sample</span><span class="sig-paren">(</span><em>shape</em>, <em>return_array=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/init.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Returns tensorflow&#8217;s tensor with specified shape.</p>
+<dd><p>Returns tensorflow’s tensor with specified shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
-<blockquote>
-<div><p>Parameter shape.</p>
-</div></blockquote>
-<p><strong>return_array</strong> : bool</p>
-<blockquote>
-<div><p>Returns numpy&#8217;s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
-and tensorflow&#8217;s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">Parameter shape.</p>
+</dd>
+<dt><strong>return_array</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Returns numpy’s array when equal to <span class="docutils literal"><span class="pre">True</span></span>
+and tensorflow’s tensor when equal to <span class="docutils literal"><span class="pre">False</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array-like or Tensor</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array-like or Tensor</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>

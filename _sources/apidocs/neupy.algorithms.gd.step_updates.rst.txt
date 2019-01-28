@@ -1,0 +1,7 @@
+neupy.algorithms.gd.step\_updates module
+========================================
+
+.. automodule:: neupy.algorithms.gd.step_updates
+    :members:
+    :undoc-members:
+    :show-inheritance:

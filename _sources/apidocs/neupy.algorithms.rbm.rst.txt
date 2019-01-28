@@ -1,5 +1,5 @@
-neupy\.algorithms\.rbm module
-=============================
+neupy.algorithms.rbm module
+===========================
 
 .. automodule:: neupy.algorithms.rbm
     :members:

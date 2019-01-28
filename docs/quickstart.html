@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Tutorials" href="tutorials.html" /><link rel="prev" title="Model Zoo" href="../pages/model_zoo.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -232,12 +239,12 @@
 <div class="section" id="building-model">
 <h2>Building model</h2>
 <p>NeuPy provide very simple and intuitive interface for building neural networks. Simple architecture can be defined with a help of the inline operator.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Inline connection is a suitable choice for very small networks. Large networks can be defined with the help of the <span class="docutils literal"><span class="pre">join</span></span> operator.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
     <span class="n">Input</span><span class="p">(</span><span class="mi">24</span><span class="p">),</span>
     <span class="n">Relu</span><span class="p">(</span><span class="mi">12</span><span class="p">),</span>
     <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
@@ -249,7 +256,7 @@
 <div class="section" id="training">
 <h2>Training</h2>
 <p>Training can be done in two simple steps. First, we need to specify training algorithm. And second, we need to pass training data and specify number of training epochs. It can be done in two lines of code in NeuPy.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -259,16 +266,16 @@
 <div class="section" id="evaluation">
 <h2>Evaluation</h2>
 <p>After the training, we can propagate test inputs through the network and get prediction.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">y_predicted</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="what-s-next">
-<h2>What&#8217;s next?</h2>
+<h2>What’s next?</h2>
 <p>There are available a few more tutorials that can help you to start working with NeuPy. You can visit the <a class="reference external" href="http://neupy.com/docs/tutorials.html">tutorials</a> page or you can click on one of the links below.</p>
 <ul class="simple">
-<li><a class="reference internal" href="../2016/11/12/mnist_classification.html#mnist-classification"><span>Image classification, MNIST digits</span></a></li>
-<li><a class="reference internal" href="../2015/07/04/boston_house_prices_dataset.html#boston-house-price"><span>Predict prices for houses in the area of Boston</span></a></li>
+<li><a class="reference internal" href="../2016/11/12/mnist_classification.html#mnist-classification"><span class="std std-ref">Image classification, MNIST digits</span></a></li>
+<li><a class="reference internal" href="../2015/07/04/boston_house_prices_dataset.html#boston-house-price"><span class="std std-ref">Predict prices for houses in the area of Boston</span></a></li>
 </ul>
 <p>Additional information about the library you can find in the <a class="reference external" href="file:///Users/projects/neupy/site/blog/html/pages/documentation.html">documentation</a>.</p>
 </div>
@@ -278,7 +285,10 @@
         
         
         
-        </div></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../pages/model_zoo.html">Model Zoo</a></li>
+            <li class="right"><a href="tutorials.html">Tutorials</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
     <form action="../search.html" method="get">
           <div class="box">

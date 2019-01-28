@@ -1,0 +1,7 @@
+neupy.utils.tf\_utils module
+============================
+
+.. automodule:: neupy.utils.tf_utils
+    :members:
+    :undoc-members:
+    :show-inheritance:

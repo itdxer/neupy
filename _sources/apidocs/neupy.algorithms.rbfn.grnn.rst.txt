@@ -1,5 +1,5 @@
-neupy\.algorithms\.rbfn\.grnn module
-====================================
+neupy.algorithms.rbfn.grnn module
+=================================
 
 .. automodule:: neupy.algorithms.rbfn.grnn
     :members:

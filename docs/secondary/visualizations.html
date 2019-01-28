@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../_static/plugins.js"></script>
         <script src="../../_static/main.js"></script>
-        <link rel="next" title="Installation" href="../../pages/installation.html" /><link rel="prev" title="Environments" href="environments.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Installation" href="../../pages/installation.html" /><link rel="prev" title="Storage for Neural Networks" href="../storage.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../../_static/underscore.js"></script><script type="text/javascript" src="../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../_static/disqus.js"></script><script type="text/javascript" src="../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../_static/js/script.js"></script><script type="text/javascript" src="../../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -228,10 +235,69 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="visualizations">
 <h1>Visualizations</h1>
+<div class="section" id="training-progress">
+<h2>Training progress</h2>
+<p>Optimizers that used for training neural networks with constructible architectures have separate method that called <span class="docutils literal"><span class="pre">plot_errors</span></span>. This method provides basic information about training.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Adadelta</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">optimizer</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/plot-errors-batch.png"><img alt="Error plots for small mini-batches" src="../../_images/plot-errors-batch.png" style="width: 100%;" /></a>
+</div>
+<p>You can notice how noise is that training curve compare to the validation curve. The reason for it is because we used batch size equal to 10 that loss estimation is quite noisy for such a small sample, whether whole validation set was used for the loss estimation and therefor loss curve is much smoother.</p>
+<p>When only small number of epochs was specified for the training it’s easy to see one mismatch between curves, it’s is if one of the shifted be one unit.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Adadelta</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">plot_errors</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/plot-errors-full-batch.png"><img alt="Error plots for full-batch training" src="../../_images/plot-errors-full-batch.png" style="width: 100%;" /></a>
+</div>
+<p>First of all, notice that now we have only one plot. It’s because we have <span class="docutils literal"><span class="pre">batch_size=None</span></span>. When during every epoch we propagate single batch there is no difference between number of updates and number of epochs. Second, notice that that training curve starts at position 0 and validation curve at position 1. The reason for it is quite simple. When we pass first batch of the training data through the network, we calculate the loss. This loss has been calculated before we updated weights and therefor no updates has been made yet. After that we use our loss to estimate gradients and apply updates to the weights. When updates were applied we can use our validation data in order to estimate validation loss, but this time we’ve already done one update for the weights. It will be wrong to put training and validation loss one on top of the other, since they’ve calculated losses in different states of the neural network parameters. Next epoch, training data will calculate losses using weights that has been updated one time and now we have data point that’s relevant to the validation loss calculated in the previous epoch.</p>
+</div>
+<div class="section" id="network-structure">
+<h2>Network structure</h2>
+<p>Relations between layers in the network can be visualized using the <span class="docutils literal"><span class="pre">show</span></span> method that can be accessed from any network.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<br><a class="reference internal image-reference" href="../../_images/layer-structure-plot.png"><img alt="Layer structure plot example" class="align-center" src="../../_images/layer-structure-plot.png" style="width: 70%;" /></a>
+</div>
+<div class="section" id="saliency-map">
+<h2>Saliency Map</h2>
+<p>Learn more details about the <a class="reference internal" href="../../apidocs/neupy.plots.saliency_map.html#neupy.plots.saliency_map.saliency_map" title="neupy.plots.saliency_map.saliency_map"><span class="xref py py-class docutils literal"><span class="pre">saliency_map</span></span></a> function from the documentation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
+
+<span class="n">vgg19</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># define pretrained VGG19 network</span>
+<span class="n">dog_image</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># load image of dog</span>
+
+<span class="c1"># apply preprocessing step to dog image</span>
+<span class="n">processed_dog_image</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">dog_image</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dog_image</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">saliency_map</span><span class="p">(</span><span class="n">vgg19</span><span class="p">,</span> <span class="n">processed_dog_image</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<br><a class="reference internal image-reference" href="../../_images/saliency-map-plot.png"><img alt="Saliency Map" class="align-center" src="../../_images/saliency-map-plot.png" style="width: 50%;" /></a>
+</div>
 <div class="section" id="hinton-diagram">
 <h2>Hinton diagram</h2>
-<p>More information about the Hinton diagram you can find in <a class="reference internal" href="../../apidocs/neupy.plots.hinton.html#neupy.plots.hinton.hinton" title="neupy.plots.hinton.hinton"><span class="xref py py-class docutils literal"><span class="pre">documentation</span></span></a>. The small example is shown below.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<p>More information about the Hinton diagram you can find in <a class="reference internal" href="../../apidocs/neupy.plots.hinton.html#neupy.plots.hinton.hinton" title="neupy.plots.hinton.hinton"><span class="xref py py-class docutils literal"><span class="pre">documentation</span></span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
 
@@ -248,52 +314,6 @@
 <a class="reference internal image-reference" href="../../_images/plots-hinton-example.png"><img alt="Hinton diagram example from NeuPy library" src="../../_images/plots-hinton-example.png" style="width: 100%;" /></a>
 </div>
 </div>
-<div class="section" id="error-plot">
-<h2>Error plot</h2>
-<p>The plot shows the basic information about network&#8217;s training progress.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">plots</span>
-
-<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="n">gdnet</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
-<span class="n">plots</span><span class="o">.</span><span class="n">error_plot</span><span class="p">(</span><span class="n">gdnet</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>More information related to this plot function you can in the <a class="reference internal" href="../../apidocs/neupy.plots.error_plot.html#neupy.plots.error_plot.error_plot" title="neupy.plots.error_plot.error_plot"><span class="xref py py-class docutils literal"><span class="pre">error_plot</span></span></a> documentation.</p>
-<a class="reference internal image-reference" href="../../_images/bpnet-train-errors-plot1.png"><img alt="GradientDescent epoch errors plot" class="align-center" src="../../_images/bpnet-train-errors-plot1.png" style="width: 70%;" /></a>
-</div>
-<div class="section" id="network-structure">
-<h2>Network structure</h2>
-<p>Relations between layers in the network can be visualized using the <span class="docutils literal"><span class="pre">network_structure</span></span> function.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">plots</span>
-
-<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-    <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
-<span class="p">)</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">network_structure</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
-</pre></div>
-</div>
-<br><a class="reference internal image-reference" href="../../_images/layer-structure-plot.png"><img alt="Layer structure plot example" class="align-center" src="../../_images/layer-structure-plot.png" style="width: 70%;" /></a>
-</div>
-<div class="section" id="saliency-map">
-<h2>Saliency Map</h2>
-<p>Read more in the <a class="reference internal" href="../../apidocs/neupy.plots.saliency_map.html#neupy.plots.saliency_map.saliency_map" title="neupy.plots.saliency_map.saliency_map"><span class="xref py py-class docutils literal"><span class="pre">Saliency</span> <span class="pre">Map</span></span></a> function documentation.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">plots</span>
-
-<span class="n">vgg19</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># define pretrained VGG19 network</span>
-<span class="n">dog_image</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># load image of dog</span>
-
-<span class="c1"># apply preprocessing step to dog image</span>
-<span class="n">processed_dog_image</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">dog_image</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dog_image</span><span class="p">)</span>
-<span class="n">plots</span><span class="o">.</span><span class="n">saliency_map</span><span class="p">(</span><span class="n">vgg19</span><span class="p">,</span> <span class="n">processed_dog_image</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<br><a class="reference internal image-reference" href="../../_images/saliency-map-plot.png"><img alt="Saliency Map" class="align-center" src="../../_images/saliency-map-plot.png" style="width: 50%;" /></a>
-</div>
 </div>
 
     <div class="postmeta">
@@ -301,7 +321,7 @@
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="environments.html">Environments</a></li>
+            <li class="left"> &laquo; <a href="../storage.html">Storage for Neural Networks</a></li>
             <li class="right"><a href="../../pages/installation.html">Installation</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>

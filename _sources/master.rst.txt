@@ -19,4 +19,5 @@ Sitemap
    pages/installation
    pages/cheatsheet
    pages/model_zoo
-   apidocs/modules
+   docs/quickstart
+   docs/tutorials

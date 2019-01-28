@@ -1,0 +1,7 @@
+neupy.utils.iters module
+========================
+
+.. automodule:: neupy.utils.iters
+    :members:
+    :undoc-members:
+    :show-inheritance:

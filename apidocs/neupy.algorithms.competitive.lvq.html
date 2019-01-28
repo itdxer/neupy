@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -236,25 +243,22 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_inputs</strong> : int</p>
-<blockquote>
-<div><p>Number of input units. It should be equal to the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>n_inputs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of input units. It should be equal to the
 number of features in the input data set.</p>
-</div></blockquote>
-<p><strong>n_subclasses</strong> : int, None</p>
-<blockquote>
-<div><p>Defines total number of subclasses. Values should be greater
+</dd>
+<dt><strong>n_subclasses</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, None</span></dt>
+<dd><p class="first last">Defines total number of subclasses. Values should be greater
 or equal to the number of classes. <span class="docutils literal"><span class="pre">None</span></span> will set up number
 of subclasses equal to the number of classes. Defaults to <span class="docutils literal"><span class="pre">None</span></span>
 (or the same as <span class="docutils literal"><span class="pre">n_classes</span></span>).</p>
-</div></blockquote>
-<p><strong>n_classes</strong> : int</p>
-<blockquote>
-<div><p>Number of classes in the data set.</p>
-</div></blockquote>
-<p><strong>prototypes_per_class</strong> : list, None</p>
-<blockquote>
-<div><p>Defines number of prototypes per each class. For instance,
+</dd>
+<dt><strong>n_classes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of classes in the data set.</p>
+</dd>
+<dt><strong>prototypes_per_class</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, None</span></dt>
+<dd><p class="first">Defines number of prototypes per each class. For instance,
 if <span class="docutils literal"><span class="pre">n_classes=3</span></span> and <span class="docutils literal"><span class="pre">n_subclasses=8</span></span> then there are
 can be 3 subclasses for the first class, 3 for the second one
 and 2 for the third one (3 + 3 + 2 == 8). The following example
@@ -265,19 +269,17 @@ can be specified as <span class="docutils literal"><span class="pre">prototypes_
 <li><span class="docutils literal"><span class="pre">len(prototypes_per_class)</span> <span class="pre">==</span> <span class="pre">n_classes</span></span></li>
 </ol>
 <p>The <span class="docutils literal"><span class="pre">None</span></span> value will distribute approximately equal
-number of subclasses per each class. It&#8217;s approximately,
+number of subclasses per each class. It’s approximately,
 because in casses when <span class="docutils literal"><span class="pre">n_subclasses</span> <span class="pre">%</span> <span class="pre">n_classes</span> <span class="pre">!=</span> <span class="pre">0</span></span>
 there is no way to distribute equal number of subclasses
 per each class.</p>
-<p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>step</strong> : float</p>
-<blockquote>
-<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</div></blockquote>
-<p><strong>n_updates_to_stepdrop</strong> : int or None</p>
-<blockquote>
-<div><p>If this options is not equal to <span class="docutils literal"><span class="pre">None</span></span> then after every
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</dd>
+<dt><strong>n_updates_to_stepdrop</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span></dt>
+<dd><p class="first">If this options is not equal to <span class="docutils literal"><span class="pre">None</span></span> then after every
 update LVQ reduces step size and do it until number of
 applied updates would reach the <span class="docutils literal"><span class="pre">n_updates_to_stepdrop</span></span>
 value. The minimum possible step size defined in the
@@ -286,57 +288,39 @@ value. The minimum possible step size defined in the
 of epochs. LVQ applies update after each propagated sample
 through the network. Relations between this parameter and
 maximum number of epochs is following</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">n_updates_to_stepdrop</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="n">n_max_epochs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_updates_to_stepdrop</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="n">n_max_epochs</span>
 </pre></div>
 </div>
-<p>If parameter equal to <span class="docutils literal"><span class="pre">None</span></span> then step size wouldn&#8217;t be
+<p>If parameter equal to <span class="docutils literal"><span class="pre">None</span></span> then step size wouldn’t be
 reduced after each update.</p>
-<p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>minstep</strong> : float</p>
-<blockquote>
-<div><p>Step size would never be lower than this value. This
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>minstep</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Step size would never be lower than this value. This
 property useful only in case if <span class="docutils literal"><span class="pre">n_updates_to_stepdrop</span></span>
 is not <span class="docutils literal"><span class="pre">None</span></span>. Defaults to <span class="docutils literal"><span class="pre">1e-5</span></span>.</p>
-</div></blockquote>
-<p><strong>show_epoch</strong> : int or str</p>
-<blockquote>
-<div><p>This property controls how often the network will
-display information about training. There are two
-main syntaxes for this property.</p>
-<ul class="simple">
-<li>You can define it as a positive integer number. It
-defines how offen would you like to see summary
-output in terminal. For instance, number <cite>100</cite> mean
-that network shows summary at 100th, 200th,
-300th ... epochs.</li>
-<li>String defines number of times you want to see output in
-terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
-the network will show output twice with approximately
-equal period of epochs and one additional output would
-be after the finall epoch.</li>
-</ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>shuffle_data</strong> : bool</p>
-<blockquote>
-<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
-training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>epoch_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train epoch finishes.</p>
-</div></blockquote>
-<p><strong>train_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train process finishes.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote class="last">
-<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
-informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
-disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first">This property controls how often the network will display
+information about training. It has to be defined as positive
+integer. For instance, number <span class="docutils literal"><span class="pre">100</span></span> mean that network shows
+summary at 1st, 100th, 200th, 300th … and last epochs.</p>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> than training data will be shuffled before
+the training. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</dd>
+<dt><strong>signals</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict, list or function</span></dt>
+<dd><p class="first last">Function that will be triggered after certain events during
+the training.</p>
+</dd>
+<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Property controls verbose output in terminal. The <span class="docutils literal"><span class="pre">True</span></span> value
+enables informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> - disable
+it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -349,8 +333,8 @@ Euclidian distance to find clusters.</li>
 samples</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -364,14 +348,14 @@ samples</li>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="37%" />
-<col width="63%" />
+<col width="40%" />
+<col width="60%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>predict(input_data)</td>
+<tr class="row-odd"><td><strong>predict(X)</strong></td>
 <td>Predicts output for the specified input.</td>
 </tr>
-<tr class="row-even"><td>fit(*args, **kwargs)</td>
+<tr class="row-even"><td><strong>fit(*args, **kwargs)</strong></td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>
 </tr>
 </tbody>
@@ -401,26 +385,35 @@ samples</li>
 <span class="descname">n_updates_to_stepdrop</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="neupy.algorithms.competitive.lvq.LVQ.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
 <dl class="method">
-<dt id="neupy.algorithms.competitive.lvq.LVQ.predict">
-<span class="descname">predict</span><span class="sig-paren">(</span><em>input_data</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Return prediction results for the input data.</p>
+<dt id="neupy.algorithms.competitive.lvq.LVQ.one_training_update">
+<span class="descname">one_training_update</span><span class="sig-paren">(</span><em>X_train</em>, <em>y_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Function would be trigger before run all training procedure
+related to the current epoch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_data</strong> : array-like</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array-like</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Current epoch number.</p>
+</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.algorithms.competitive.lvq.LVQ.options">
+<span class="descname">options</span><em class="property"> = {'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=IntProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'signals': Option(class_name='BaseNetwork', value=Property(name=&quot;signals&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.algorithms.competitive.lvq.LVQ.predict">
+<span class="descname">predict</span><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ.prototypes_per_class">
@@ -429,34 +422,33 @@ samples</li>
 
 <dl class="method">
 <dt id="neupy.algorithms.competitive.lvq.LVQ.train">
-<span class="descname">train</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">train</span><span class="sig-paren">(</span><em>X_train</em>, <em>y_train</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Method train neural network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_train</strong> : array-like</p>
-<p><strong>target_train</strong> : array-like or None</p>
-<p><strong>input_test</strong> : array-like or None</p>
-<p><strong>target_test</strong> : array-like or None</p>
-<p><strong>epochs</strong> : int</p>
-<blockquote>
-<div><p>Defaults to <cite>100</cite>.</p>
-</div></blockquote>
-<p><strong>epsilon</strong> : float or None</p>
-<blockquote class="last">
-<div><p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>X_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd></dd>
+<dt><strong>y_train</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>X_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>y_test</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like or None</span></dt>
+<dd></dd>
+<dt><strong>epochs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Defaults to <span class="docutils literal"><span class="pre">100</span></span>.</p>
+</dd>
+<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
+<dd><p class="first last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="method">
-<dt id="neupy.algorithms.competitive.lvq.LVQ.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ.training_step">
@@ -479,30 +471,26 @@ Improved version for the LVQ algorithm.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>epsilon</strong> : float</p>
-<blockquote>
-<div><p>Ration between to closest subclasses that
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Ration between to closest subclasses that
 triggers double weight update. Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</div></blockquote>
-<p><strong>n_inputs</strong> : int</p>
-<blockquote>
-<div><p>Number of input units. It should be equal to the
+</dd>
+<dt><strong>n_inputs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of input units. It should be equal to the
 number of features in the input data set.</p>
-</div></blockquote>
-<p><strong>n_subclasses</strong> : int, None</p>
-<blockquote>
-<div><p>Defines total number of subclasses. Values should be greater
+</dd>
+<dt><strong>n_subclasses</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, None</span></dt>
+<dd><p class="first last">Defines total number of subclasses. Values should be greater
 or equal to the number of classes. <span class="docutils literal"><span class="pre">None</span></span> will set up number
 of subclasses equal to the number of classes. Defaults to <span class="docutils literal"><span class="pre">None</span></span>
 (or the same as <span class="docutils literal"><span class="pre">n_classes</span></span>).</p>
-</div></blockquote>
-<p><strong>n_classes</strong> : int</p>
-<blockquote>
-<div><p>Number of classes in the data set.</p>
-</div></blockquote>
-<p><strong>prototypes_per_class</strong> : list, None</p>
-<blockquote>
-<div><p>Defines number of prototypes per each class. For instance,
+</dd>
+<dt><strong>n_classes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of classes in the data set.</p>
+</dd>
+<dt><strong>prototypes_per_class</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, None</span></dt>
+<dd><p class="first">Defines number of prototypes per each class. For instance,
 if <span class="docutils literal"><span class="pre">n_classes=3</span></span> and <span class="docutils literal"><span class="pre">n_subclasses=8</span></span> then there are
 can be 3 subclasses for the first class, 3 for the second one
 and 2 for the third one (3 + 3 + 2 == 8). The following example
@@ -513,19 +501,17 @@ can be specified as <span class="docutils literal"><span class="pre">prototypes_
 <li><span class="docutils literal"><span class="pre">len(prototypes_per_class)</span> <span class="pre">==</span> <span class="pre">n_classes</span></span></li>
 </ol>
 <p>The <span class="docutils literal"><span class="pre">None</span></span> value will distribute approximately equal
-number of subclasses per each class. It&#8217;s approximately,
+number of subclasses per each class. It’s approximately,
 because in casses when <span class="docutils literal"><span class="pre">n_subclasses</span> <span class="pre">%</span> <span class="pre">n_classes</span> <span class="pre">!=</span> <span class="pre">0</span></span>
 there is no way to distribute equal number of subclasses
 per each class.</p>
-<p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>step</strong> : float</p>
-<blockquote>
-<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</div></blockquote>
-<p><strong>n_updates_to_stepdrop</strong> : int or None</p>
-<blockquote>
-<div><p>If this options is not equal to <span class="docutils literal"><span class="pre">None</span></span> then after every
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</dd>
+<dt><strong>n_updates_to_stepdrop</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span></dt>
+<dd><p class="first">If this options is not equal to <span class="docutils literal"><span class="pre">None</span></span> then after every
 update LVQ reduces step size and do it until number of
 applied updates would reach the <span class="docutils literal"><span class="pre">n_updates_to_stepdrop</span></span>
 value. The minimum possible step size defined in the
@@ -534,57 +520,39 @@ value. The minimum possible step size defined in the
 of epochs. LVQ applies update after each propagated sample
 through the network. Relations between this parameter and
 maximum number of epochs is following</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">n_updates_to_stepdrop</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="n">n_max_epochs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_updates_to_stepdrop</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="n">n_max_epochs</span>
 </pre></div>
 </div>
-<p>If parameter equal to <span class="docutils literal"><span class="pre">None</span></span> then step size wouldn&#8217;t be
+<p>If parameter equal to <span class="docutils literal"><span class="pre">None</span></span> then step size wouldn’t be
 reduced after each update.</p>
-<p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>minstep</strong> : float</p>
-<blockquote>
-<div><p>Step size would never be lower than this value. This
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>minstep</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Step size would never be lower than this value. This
 property useful only in case if <span class="docutils literal"><span class="pre">n_updates_to_stepdrop</span></span>
 is not <span class="docutils literal"><span class="pre">None</span></span>. Defaults to <span class="docutils literal"><span class="pre">1e-5</span></span>.</p>
-</div></blockquote>
-<p><strong>show_epoch</strong> : int or str</p>
-<blockquote>
-<div><p>This property controls how often the network will
-display information about training. There are two
-main syntaxes for this property.</p>
-<ul class="simple">
-<li>You can define it as a positive integer number. It
-defines how offen would you like to see summary
-output in terminal. For instance, number <cite>100</cite> mean
-that network shows summary at 100th, 200th,
-300th ... epochs.</li>
-<li>String defines number of times you want to see output in
-terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
-the network will show output twice with approximately
-equal period of epochs and one additional output would
-be after the finall epoch.</li>
-</ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>shuffle_data</strong> : bool</p>
-<blockquote>
-<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
-training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>epoch_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train epoch finishes.</p>
-</div></blockquote>
-<p><strong>train_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train process finishes.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote class="last">
-<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
-informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
-disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first">This property controls how often the network will display
+information about training. It has to be defined as positive
+integer. For instance, number <span class="docutils literal"><span class="pre">100</span></span> mean that network shows
+summary at 1st, 100th, 200th, 300th … and last epochs.</p>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> than training data will be shuffled before
+the training. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</dd>
+<dt><strong>signals</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict, list or function</span></dt>
+<dd><p class="first last">Function that will be triggered after certain events during
+the training.</p>
+</dd>
+<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Property controls verbose output in terminal. The <span class="docutils literal"><span class="pre">True</span></span> value
+enables informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> - disable
+it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -597,8 +565,8 @@ Euclidian distance to find clusters.</li>
 samples</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -614,14 +582,29 @@ samples</li>
 <span class="descname">epsilon</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="neupy.algorithms.competitive.lvq.LVQ2.one_training_update">
+<span class="descname">one_training_update</span><span class="sig-paren">(</span><em>X_train</em>, <em>y_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Function would be trigger before run all training procedure
+related to the current epoch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Current epoch number.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ2.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.algorithms.competitive.lvq.LVQ2.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=IntProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'signals': Option(class_name='BaseNetwork', value=Property(name=&quot;signals&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -635,30 +618,26 @@ Improved version for the LVQ2 algorithm.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>epsilon</strong> : float</p>
-<blockquote>
-<div><p>Ration between to closest subclasses that
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Ration between to closest subclasses that
 triggers double weight update. Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</div></blockquote>
-<p><strong>n_inputs</strong> : int</p>
-<blockquote>
-<div><p>Number of input units. It should be equal to the
+</dd>
+<dt><strong>n_inputs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of input units. It should be equal to the
 number of features in the input data set.</p>
-</div></blockquote>
-<p><strong>n_subclasses</strong> : int, None</p>
-<blockquote>
-<div><p>Defines total number of subclasses. Values should be greater
+</dd>
+<dt><strong>n_subclasses</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, None</span></dt>
+<dd><p class="first last">Defines total number of subclasses. Values should be greater
 or equal to the number of classes. <span class="docutils literal"><span class="pre">None</span></span> will set up number
 of subclasses equal to the number of classes. Defaults to <span class="docutils literal"><span class="pre">None</span></span>
 (or the same as <span class="docutils literal"><span class="pre">n_classes</span></span>).</p>
-</div></blockquote>
-<p><strong>n_classes</strong> : int</p>
-<blockquote>
-<div><p>Number of classes in the data set.</p>
-</div></blockquote>
-<p><strong>prototypes_per_class</strong> : list, None</p>
-<blockquote>
-<div><p>Defines number of prototypes per each class. For instance,
+</dd>
+<dt><strong>n_classes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of classes in the data set.</p>
+</dd>
+<dt><strong>prototypes_per_class</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, None</span></dt>
+<dd><p class="first">Defines number of prototypes per each class. For instance,
 if <span class="docutils literal"><span class="pre">n_classes=3</span></span> and <span class="docutils literal"><span class="pre">n_subclasses=8</span></span> then there are
 can be 3 subclasses for the first class, 3 for the second one
 and 2 for the third one (3 + 3 + 2 == 8). The following example
@@ -669,19 +648,17 @@ can be specified as <span class="docutils literal"><span class="pre">prototypes_
 <li><span class="docutils literal"><span class="pre">len(prototypes_per_class)</span> <span class="pre">==</span> <span class="pre">n_classes</span></span></li>
 </ol>
 <p>The <span class="docutils literal"><span class="pre">None</span></span> value will distribute approximately equal
-number of subclasses per each class. It&#8217;s approximately,
+number of subclasses per each class. It’s approximately,
 because in casses when <span class="docutils literal"><span class="pre">n_subclasses</span> <span class="pre">%</span> <span class="pre">n_classes</span> <span class="pre">!=</span> <span class="pre">0</span></span>
 there is no way to distribute equal number of subclasses
 per each class.</p>
-<p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>step</strong> : float</p>
-<blockquote>
-<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</div></blockquote>
-<p><strong>n_updates_to_stepdrop</strong> : int or None</p>
-<blockquote>
-<div><p>If this options is not equal to <span class="docutils literal"><span class="pre">None</span></span> then after every
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Learning rate, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+</dd>
+<dt><strong>n_updates_to_stepdrop</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span></dt>
+<dd><p class="first">If this options is not equal to <span class="docutils literal"><span class="pre">None</span></span> then after every
 update LVQ reduces step size and do it until number of
 applied updates would reach the <span class="docutils literal"><span class="pre">n_updates_to_stepdrop</span></span>
 value. The minimum possible step size defined in the
@@ -690,57 +667,39 @@ value. The minimum possible step size defined in the
 of epochs. LVQ applies update after each propagated sample
 through the network. Relations between this parameter and
 maximum number of epochs is following</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">n_updates_to_stepdrop</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="n">n_max_epochs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_updates_to_stepdrop</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="n">n_max_epochs</span>
 </pre></div>
 </div>
-<p>If parameter equal to <span class="docutils literal"><span class="pre">None</span></span> then step size wouldn&#8217;t be
+<p>If parameter equal to <span class="docutils literal"><span class="pre">None</span></span> then step size wouldn’t be
 reduced after each update.</p>
-<p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>minstep</strong> : float</p>
-<blockquote>
-<div><p>Step size would never be lower than this value. This
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>minstep</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Step size would never be lower than this value. This
 property useful only in case if <span class="docutils literal"><span class="pre">n_updates_to_stepdrop</span></span>
 is not <span class="docutils literal"><span class="pre">None</span></span>. Defaults to <span class="docutils literal"><span class="pre">1e-5</span></span>.</p>
-</div></blockquote>
-<p><strong>show_epoch</strong> : int or str</p>
-<blockquote>
-<div><p>This property controls how often the network will
-display information about training. There are two
-main syntaxes for this property.</p>
-<ul class="simple">
-<li>You can define it as a positive integer number. It
-defines how offen would you like to see summary
-output in terminal. For instance, number <cite>100</cite> mean
-that network shows summary at 100th, 200th,
-300th ... epochs.</li>
-<li>String defines number of times you want to see output in
-terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
-the network will show output twice with approximately
-equal period of epochs and one additional output would
-be after the finall epoch.</li>
-</ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>shuffle_data</strong> : bool</p>
-<blockquote>
-<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
-training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>epoch_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train epoch finishes.</p>
-</div></blockquote>
-<p><strong>train_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train process finishes.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote class="last">
-<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
-informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
-disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first">This property controls how often the network will display
+information about training. It has to be defined as positive
+integer. For instance, number <span class="docutils literal"><span class="pre">100</span></span> mean that network shows
+summary at 1st, 100th, 200th, 300th … and last epochs.</p>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> than training data will be shuffled before
+the training. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</dd>
+<dt><strong>signals</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict, list or function</span></dt>
+<dd><p class="first last">Function that will be triggered after certain events during
+the training.</p>
+</dd>
+<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Property controls verbose output in terminal. The <span class="docutils literal"><span class="pre">True</span></span> value
+enables informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> - disable
+it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -753,8 +712,8 @@ Euclidian distance to find clusters.</li>
 samples</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -765,14 +724,29 @@ samples</li>
 <span class="go">array([1, 0])</span>
 </pre></div>
 </div>
+<dl class="method">
+<dt id="neupy.algorithms.competitive.lvq.LVQ21.one_training_update">
+<span class="descname">one_training_update</span><span class="sig-paren">(</span><em>X_train</em>, <em>y_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Function would be trigger before run all training procedure
+related to the current epoch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Current epoch number.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ21.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.algorithms.competitive.lvq.LVQ21.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=IntProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'signals': Option(class_name='BaseNetwork', value=Property(name=&quot;signals&quot;)), 'step': Option(class_name='BaseNetwork', value=NumberProperty(name=&quot;step&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -786,25 +760,22 @@ Improved version for the LVQ2.1 algorithm.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_inputs</strong> : int</p>
-<blockquote>
-<div><p>Number of input units. It should be equal to the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>n_inputs</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of input units. It should be equal to the
 number of features in the input data set.</p>
-</div></blockquote>
-<p><strong>n_subclasses</strong> : int, None</p>
-<blockquote>
-<div><p>Defines total number of subclasses. Values should be greater
+</dd>
+<dt><strong>n_subclasses</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, None</span></dt>
+<dd><p class="first last">Defines total number of subclasses. Values should be greater
 or equal to the number of classes. <span class="docutils literal"><span class="pre">None</span></span> will set up number
 of subclasses equal to the number of classes. Defaults to <span class="docutils literal"><span class="pre">None</span></span>
 (or the same as <span class="docutils literal"><span class="pre">n_classes</span></span>).</p>
-</div></blockquote>
-<p><strong>n_classes</strong> : int</p>
-<blockquote>
-<div><p>Number of classes in the data set.</p>
-</div></blockquote>
-<p><strong>prototypes_per_class</strong> : list, None</p>
-<blockquote>
-<div><p>Defines number of prototypes per each class. For instance,
+</dd>
+<dt><strong>n_classes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of classes in the data set.</p>
+</dd>
+<dt><strong>prototypes_per_class</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list, None</span></dt>
+<dd><p class="first">Defines number of prototypes per each class. For instance,
 if <span class="docutils literal"><span class="pre">n_classes=3</span></span> and <span class="docutils literal"><span class="pre">n_subclasses=8</span></span> then there are
 can be 3 subclasses for the first class, 3 for the second one
 and 2 for the third one (3 + 3 + 2 == 8). The following example
@@ -815,65 +786,45 @@ can be specified as <span class="docutils literal"><span class="pre">prototypes_
 <li><span class="docutils literal"><span class="pre">len(prototypes_per_class)</span> <span class="pre">==</span> <span class="pre">n_classes</span></span></li>
 </ol>
 <p>The <span class="docutils literal"><span class="pre">None</span></span> value will distribute approximately equal
-number of subclasses per each class. It&#8217;s approximately,
+number of subclasses per each class. It’s approximately,
 because in casses when <span class="docutils literal"><span class="pre">n_subclasses</span> <span class="pre">%</span> <span class="pre">n_classes</span> <span class="pre">!=</span> <span class="pre">0</span></span>
 there is no way to distribute equal number of subclasses
 per each class.</p>
-<p>Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
-</div></blockquote>
-<p><strong>epsilon</strong> : float</p>
-<blockquote>
-<div><p>Ration between to closest subclasses that
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+</dd>
+<dt><strong>epsilon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Ration between to closest subclasses that
 triggers double weight update. Defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
-</div></blockquote>
-<p><strong>slowdown_rate</strong> : float</p>
-<blockquote>
-<div><p>Paremeter scales learning step in order to decrease it
+</dd>
+<dt><strong>slowdown_rate</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Paremeter scales learning step in order to decrease it
 in case if the two closest subclasses predict target
 value correctly. Defaults to <span class="docutils literal"><span class="pre">0.4</span></span>.</p>
-</div></blockquote>
-<p><strong>step</strong> : float</p>
-<blockquote>
-<div><p>Learning rate, defaults to <span class="docutils literal"><span class="pre">0.01</span></span>.</p>
-</div></blockquote>
-<p><strong>show_epoch</strong> : int or str</p>
-<blockquote>
-<div><p>This property controls how often the network will
-display information about training. There are two
-main syntaxes for this property.</p>
-<ul class="simple">
-<li>You can define it as a positive integer number. It
-defines how offen would you like to see summary
-output in terminal. For instance, number <cite>100</cite> mean
-that network shows summary at 100th, 200th,
-300th ... epochs.</li>
-<li>String defines number of times you want to see output in
-terminal. For instance, value <span class="docutils literal"><span class="pre">'2</span> <span class="pre">times'</span></span> mean that
-the network will show output twice with approximately
-equal period of epochs and one additional output would
-be after the finall epoch.</li>
-</ul>
-<p>Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
-</div></blockquote>
-<p><strong>shuffle_data</strong> : bool</p>
-<blockquote>
-<div><p>If it&#8217;s <span class="docutils literal"><span class="pre">True</span></span> class shuffles all your training data before
-training your network, defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
-</div></blockquote>
-<p><strong>epoch_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train epoch finishes.</p>
-</div></blockquote>
-<p><strong>train_end_signal</strong> : function</p>
-<blockquote>
-<div><p>Calls this function when train process finishes.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote class="last">
-<div><p>Property controls verbose output interminal. <span class="docutils literal"><span class="pre">True</span></span> enables
-informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> -
-disable it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
-</div></blockquote>
+</dd>
+<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Learning rate, defaults to <span class="docutils literal"><span class="pre">0.01</span></span>.</p>
+</dd>
+<dt><strong>show_epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first">This property controls how often the network will display
+information about training. It has to be defined as positive
+integer. For instance, number <span class="docutils literal"><span class="pre">100</span></span> mean that network shows
+summary at 1st, 100th, 200th, 300th … and last epochs.</p>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>shuffle_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If it’s <span class="docutils literal"><span class="pre">True</span></span> than training data will be shuffled before
+the training. Defaults to <span class="docutils literal"><span class="pre">True</span></span>.</p>
+</dd>
+<dt><strong>signals</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict, list or function</span></dt>
+<dd><p class="first last">Function that will be triggered after certain events during
+the training.</p>
+</dd>
+<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Property controls verbose output in terminal. The <span class="docutils literal"><span class="pre">True</span></span> value
+enables informative output in the terminal and <span class="docutils literal"><span class="pre">False</span></span> - disable
+it. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -888,8 +839,8 @@ samples</li>
 can improve the performance.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -900,9 +851,29 @@ can improve the performance.</li>
 <span class="go">array([1, 0])</span>
 </pre></div>
 </div>
+<dl class="method">
+<dt id="neupy.algorithms.competitive.lvq.LVQ3.one_training_update">
+<span class="descname">one_training_update</span><span class="sig-paren">(</span><em>X_train</em>, <em>y_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Function would be trigger before run all training procedure
+related to the current epoch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>epoch</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Current epoch number.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ3.options">
-<span class="descname">options</span><em class="property"> = {'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'step': Option(class_name='LVQ3', value=NumberProperty(name=&quot;step&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=ShowEpochProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'epoch_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;epoch_end_signal&quot;)), 'train_end_signal': Option(class_name='BaseNetwork', value=Property(name=&quot;train_end_signal&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'slowdown_rate': Option(class_name='LVQ3', value=NumberProperty(name=&quot;slowdown_rate&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descname">options</span><em class="property"> = {'epsilon': Option(class_name='LVQ2', value=NumberProperty(name=&quot;epsilon&quot;)), 'minstep': Option(class_name='LVQ', value=NumberProperty(name=&quot;minstep&quot;)), 'n_classes': Option(class_name='LVQ', value=IntProperty(name=&quot;n_classes&quot;)), 'n_inputs': Option(class_name='LVQ', value=IntProperty(name=&quot;n_inputs&quot;)), 'n_subclasses': Option(class_name='LVQ', value=IntProperty(name=&quot;n_subclasses&quot;)), 'n_updates_to_stepdrop': Option(class_name='LVQ', value=IntProperty(name=&quot;n_updates_to_stepdrop&quot;)), 'prototypes_per_class': Option(class_name='LVQ', value=TypedListProperty(name=&quot;prototypes_per_class&quot;)), 'show_epoch': Option(class_name='BaseNetwork', value=IntProperty(name=&quot;show_epoch&quot;)), 'shuffle_data': Option(class_name='BaseNetwork', value=Property(name=&quot;shuffle_data&quot;)), 'signals': Option(class_name='BaseNetwork', value=Property(name=&quot;signals&quot;)), 'slowdown_rate': Option(class_name='LVQ3', value=NumberProperty(name=&quot;slowdown_rate&quot;)), 'step': Option(class_name='LVQ3', value=NumberProperty(name=&quot;step&quot;)), 'verbose': Option(class_name='Verbose', value=VerboseProperty(name=&quot;verbose&quot;)), 'weight': Option(class_name='LVQ', value=Property(name=&quot;weight&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -913,11 +884,6 @@ can improve the performance.</li>
 <dl class="attribute">
 <dt id="neupy.algorithms.competitive.lvq.LVQ3.step">
 <span class="descname">step</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="neupy.algorithms.competitive.lvq.LVQ3.train_epoch">
-<span class="descname">train_epoch</span><span class="sig-paren">(</span><em>input_train</em>, <em>target_train</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/competitive/lvq.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

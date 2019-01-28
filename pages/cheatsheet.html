@@ -28,15 +28,16 @@
         <script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../_static/plugins.js"></script>
         <script src="../_static/main.js"></script>
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script><script type="text/javascript" src="../_static/js/google_analytics.js"></script><script type="text/javascript" src="../_static/js/script.js"></script><script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -51,10 +52,16 @@
         img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
         div.highlight { margin-bottom: 20px !important; }
 
         .limited-width { max-width: 800px; margin: auto; }
         .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
         .docutils td { padding: 10px; }
         .section { word-wrap:break-word; }
         .descname { font-weight: bold; }
@@ -236,126 +243,125 @@
 <li><a class="reference internal" href="#layers" id="id4">Layers</a></li>
 <li><a class="reference internal" href="#architectures" id="id5">Architectures</a></li>
 <li><a class="reference internal" href="#parameter-initialization" id="id6">Parameter initialization</a></li>
-<li><a class="reference internal" href="#loss-functions" id="id7">Loss functions</a></li>
-<li><a class="reference internal" href="#datasets" id="id8">Datasets</a></li>
+<li><a class="reference internal" href="#datasets" id="id7">Datasets</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="algorithms">
 <h2><a class="toc-backref" href="#id3">Algorithms</a></h2>
-<div class="section" id="algorithms-based-on-backpropagation">
-<h3>Algorithms based on backpropagation</h3>
-<div class="section" id="training-algorithms">
-<span id="cheatsheet-backprop-algorithms"></span><h4>Training algorithms</h4>
-<table border="1" class="docutils">
+<div class="section" id="deep-learning">
+<h3>Deep Learning</h3>
+<div class="section" id="optimizers">
+<h4>Optimizers</h4>
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.base.html#neupy.algorithms.gd.base.GradientDescent" title="neupy.algorithms.gd.base.GradientDescent"><span class="xref py py-class docutils literal"><span class="pre">GradientDescent</span></span></a></td>
-<td>Gradient Descent</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Momentum.html#neupy.algorithms.Momentum" title="neupy.algorithms.Momentum"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Momentum</span></span></a></td>
+<td>Momentum algorithm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.momentum.html#neupy.algorithms.gd.momentum.Momentum" title="neupy.algorithms.gd.momentum.Momentum"><span class="xref py py-class docutils literal"><span class="pre">Momentum</span></span></a></td>
-<td>Momentum</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.GradientDescent.html#neupy.algorithms.GradientDescent" title="neupy.algorithms.GradientDescent"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.GradientDescent</span></span></a></td>
+<td>Mini-batch Gradient Descent algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adam.html#neupy.algorithms.gd.adam.Adam" title="neupy.algorithms.gd.adam.Adam"><span class="xref py py-class docutils literal"><span class="pre">Adam</span></span></a></td>
-<td>Adam</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Adam.html#neupy.algorithms.Adam" title="neupy.algorithms.Adam"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Adam</span></span></a></td>
+<td>Adam algorithm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adamax.html#neupy.algorithms.gd.adamax.Adamax" title="neupy.algorithms.gd.adamax.Adamax"><span class="xref py py-class docutils literal"><span class="pre">Adamax</span></span></a></td>
-<td>AdaMax</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Adamax.html#neupy.algorithms.Adamax" title="neupy.algorithms.Adamax"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Adamax</span></span></a></td>
+<td>AdaMax algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rmsprop.html#neupy.algorithms.gd.rmsprop.RMSProp" title="neupy.algorithms.gd.rmsprop.RMSProp"><span class="xref py py-class docutils literal"><span class="pre">RMSProp</span></span></a></td>
-<td>RMSProp</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.RMSProp.html#neupy.algorithms.RMSProp" title="neupy.algorithms.RMSProp"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.RMSProp</span></span></a></td>
+<td>RMSProp algorithm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adadelta.html#neupy.algorithms.gd.adadelta.Adadelta" title="neupy.algorithms.gd.adadelta.Adadelta"><span class="xref py py-class docutils literal"><span class="pre">Adadelta</span></span></a></td>
-<td>Adadelta</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Adadelta.html#neupy.algorithms.Adadelta" title="neupy.algorithms.Adadelta"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Adadelta</span></span></a></td>
+<td>Adadelta algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.adagrad.html#neupy.algorithms.gd.adagrad.Adagrad" title="neupy.algorithms.gd.adagrad.Adagrad"><span class="xref py py-class docutils literal"><span class="pre">Adagrad</span></span></a></td>
-<td>Adagrad</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Adagrad.html#neupy.algorithms.Adagrad" title="neupy.algorithms.Adagrad"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Adagrad</span></span></a></td>
+<td>Adagrad algorithm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.conjgrad.html#neupy.algorithms.gd.conjgrad.ConjugateGradient" title="neupy.algorithms.gd.conjgrad.ConjugateGradient"><span class="xref py py-class docutils literal"><span class="pre">ConjugateGradient</span></span></a></td>
-<td>Conjugate Gradient</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.ConjugateGradient.html#neupy.algorithms.ConjugateGradient" title="neupy.algorithms.ConjugateGradient"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.ConjugateGradient</span></span></a></td>
+<td>Conjugate Gradient algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.quasi_newton.html#neupy.algorithms.gd.quasi_newton.QuasiNewton" title="neupy.algorithms.gd.quasi_newton.QuasiNewton"><span class="xref py py-class docutils literal"><span class="pre">QuasiNewton</span></span></a></td>
-<td>quasi-Newton</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.QuasiNewton.html#neupy.algorithms.QuasiNewton" title="neupy.algorithms.QuasiNewton"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.QuasiNewton</span></span></a></td>
+<td>Quasi-Newton algorithm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.lev_marq.html#neupy.algorithms.gd.lev_marq.LevenbergMarquardt" title="neupy.algorithms.gd.lev_marq.LevenbergMarquardt"><span class="xref py py-class docutils literal"><span class="pre">LevenbergMarquardt</span></span></a></td>
-<td>Levenberg-Marquardt</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.LevenbergMarquardt.html#neupy.algorithms.LevenbergMarquardt" title="neupy.algorithms.LevenbergMarquardt"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.LevenbergMarquardt</span></span></a></td>
+<td>Levenberg-Marquardt algorithm is a variation of the Newton’s method.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessian.html#neupy.algorithms.gd.hessian.Hessian" title="neupy.algorithms.gd.hessian.Hessian"><span class="xref py py-class docutils literal"><span class="pre">Hessian</span></span></a></td>
-<td>Hessian</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Hessian.html#neupy.algorithms.Hessian" title="neupy.algorithms.Hessian"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Hessian</span></span></a></td>
+<td>Hessian gradient decent optimization, also known as Newton’s method.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.hessdiag.html#neupy.algorithms.gd.hessdiag.HessianDiagonal" title="neupy.algorithms.gd.hessdiag.HessianDiagonal"><span class="xref py py-class docutils literal"><span class="pre">HessianDiagonal</span></span></a></td>
-<td>Hessian diagonal</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.HessianDiagonal.html#neupy.algorithms.HessianDiagonal" title="neupy.algorithms.HessianDiagonal"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.HessianDiagonal</span></span></a></td>
+<td>Hissian diagonal is a Hessian algorithm approximation which require only computation of hessian matrix diagonal elements and makes it invertion much easier and faster.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.RPROP" title="neupy.algorithms.gd.rprop.RPROP"><span class="xref py py-class docutils literal"><span class="pre">RPROP</span></span></a></td>
-<td>RPROP</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.RPROP.html#neupy.algorithms.RPROP" title="neupy.algorithms.RPROP"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.RPROP</span></span></a></td>
+<td>Resilient backpropagation (RPROP) is an optimization algorithm for supervised learning.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.rprop.html#neupy.algorithms.gd.rprop.IRPROPPlus" title="neupy.algorithms.gd.rprop.IRPROPPlus"><span class="xref py py-class docutils literal"><span class="pre">IRPROPPlus</span></span></a></td>
-<td>iRPROP+</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.IRPROPPlus.html#neupy.algorithms.IRPROPPlus" title="neupy.algorithms.IRPROPPlus"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.IRPROPPlus</span></span></a></td>
+<td>iRPROP+ is an optimization algorithm for supervised learning.</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="regularization-methods">
-<h4>Regularization methods</h4>
-<table border="1" class="docutils">
+<div class="section" id="regularizers">
+<h4>Regularizers</h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">step</span><span class="o">=</span><span class="n">algorithms</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">decay_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.regularization.weight_decay.html#neupy.algorithms.regularization.weight_decay.WeightDecay" title="neupy.algorithms.regularization.weight_decay.WeightDecay"><span class="xref py py-class docutils literal"><span class="pre">WeightDecay</span></span></a></td>
-<td>Weight decay</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.l1.html#neupy.algorithms.l1" title="neupy.algorithms.l1"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.l1</span></span></a></td>
+<td>Applies l1 regularization to the trainable parameters in the network.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.regularization.weight_elimination.html#neupy.algorithms.regularization.weight_elimination.WeightElimination" title="neupy.algorithms.regularization.weight_elimination.WeightElimination"><span class="xref py py-class docutils literal"><span class="pre">WeightElimination</span></span></a></td>
-<td>Weight elimination</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.l2.html#neupy.algorithms.l2" title="neupy.algorithms.l2"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.l2</span></span></a></td>
+<td>Applies l2 regularization to the trainable parameters in the network.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.regularization.max_norm.html#neupy.algorithms.regularization.max_norm.MaxNormRegularization" title="neupy.algorithms.regularization.max_norm.MaxNormRegularization"><span class="xref py py-class docutils literal"><span class="pre">MaxNormRegularization</span></span></a></td>
-<td>Max-norm regularization</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.maxnorm.html#neupy.algorithms.maxnorm" title="neupy.algorithms.maxnorm"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.maxnorm</span></span></a></td>
+<td>Applies max-norm regularization to the trainable parameters in the network.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="learning-rate-update-rules">
 <h4>Learning rate update rules</h4>
-<table border="1" class="docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">step</span><span class="o">=</span><span class="n">algorithms</span><span class="o">.</span><span class="n">step_decay</span><span class="p">(</span>
+        <span class="n">initial_value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">reduction_freq</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.step_update.leak_step.html#neupy.algorithms.step_update.leak_step.LeakStepAdaptation" title="neupy.algorithms.step_update.leak_step.LeakStepAdaptation"><span class="xref py py-class docutils literal"><span class="pre">LeakStepAdaptation</span></span></a></td>
-<td>Leak Step Adaptation</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.step_decay.html#neupy.algorithms.step_decay" title="neupy.algorithms.step_decay"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.step_decay</span></span></a></td>
+<td>Algorithm minimizes learning step monotonically after each iteration.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.step_update.errdiff.html#neupy.algorithms.step_update.errdiff.ErrDiffStepUpdate" title="neupy.algorithms.step_update.errdiff.ErrDiffStepUpdate"><span class="xref py py-class docutils literal"><span class="pre">ErrDiffStepUpdate</span></span></a></td>
-<td>Error difference Update</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.exponential_decay.html#neupy.algorithms.exponential_decay" title="neupy.algorithms.exponential_decay"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.exponential_decay</span></span></a></td>
+<td>Applies exponential decay to the learning rate.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.step_update.linear_search.html#neupy.algorithms.step_update.linear_search.LinearSearch" title="neupy.algorithms.step_update.linear_search.LinearSearch"><span class="xref py py-class docutils literal"><span class="pre">LinearSearch</span></span></a></td>
-<td>Linear search by Golden Search or Brent</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.step_update.search_then_converge.html#neupy.algorithms.step_update.search_then_converge.SearchThenConverge" title="neupy.algorithms.step_update.search_then_converge.SearchThenConverge"><span class="xref py py-class docutils literal"><span class="pre">SearchThenConverge</span></span></a></td>
-<td>Search than converge</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.step_update.step_decay.html#neupy.algorithms.step_update.step_decay.StepDecay" title="neupy.algorithms.step_update.step_decay.StepDecay"><span class="xref py py-class docutils literal"><span class="pre">StepDecay</span></span></a></td>
-<td>Minimize step monotonically after each epoch</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.polynomial_decay.html#neupy.algorithms.polynomial_decay" title="neupy.algorithms.polynomial_decay"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.polynomial_decay</span></span></a></td>
+<td>Applies polynomial decay to the learning rate.</td>
 </tr>
 </tbody>
 </table>
@@ -363,134 +369,106 @@
 </div>
 <div class="section" id="neural-networks-with-radial-basis-functions-rbfn">
 <h3>Neural Networks with Radial Basis Functions (RBFN)</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.rbfn.grnn.html#neupy.algorithms.rbfn.grnn.GRNN" title="neupy.algorithms.rbfn.grnn.GRNN"><span class="xref py py-class docutils literal"><span class="pre">GRNN</span></span></a></td>
-<td>Generalized Regression Neural Network (GRNN)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.GRNN.html#neupy.algorithms.GRNN" title="neupy.algorithms.GRNN"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.GRNN</span></span></a></td>
+<td>Generalized Regression Neural Network (GRNN).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.rbfn.pnn.html#neupy.algorithms.rbfn.pnn.PNN" title="neupy.algorithms.rbfn.pnn.PNN"><span class="xref py py-class docutils literal"><span class="pre">PNN</span></span></a></td>
-<td>Probabilistic Neural Network (PNN)</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.rbfn.rbf_kmeans.html#neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans" title="neupy.algorithms.rbfn.rbf_kmeans.RBFKMeans"><span class="xref py py-class docutils literal"><span class="pre">RBFKMeans</span></span></a></td>
-<td>Radial basis function K-means</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.PNN.html#neupy.algorithms.PNN" title="neupy.algorithms.PNN"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.PNN</span></span></a></td>
+<td>Probabilistic Neural Network (PNN).</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="autoasociative-memory">
 <h3>Autoasociative Memory</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.memory.bam.html#neupy.algorithms.memory.bam.DiscreteBAM" title="neupy.algorithms.memory.bam.DiscreteBAM"><span class="xref py py-class docutils literal"><span class="pre">DiscreteBAM</span></span></a></td>
-<td>Discrete BAM Network</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.DiscreteBAM.html#neupy.algorithms.DiscreteBAM" title="neupy.algorithms.DiscreteBAM"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.DiscreteBAM</span></span></a></td>
+<td>Discrete BAM Network with associations.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.memory.cmac.html#neupy.algorithms.memory.cmac.CMAC" title="neupy.algorithms.memory.cmac.CMAC"><span class="xref py py-class docutils literal"><span class="pre">CMAC</span></span></a></td>
-<td>CMAC Network</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.CMAC.html#neupy.algorithms.CMAC" title="neupy.algorithms.CMAC"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.CMAC</span></span></a></td>
+<td>Cerebellar Model Articulation Controller (CMAC) Network based on memory.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.memory.discrete_hopfield_network.html#neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork" title="neupy.algorithms.memory.discrete_hopfield_network.DiscreteHopfieldNetwork"><span class="xref py py-class docutils literal"><span class="pre">DiscreteHopfieldNetwork</span></span></a></td>
-<td>Discrete Hopfield Network</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.DiscreteHopfieldNetwork.html#neupy.algorithms.DiscreteHopfieldNetwork" title="neupy.algorithms.DiscreteHopfieldNetwork"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.DiscreteHopfieldNetwork</span></span></a></td>
+<td>Discrete Hopfield Network.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="competitive-networks">
 <h3>Competitive Networks</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.competitive.art.html#neupy.algorithms.competitive.art.ART1" title="neupy.algorithms.competitive.art.ART1"><span class="xref py py-class docutils literal"><span class="pre">ART1</span></span></a></td>
-<td>Adaptive Resonance Theory (ART1) Network</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.ART1.html#neupy.algorithms.ART1" title="neupy.algorithms.ART1"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.ART1</span></span></a></td>
+<td>Adaptive Resonance Theory (ART1) Network for binary data clustering.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.competitive.growing_neural_gas.html#neupy.algorithms.competitive.growing_neural_gas.GrowingNeuralGas" title="neupy.algorithms.competitive.growing_neural_gas.GrowingNeuralGas"><span class="xref py py-class docutils literal"><span class="pre">GrowingNeuralGas</span></span></a></td>
-<td>Growing Neural Gas (GNG) Network</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.GrowingNeuralGas.html#neupy.algorithms.GrowingNeuralGas" title="neupy.algorithms.GrowingNeuralGas"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.GrowingNeuralGas</span></span></a></td>
+<td>Growing Neural Gas (GNG) algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.competitive.sofm.html#neupy.algorithms.competitive.sofm.SOFM" title="neupy.algorithms.competitive.sofm.SOFM"><span class="xref py py-class docutils literal"><span class="pre">SOFM</span></span></a></td>
-<td>Self-Organizing Feature Map (SOFM or SOM)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.SOFM.html#neupy.algorithms.SOFM" title="neupy.algorithms.SOFM"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.SOFM</span></span></a></td>
+<td>Self-Organizing Feature Map (SOFM or SOM).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.competitive.lvq.html#neupy.algorithms.competitive.lvq.LVQ" title="neupy.algorithms.competitive.lvq.LVQ"><span class="xref py py-class docutils literal"><span class="pre">LVQ</span></span></a></td>
-<td>Learning Vector Quantization (LVQ)</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.LVQ.html#neupy.algorithms.LVQ" title="neupy.algorithms.LVQ"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.LVQ</span></span></a></td>
+<td>Learning Vector Quantization (LVQ) algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.competitive.lvq.html#neupy.algorithms.competitive.lvq.LVQ2" title="neupy.algorithms.competitive.lvq.LVQ2"><span class="xref py py-class docutils literal"><span class="pre">LVQ2</span></span></a></td>
-<td>Learning Vector Quantization 2 (LVQ2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.LVQ2.html#neupy.algorithms.LVQ2" title="neupy.algorithms.LVQ2"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.LVQ2</span></span></a></td>
+<td>Learning Vector Quantization 2 (LVQ2) algorithm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.competitive.lvq.html#neupy.algorithms.competitive.lvq.LVQ21" title="neupy.algorithms.competitive.lvq.LVQ21"><span class="xref py py-class docutils literal"><span class="pre">LVQ21</span></span></a></td>
-<td>Learning Vector Quantization 2.1 (LVQ2.1)</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.LVQ21.html#neupy.algorithms.LVQ21" title="neupy.algorithms.LVQ21"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.LVQ21</span></span></a></td>
+<td>Learning Vector Quantization 2.1 (LVQ2.1) algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.competitive.lvq.html#neupy.algorithms.competitive.lvq.LVQ3" title="neupy.algorithms.competitive.lvq.LVQ3"><span class="xref py py-class docutils literal"><span class="pre">LVQ3</span></span></a></td>
-<td>Learning Vector Quantization 3 (LVQ3)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.LVQ3.html#neupy.algorithms.LVQ3" title="neupy.algorithms.LVQ3"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.LVQ3</span></span></a></td>
+<td>Learning Vector Quantization 3 (LVQ3) algorithm.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="associative">
 <h3>Associative</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.associative.oja.html#neupy.algorithms.associative.oja.Oja" title="neupy.algorithms.associative.oja.Oja"><span class="xref py py-class docutils literal"><span class="pre">Oja</span></span></a></td>
-<td>OJA</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Oja.html#neupy.algorithms.Oja" title="neupy.algorithms.Oja"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Oja</span></span></a></td>
+<td>Oja is an unsupervised technique used for the dimensionality reduction tasks.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.associative.kohonen.html#neupy.algorithms.associative.kohonen.Kohonen" title="neupy.algorithms.associative.kohonen.Kohonen"><span class="xref py py-class docutils literal"><span class="pre">Kohonen</span></span></a></td>
-<td>Kohonen</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Kohonen.html#neupy.algorithms.Kohonen" title="neupy.algorithms.Kohonen"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Kohonen</span></span></a></td>
+<td>Kohonen Neural Network used for unsupervised learning.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.associative.instar.html#neupy.algorithms.associative.instar.Instar" title="neupy.algorithms.associative.instar.Instar"><span class="xref py py-class docutils literal"><span class="pre">Instar</span></span></a></td>
-<td>Instar</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Instar.html#neupy.algorithms.Instar" title="neupy.algorithms.Instar"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Instar</span></span></a></td>
+<td>Instar is a simple unsupervised Neural Network algortihm which detects associations.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.associative.hebb.html#neupy.algorithms.associative.hebb.HebbRule" title="neupy.algorithms.associative.hebb.HebbRule"><span class="xref py py-class docutils literal"><span class="pre">HebbRule</span></span></a></td>
-<td>Hebbian Neural Network</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.HebbRule.html#neupy.algorithms.HebbRule" title="neupy.algorithms.HebbRule"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.HebbRule</span></span></a></td>
+<td>Neural Network with Hebbian Learning.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="boltzmann-machine">
 <h3>Boltzmann Machine</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Name</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.rbm.html#neupy.algorithms.rbm.RBM" title="neupy.algorithms.rbm.RBM"><span class="xref py py-class docutils literal"><span class="pre">RBM</span></span></a></td>
-<td>Boolean/Bernoulli Restricted Boltzmann Machine</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.RBM.html#neupy.algorithms.RBM" title="neupy.algorithms.RBM"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.RBM</span></span></a></td>
+<td>Boolean/Bernoulli Restricted Boltzmann Machine (RBM).</td>
 </tr>
 </tbody>
 </table>
@@ -498,217 +476,205 @@
 </div>
 <div class="section" id="layers">
 <h2><a class="toc-backref" href="#id4">Layers</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="section" id="layers-with-activation-function">
 <h3>Layers with activation function</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Linear" title="neupy.layers.activations.Linear"><span class="xref py py-class docutils literal"><span class="pre">Linear</span></span></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Linear.html#neupy.layers.Linear" title="neupy.layers.Linear"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Linear</span></span></a></td>
 <td>Layer with linear activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Sigmoid" title="neupy.layers.activations.Sigmoid"><span class="xref py py-class docutils literal"><span class="pre">Sigmoid</span></span></a></td>
-<td>Layer with sigmoid activation function.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.Sigmoid.html#neupy.layers.Sigmoid" title="neupy.layers.Sigmoid"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Sigmoid</span></span></a></td>
+<td>Layer with the sigmoid used as an activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.HardSigmoid" title="neupy.layers.activations.HardSigmoid"><span class="xref py py-class docutils literal"><span class="pre">HardSigmoid</span></span></a></td>
-<td>Layer with hard sigmoid activation function.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.HardSigmoid.html#neupy.layers.HardSigmoid" title="neupy.layers.HardSigmoid"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.HardSigmoid</span></span></a></td>
+<td>Layer with the hard sigmoid used as an activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Tanh" title="neupy.layers.activations.Tanh"><span class="xref py py-class docutils literal"><span class="pre">Tanh</span></span></a></td>
-<td>Layer with tanh activation function.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.Tanh.html#neupy.layers.Tanh" title="neupy.layers.Tanh"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Tanh</span></span></a></td>
+<td>Layer with the hyperbolic tangent used as an activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Relu" title="neupy.layers.activations.Relu"><span class="xref py py-class docutils literal"><span class="pre">Relu</span></span></a></td>
-<td>Layer with ReLu activation function.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Relu.html#neupy.layers.Relu" title="neupy.layers.Relu"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Relu</span></span></a></td>
+<td>Layer with the rectifier (ReLu) used as an activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.LeakyRelu" title="neupy.layers.activations.LeakyRelu"><span class="xref py py-class docutils literal"><span class="pre">LeakyRelu</span></span></a></td>
-<td>Layer with Leaky ReLu activation function.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.LeakyRelu.html#neupy.layers.LeakyRelu" title="neupy.layers.LeakyRelu"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.LeakyRelu</span></span></a></td>
+<td>Layer with the leaky rectifier (Leaky ReLu) used as an activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Elu" title="neupy.layers.activations.Elu"><span class="xref py py-class docutils literal"><span class="pre">Elu</span></span></a></td>
-<td>Layer with ELU activation function.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Elu.html#neupy.layers.Elu" title="neupy.layers.Elu"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Elu</span></span></a></td>
+<td>Layer with the exponensial linear unit (ELU) used as an activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.PRelu" title="neupy.layers.activations.PRelu"><span class="xref py py-class docutils literal"><span class="pre">PRelu</span></span></a></td>
-<td>Layer with Parametric ReLu activation function.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.PRelu.html#neupy.layers.PRelu" title="neupy.layers.PRelu"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.PRelu</span></span></a></td>
+<td>Layer with the parametrized ReLu used as an activation function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Softplus" title="neupy.layers.activations.Softplus"><span class="xref py py-class docutils literal"><span class="pre">Softplus</span></span></a></td>
-<td>Layer with softplus activation function.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Softplus.html#neupy.layers.Softplus" title="neupy.layers.Softplus"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Softplus</span></span></a></td>
+<td>Layer with the softplus used as an activation function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.activations.html#neupy.layers.activations.Softmax" title="neupy.layers.activations.Softmax"><span class="xref py py-class docutils literal"><span class="pre">Softmax</span></span></a></td>
-<td>Layer with softmax activation function.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.Softmax.html#neupy.layers.Softmax" title="neupy.layers.Softmax"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Softmax</span></span></a></td>
+<td>Layer with the softmax activation function.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="convolutional-layers">
 <h3>Convolutional layers</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolution</span></span></a></td>
-<td>Convolutional layer</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Convolution.html#neupy.layers.Convolution" title="neupy.layers.Convolution"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Convolution</span></span></a></td>
+<td>Convolutional layer.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Deconvolution" title="neupy.layers.convolutions.Deconvolution"><span class="xref py py-class docutils literal"><span class="pre">Deconvolution</span></span></a></td>
-<td>Deconvolutional layer</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.Deconvolution.html#neupy.layers.Deconvolution" title="neupy.layers.Deconvolution"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Deconvolution</span></span></a></td>
+<td>Deconvolution layer (also known as Transposed Convolution.).</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="recurrent-layers">
 <h3>Recurrent layers</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.recurrent.html#neupy.layers.recurrent.LSTM" title="neupy.layers.recurrent.LSTM"><span class="xref py py-class docutils literal"><span class="pre">LSTM</span></span></a></td>
-<td>Long-Short Term Memory (LSTM) layer</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.LSTM.html#neupy.layers.LSTM" title="neupy.layers.LSTM"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.LSTM</span></span></a></td>
+<td>Long Short Term Memory (LSTM) Layer.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.recurrent.html#neupy.layers.recurrent.GRU" title="neupy.layers.recurrent.GRU"><span class="xref py py-class docutils literal"><span class="pre">GRU</span></span></a></td>
-<td>Gated Recurrent Unit (GRU) layer</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.GRU.html#neupy.layers.GRU" title="neupy.layers.GRU"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.GRU</span></span></a></td>
+<td>Gated Recurrent Unit (GRU) Layer.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="pooling-layers">
 <h3>Pooling layers</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.pooling.html#neupy.layers.pooling.MaxPooling" title="neupy.layers.pooling.MaxPooling"><span class="xref py py-class docutils literal"><span class="pre">MaxPooling</span></span></a></td>
-<td>Maximum pooling layer</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.MaxPooling.html#neupy.layers.MaxPooling" title="neupy.layers.MaxPooling"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.MaxPooling</span></span></a></td>
+<td>Maximum pooling layer.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.pooling.html#neupy.layers.pooling.AveragePooling" title="neupy.layers.pooling.AveragePooling"><span class="xref py py-class docutils literal"><span class="pre">AveragePooling</span></span></a></td>
-<td>Average pooling layer</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.AveragePooling.html#neupy.layers.AveragePooling" title="neupy.layers.AveragePooling"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.AveragePooling</span></span></a></td>
+<td>Average pooling layer.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.pooling.html#neupy.layers.pooling.Upscale" title="neupy.layers.pooling.Upscale"><span class="xref py py-class docutils literal"><span class="pre">Upscale</span></span></a></td>
-<td>Upscale layer</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Upscale.html#neupy.layers.Upscale" title="neupy.layers.Upscale"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Upscale</span></span></a></td>
+<td>Upscales input over two axis (height and width).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.pooling.html#neupy.layers.pooling.GlobalPooling" title="neupy.layers.pooling.GlobalPooling"><span class="xref py py-class docutils literal"><span class="pre">GlobalPooling</span></span></a></td>
-<td>Global pooling layer</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.GlobalPooling.html#neupy.layers.GlobalPooling" title="neupy.layers.GlobalPooling"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.GlobalPooling</span></span></a></td>
+<td>Global pooling layer.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="normalization-layers">
 <h3>Normalization layers</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.normalization.html#neupy.layers.normalization.BatchNorm" title="neupy.layers.normalization.BatchNorm"><span class="xref py py-class docutils literal"><span class="pre">BatchNorm</span></span></a></td>
-<td>Batch normalization layer</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.BatchNorm.html#neupy.layers.BatchNorm" title="neupy.layers.BatchNorm"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.BatchNorm</span></span></a></td>
+<td>Batch normalization layer.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.normalization.html#neupy.layers.normalization.LocalResponseNorm" title="neupy.layers.normalization.LocalResponseNorm"><span class="xref py py-class docutils literal"><span class="pre">LocalResponseNorm</span></span></a></td>
-<td>Local Response Normalization layer</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.GroupNorm.html#neupy.layers.GroupNorm" title="neupy.layers.GroupNorm"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.GroupNorm</span></span></a></td>
+<td>Group Normalization layer.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.LocalResponseNorm.html#neupy.layers.LocalResponseNorm" title="neupy.layers.LocalResponseNorm"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.LocalResponseNorm</span></span></a></td>
+<td>Local Response Normalization Layer.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="stochastic-layers">
 <h3>Stochastic layers</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.stochastic.html#neupy.layers.stochastic.Dropout" title="neupy.layers.stochastic.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a></td>
-<td>Dropout layer</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Dropout.html#neupy.layers.Dropout" title="neupy.layers.Dropout"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Dropout</span></span></a></td>
+<td>Dropout layer.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.stochastic.html#neupy.layers.stochastic.GaussianNoise" title="neupy.layers.stochastic.GaussianNoise"><span class="xref py py-class docutils literal"><span class="pre">GaussianNoise</span></span></a></td>
-<td>Add gaussian noise to the input</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.GaussianNoise.html#neupy.layers.GaussianNoise" title="neupy.layers.GaussianNoise"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.GaussianNoise</span></span></a></td>
+<td>Add gaussian noise to the input value.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="merge-layers">
 <h3>Merge layers</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.merge.html#neupy.layers.merge.Elementwise" title="neupy.layers.merge.Elementwise"><span class="xref py py-class docutils literal"><span class="pre">Elementwise</span></span></a></td>
-<td>Merge multiple input layers in one with elementwise function</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Elementwise.html#neupy.layers.Elementwise" title="neupy.layers.Elementwise"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Elementwise</span></span></a></td>
+<td>Layer merges multiple input with elementwise function and generate single output.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.merge.html#neupy.layers.merge.Concatenate" title="neupy.layers.merge.Concatenate"><span class="xref py py-class docutils literal"><span class="pre">Concatenate</span></span></a></td>
-<td>Concatenate multiple input layers in one based on the specified axes.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.Concatenate.html#neupy.layers.Concatenate" title="neupy.layers.Concatenate"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Concatenate</span></span></a></td>
+<td>Concatenate multiple inputs into one.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.merge.html#neupy.layers.merge.GatedAverage" title="neupy.layers.merge.GatedAverage"><span class="xref py py-class docutils literal"><span class="pre">GatedAverage</span></span></a></td>
-<td>Average multiple layers based on the output from the gate layer.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.GatedAverage.html#neupy.layers.GatedAverage" title="neupy.layers.GatedAverage"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.GatedAverage</span></span></a></td>
+<td>Layer uses applies weighted elementwise addition to multiple outputs.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="other-layers">
 <h3>Other layers</h3>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.input.html#neupy.layers.input.Input" title="neupy.layers.input.Input"><span class="xref py py-class docutils literal"><span class="pre">Input</span></span></a></td>
-<td>Layer defines input value&#8217;s feature shape</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Input.html#neupy.layers.Input" title="neupy.layers.Input"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Input</span></span></a></td>
+<td>Layer defines network’s input.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.reshape.html#neupy.layers.reshape.Reshape" title="neupy.layers.reshape.Reshape"><span class="xref py py-class docutils literal"><span class="pre">Reshape</span></span></a></td>
-<td>Reshape tensor input</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.Identity.html#neupy.layers.Identity" title="neupy.layers.Identity"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Identity</span></span></a></td>
+<td>Passes input through the layer without changes.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.layers.reshape.html#neupy.layers.reshape.Transpose" title="neupy.layers.reshape.Transpose"><span class="xref py py-class docutils literal"><span class="pre">Transpose</span></span></a></td>
-<td>Transpose dimensions of the tensor input</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Reshape.html#neupy.layers.Reshape" title="neupy.layers.Reshape"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Reshape</span></span></a></td>
+<td>Layer reshapes input tensor.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.layers.embedding.html#neupy.layers.embedding.Embedding" title="neupy.layers.embedding.Embedding"><span class="xref py py-class docutils literal"><span class="pre">Embedding</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.Transpose.html#neupy.layers.Transpose" title="neupy.layers.Transpose"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Transpose</span></span></a></td>
+<td>Layer transposes input tensor.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Embedding.html#neupy.layers.Embedding" title="neupy.layers.Embedding"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Embedding</span></span></a></td>
 <td>Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations">
+<h3>Operations</h3>
+<p>Additional operations that can be performed on the layers or graphs</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.join.html#neupy.layers.join" title="neupy.layers.join"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.join</span></span></a>(*networks)</td>
+<td>Sequentialy combines layers and networks into single network.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.parallel.html#neupy.layers.parallel" title="neupy.layers.parallel"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.parallel</span></span></a>(*networks)</td>
+<td>Merges all networks/layers into single network without joining input and output layers together.</td>
 </tr>
 </tbody>
 </table>
@@ -716,152 +682,100 @@
 </div>
 <div class="section" id="architectures">
 <h2><a class="toc-backref" href="#id5">Architectures</a></h2>
-<table border="1" class="docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">architectures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resnet</span> <span class="o">=</span> <span class="n">architectures</span><span class="o">.</span><span class="n">resnet50</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resnet</span>
+<span class="go">(?, 224, 224, 3) -&gt; [... 187 layers ...] -&gt; (?, 1000)</span>
+</pre></div>
+</div>
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.architectures.vgg16.html#neupy.architectures.vgg16.vgg16" title="neupy.architectures.vgg16.vgg16"><span class="xref py py-class docutils literal"><span class="pre">vgg16</span></span></a></td>
-<td>VGG16 network</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.architectures.vgg16.html#neupy.architectures.vgg16" title="neupy.architectures.vgg16"><span class="xref py py-obj docutils literal"><span class="pre">neupy.architectures.vgg16</span></span></a></td>
+<td>VGG16 network architecture with random parameters.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.architectures.vgg19.html#neupy.architectures.vgg19.vgg19" title="neupy.architectures.vgg19.vgg19"><span class="xref py py-class docutils literal"><span class="pre">vgg19</span></span></a></td>
-<td>VGG19 network</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.architectures.vgg19.html#neupy.architectures.vgg19" title="neupy.architectures.vgg19"><span class="xref py py-obj docutils literal"><span class="pre">neupy.architectures.vgg19</span></span></a></td>
+<td>VGG19 network architecture with random parameters.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.architectures.squeezenet.html#neupy.architectures.squeezenet.squeezenet" title="neupy.architectures.squeezenet.squeezenet"><span class="xref py py-class docutils literal"><span class="pre">squeezenet</span></span></a></td>
-<td>SqueezeNet network</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.architectures.squeezenet.html#neupy.architectures.squeezenet" title="neupy.architectures.squeezenet"><span class="xref py py-obj docutils literal"><span class="pre">neupy.architectures.squeezenet</span></span></a></td>
+<td>SqueezeNet network architecture with random parameters.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.architectures.resnet.html#neupy.architectures.resnet.resnet50" title="neupy.architectures.resnet.resnet50"><span class="xref py py-class docutils literal"><span class="pre">resnet50</span></span></a></td>
-<td>ResNet-50 network</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.architectures.resnet50.html#neupy.architectures.resnet50" title="neupy.architectures.resnet50"><span class="xref py py-obj docutils literal"><span class="pre">neupy.architectures.resnet50</span></span></a></td>
+<td>ResNet50 network architecture with random parameters.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.architectures.mixture_of_experts.html#neupy.architectures.mixture_of_experts.mixture_of_experts" title="neupy.architectures.mixture_of_experts.mixture_of_experts"><span class="xref py py-class docutils literal"><span class="pre">mixture_of_experts</span></span></a></td>
-<td>Mixture of Experts</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.architectures.mixture_of_experts.html#neupy.architectures.mixture_of_experts" title="neupy.architectures.mixture_of_experts"><span class="xref py py-obj docutils literal"><span class="pre">neupy.architectures.mixture_of_experts</span></span></a></td>
+<td>Generates mixture of experts architecture from the set of networks that has the same input and output shapes.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="parameter-initialization">
 <span id="init-methods"></span><h2><a class="toc-backref" href="#id6">Parameter initialization</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">init</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.init</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">algorithms</span>
 
-<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Relu</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">HeNormal</span><span class="p">(),</span> <span class="n">bias</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">HeNormal</span><span class="p">()),</span>
-        <span class="n">layers</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)),</span>
-    <span class="p">]</span>
-<span class="p">)</span>
+<span class="n">gdnet</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">GradientDescent</span><span class="p">([</span>
+      <span class="n">Input</span><span class="p">(</span><span class="mi">784</span><span class="p">),</span>
+      <span class="n">Relu</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">HeNormal</span><span class="p">(),</span> <span class="n">bias</span><span class="o">=</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+      <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)),</span>
+<span class="p">])</span>
 </pre></div>
 </div>
-<br><table border="1" class="docutils">
+<br><table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Class name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-class docutils literal"><span class="pre">Constant</span></span></a></td>
-<td>Initialize weights with constant values</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.init.Constant.html#neupy.init.Constant" title="neupy.init.Constant"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.Constant</span></span></a></td>
+<td>Initialize parameter that has constant values.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.Normal" title="neupy.init.Normal"><span class="xref py py-class docutils literal"><span class="pre">Normal</span></span></a></td>
-<td>Sample weights from the Normal distribution</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.init.Normal.html#neupy.init.Normal" title="neupy.init.Normal"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.Normal</span></span></a></td>
+<td>Initialize parameter sampling from the normal distribution.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.Uniform" title="neupy.init.Uniform"><span class="xref py py-class docutils literal"><span class="pre">Uniform</span></span></a></td>
-<td>Sample weights from the Uniformal distribution</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.init.Uniform.html#neupy.init.Uniform" title="neupy.init.Uniform"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.Uniform</span></span></a></td>
+<td>Initialize parameter sampling from the uniformal distribution.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.Orthogonal" title="neupy.init.Orthogonal"><span class="xref py py-class docutils literal"><span class="pre">Orthogonal</span></span></a></td>
-<td>Initialize matrix with orthogonal basis</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.init.Orthogonal.html#neupy.init.Orthogonal" title="neupy.init.Orthogonal"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.Orthogonal</span></span></a></td>
+<td>Initialize matrix with orthogonal basis.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-class docutils literal"><span class="pre">HeNormal</span></span></a></td>
-<td>Kaiming He parameter initialization method based on the Normal distribution.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.init.HeNormal.html#neupy.init.HeNormal" title="neupy.init.HeNormal"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.HeNormal</span></span></a></td>
+<td>Kaiming He parameter initialization method based on the normal distribution.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.HeUniform" title="neupy.init.HeUniform"><span class="xref py py-class docutils literal"><span class="pre">HeUniform</span></span></a></td>
-<td>Kaiming He parameter initialization method based on the Uniformal distribution.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.init.HeUniform.html#neupy.init.HeUniform" title="neupy.init.HeUniform"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.HeUniform</span></span></a></td>
+<td>Kaiming He parameter initialization method based on the uniformal distribution.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-class docutils literal"><span class="pre">XavierNormal</span></span></a></td>
-<td>Glorot Xavier parameter initialization method based on the Normal distribution.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.init.XavierNormal.html#neupy.init.XavierNormal" title="neupy.init.XavierNormal"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.XavierNormal</span></span></a></td>
+<td>Xavier Glorot parameter initialization method based on normal distribution.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.init.html#neupy.init.XavierUniform" title="neupy.init.XavierUniform"><span class="xref py py-class docutils literal"><span class="pre">XavierUniform</span></span></a></td>
-<td>Glorot Xavier parameter initialization method based on the Uniformal distribution.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="loss-functions">
-<span id="cheatsheet-error-function"></span><h2><a class="toc-backref" href="#id7">Loss functions</a></h2>
-<table border="1" class="docutils">
-<colgroup>
-<col width="50%" />
-<col width="50%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Function name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.mae" title="neupy.algorithms.gd.errors.mae"><span class="xref py py-class docutils literal"><span class="pre">mae</span></span></a></td>
-<td>Mean absolute error</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.mse" title="neupy.algorithms.gd.errors.mse"><span class="xref py py-class docutils literal"><span class="pre">mse</span></span></a></td>
-<td>Mean squared error</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.rmse" title="neupy.algorithms.gd.errors.rmse"><span class="xref py py-class docutils literal"><span class="pre">rmse</span></span></a></td>
-<td>Root mean squared error</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.msle" title="neupy.algorithms.gd.errors.msle"><span class="xref py py-class docutils literal"><span class="pre">msle</span></span></a></td>
-<td>Mean squared logarithmic error</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.rmsle" title="neupy.algorithms.gd.errors.rmsle"><span class="xref py py-class docutils literal"><span class="pre">rmsle</span></span></a></td>
-<td>Root mean squared logarithmic error</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.binary_crossentropy" title="neupy.algorithms.gd.errors.binary_crossentropy"><span class="xref py py-class docutils literal"><span class="pre">binary_crossentropy</span></span></a></td>
-<td>Cross entropy error function for the binary classification</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.categorical_crossentropy" title="neupy.algorithms.gd.errors.categorical_crossentropy"><span class="xref py py-class docutils literal"><span class="pre">categorical_crossentropy</span></span></a></td>
-<td>Cross entropy error function for the multi-class classification</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.binary_hinge" title="neupy.algorithms.gd.errors.binary_hinge"><span class="xref py py-class docutils literal"><span class="pre">binary_hinge</span></span></a></td>
-<td>Hinge error function for the binary classification</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.algorithms.gd.errors.html#neupy.algorithms.gd.errors.categorical_hinge" title="neupy.algorithms.gd.errors.categorical_hinge"><span class="xref py py-class docutils literal"><span class="pre">categorical_hinge</span></span></a></td>
-<td>Hinge error function for the multi-class classification</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.init.XavierUniform.html#neupy.init.XavierUniform" title="neupy.init.XavierUniform"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.XavierUniform</span></span></a></td>
+<td>Xavier Glorot parameter initialization method based on uniform distribution.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="datasets">
-<h2><a class="toc-backref" href="#id8">Datasets</a></h2>
-<table border="1" class="docutils">
+<h2><a class="toc-backref" href="#id7">Datasets</a></h2>
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Dataset name</th>
-<th class="head">Description</th>
-</tr>
-</thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.datasets.digits.html#neupy.datasets.digits.load_digits" title="neupy.datasets.digits.load_digits"><span class="xref py py-class docutils literal"><span class="pre">load_digits</span></span></a></td>
-<td>Load 10 discrete digit images with shape (6, 4)</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.datasets.load_digits.html#neupy.datasets.load_digits" title="neupy.datasets.load_digits"><span class="xref py py-obj docutils literal"><span class="pre">neupy.datasets.load_digits</span></span></a></td>
+<td>Returns dataset that contains discrete digits.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.datasets.digits.html#neupy.datasets.digits.make_digits" title="neupy.datasets.digits.make_digits"><span class="xref py py-class docutils literal"><span class="pre">make_digits</span></span></a></td>
-<td>Load discrete digits that has additional noise.</td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.datasets.make_digits.html#neupy.datasets.make_digits" title="neupy.datasets.make_digits"><span class="xref py py-obj docutils literal"><span class="pre">neupy.datasets.make_digits</span></span></a></td>
+<td>Returns discrete digits dataset.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../apidocs/neupy.datasets.reber.html#neupy.datasets.reber.make_reber" title="neupy.datasets.reber.make_reber"><span class="xref py py-class docutils literal"><span class="pre">make_reber</span></span></a></td>
-<td>Generate list of words valid by Grammar rules.</td>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.datasets.make_reber.html#neupy.datasets.make_reber" title="neupy.datasets.make_reber"><span class="xref py py-obj docutils literal"><span class="pre">neupy.datasets.make_reber</span></span></a></td>
+<td>Generate list of words valid by Reber grammar.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../apidocs/neupy.datasets.reber.html#neupy.datasets.reber.make_reber_classification" title="neupy.datasets.reber.make_reber_classification"><span class="xref py py-class docutils literal"><span class="pre">make_reber_classification</span></span></a></td>
+<tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.datasets.make_reber_classification.html#neupy.datasets.make_reber_classification" title="neupy.datasets.make_reber_classification"><span class="xref py py-obj docutils literal"><span class="pre">neupy.datasets.make_reber_classification</span></span></a></td>
 <td>Generate random dataset for Reber grammar classification.</td>
 </tr>
 </tbody>
