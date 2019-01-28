@@ -41,4 +41,4 @@ Extra features
     :maxdepth: 2
 
     ../docs/storage
-    ../docs/secondary
+    ../docs/secondary/visualizations

@@ -15,8 +15,9 @@ You can use ``fit`` method instead of the ``train`` method.
     # Function `load_data` is not implemented
     x_train, y_train = load_data()
 
-    bpnet = algorithms.GradientDescent((2, 3 1))
-    bpnet.fit(x_train, y_train, epochs=100)
+    network = Input(3) >> Sigmoid(2) >> Sigmoid(1)
+    optimizer = algorithms.GradientDescent(network, verbose=True)
+    optimizer.fit(x_train, y_train, epochs=100)
 
 Transform method
 ----------------
@@ -30,8 +31,9 @@ You can use ``transform`` method instead of the ``predict`` method.
     # Function `load_data` is not implemented
     x_train, y_train = load_data()
 
-    bpnet = algorithms.GradientDescent((2, 3 1))
-    y_predicted = bpnet.transform(x_train)
+    network = Input(3) >> Sigmoid(2) >> Sigmoid(1)
+    optimizer = algorithms.GradientDescent(network, verbose=True)
+    y_predicted = optimizer.transform(x_train)
 
 Pipelines
 ---------
@@ -43,9 +45,10 @@ It's possible to use NeuPy in scikit-learn pipelines.
     from sklearn import preprocessing, pipeline
     from neupy import algorithms
 
+    network = Input(3) >> Sigmoid(2) >> Sigmoid(1)
     pipeline = pipeline.Pipeline([
         ('min_max_scaler', preprocessing.MinMaxScaler()),
-        ('backpropagation', algorithms.GradientDescent((2, 3, 1))),
+        ('backpropagation', algorithms.GradientDescent(network)),
     ])
 
     # Function `load_data` is not implemented

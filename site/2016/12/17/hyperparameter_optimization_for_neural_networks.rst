@@ -574,9 +574,9 @@ Next, we need to construct network based on the presented information. In our ca
     network = layers.Input(784)
 
     for layer_size in layer_sizes:
-        network = network > activation_layer(layer_size)
+        network = network >> activation_layer(layer_size)
 
-    network = network > layers.Dropout(proba) > layers.Softmax(10)
+    network = network >> layers.Dropout(proba) >> layers.Softmax(10)
 
 To learn more about layers in NeuPy you should check :ref:`documentation <layers-basics>`.
 

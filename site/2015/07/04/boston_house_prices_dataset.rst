@@ -297,7 +297,7 @@ Now that we have the our network we can use one of the large `training algorithm
 
     from neupy import algorithms
 
-    lmnet = algorithms.LevenbergMarquardt(
+    optimizer = algorithms.LevenbergMarquardt(
         # First argument has to be neural network
         network,
 
@@ -319,52 +319,42 @@ Output after initialization might look like this
 
     [ALGORITHM] LevenbergMarquardt
 
-    [OPTION] verbose = True
-    [OPTION] signals = None
-    [OPTION] show_epoch = 5
-    [OPTION] shuffle_data = False
-    [OPTION] error = mse
+    [OPTION] loss = mse
     [OPTION] mu = 0.01
     [OPTION] mu_update_factor = 1.2
+    [OPTION] show_epoch = 5
+    [OPTION] shuffle_data = False
+    [OPTION] signals = None
+    [OPTION] target = Tensor("placeholder/target/sigmoid-10:0", shape=(?, 1), dtype=float32)
+    [OPTION] verbose = True
 
     [TENSORFLOW] Initializing Tensorflow variables and functions.
-    [TENSORFLOW] Initialization finished successfully. It took 0.46 seconds
+    [TENSORFLOW] Initialization finished successfully. It took 0.30 seconds
 
 And finally, we can use our data in order to train the network. In addition, neupy allows to specify validation datasets. It won't use it for training. Instead, at the end of every epoch it will use validation data to estimate network forecasting performance on the unseen data.
 
 .. code-block:: python
 
-    lmnet.train(x_train, y_train, x_test, y_test, epochs=30)
+    optimizer.train(x_train, y_train, x_test, y_test, epochs=30)
 
 Output during the training might look like this
 
 .. code-block:: python
 
-    Start training
-
-    [TRAINING DATA] shapes: (430, 13)
-    [TEST DATA] shapes: (76, 13)
-    [TRAINING] Total epochs: 30
-
-    ---------------------------------------------------------
-    |    Epoch    |  Train err  |  Valid err  |    Time     |
-    ---------------------------------------------------------
-    |           1 |    0.079689 |    0.037351 |      376 ms |
-    |           5 |   0.0097019 |    0.014112 |       73 ms |
-    |          10 |    0.011091 |    0.011521 |       76 ms |
-    |          15 |   0.0045973 |   0.0092206 |       72 ms |
-    |          20 |    0.003823 |   0.0098822 |       75 ms |
-    |          25 |   0.0031455 |   0.0087205 |       71 ms |
-    |          30 |   0.0025977 |   0.0095658 |       74 ms |
-    ---------------------------------------------------------
+    #1 : [224 ms] train: 0.046980, valid: 0.032002
+    #5 : [76 ms] train: 0.009437, valid: 0.013484
+    #10 : [75 ms] train: 0.007141, valid: 0.010253
+    #15 : [77 ms] train: 0.004664, valid: 0.008936
+    #20 : [75 ms] train: 0.003780, valid: 0.009333
+    #25 : [75 ms] train: 0.003117, valid: 0.008975
+    #30 : [77 ms] train: 0.002608, valid: 0.009507
 
 
 It's also useful to visualize network training progress using line plot. In the figure below you can see two lines. One line shows training error and the other one validation error.
 
 .. code-block:: python
 
-    from neupy import plots
-    plots.error_plot(lmnet)
+    optimizer.plot_errors()
 
 .. figure:: images/boston/cgnet-error-plot.png
     :width: 80%
@@ -385,7 +375,7 @@ During the training we used mean squared error as a loss function on the scaled 
         squared_log_error = np.square(log_expected - log_predicted)
         return np.sqrt(np.mean(squared_log_error))
 
-    y_predict = lmnet.predict(x_test).round(1)
+    y_predict = optimizer.predict(x_test).round(1)
     error = rmsle(
         target_scaler.inverse_transform(y_test),
         target_scaler.inverse_transform(y_predict),

@@ -8,55 +8,36 @@ Algorithms with constructible architecture
 Specify network structure
 -------------------------
 
-There are three ways to define relations between layers. We can define network's architecture separately from the training algorithm.
-
-.. code-block:: python
-
-    from neupy import algorithms, layers
-
-    network = layers.join(
-        layers.Input(10),
-        layers.Sigmoid(40),
-        layers.Sigmoid(2),
-    )
-
-    bpnet = algorithms.GradientDescent(
-        network,
-        step=0.2,
-        shuffle_data=True
-    )
-
-Or, we can set up a list of layers that define sequential relations between layers.
-
-.. code-block:: python
-
-    from neupy import algorithms, layers
-
-    bpnet = algorithms.GradientDescent(
-        [
-            layers.Input(10),
-            layers.Sigmoid(40),
-            layers.Sigmoid(2)
-            layers.Softmax(2),
-        ],
-        step=0.2,
-        shuffle_data=True
-    )
-
-This is just a syntax simplification that allows to avoid using ``layer.join`` function.
-
-Small networks can be defined with a help of inline operator.
+There are two ways to define relations between layers. We can define network's architecture separately from the training algorithm.
 
 .. code-block:: python
 
     from neupy import algorithms
     from neupy.layers import *
 
-    bpnet = algorithms.GradientDescent(
-        Input(10) > Sigmoid(40) > Sigmoid(2),
+    network = Input(10) >> Sigmoid(40) >> Softmax(4)
+    optimizer = algorithms.GradientDescent(
+        network, step=0.2, shuffle_data=True, verbose=True,
+    )
+
+Or, we can set up a list of layers that define sequential relations between layers.
+
+.. code-block:: python
+
+    from neupy import algorithms
+
+    optimizer = algorithms.GradientDescent(
+        [
+            Input(10),
+            Sigmoid(40),
+            Softmax(4),
+        ],
         step=0.2,
         shuffle_data=True
+        verbose=True,
     )
+
+This is just a syntax simplification that allows to avoid using ``join`` function and inline connections.
 
 Train networks with multiple inputs
 -----------------------------------
@@ -65,22 +46,23 @@ NeuPy allows to train networks with multiple inputs.
 
 .. code-block:: python
 
-    from neupy import algorithms, layers
+    from neupy import algorithms
+    from neupy.layers import *
 
-    gdnet = algorithms.GradientDescent(
+    optimizer = algorithms.GradientDescent(
         [
-            [[
+            parallel([
                 # 3 categorical inputs
-                layers.Input(3),
-                layers.Embedding(n_unique_categories, 4),
-                layers.Reshape(),
+                Input(3),
+                Embedding(n_unique_categories, 4),
+                Reshape(),
             ], [
                 # 17 numerical inputs
-                layers.Input(17),
-            ]],
-            layers.Concatenate(),
-            layers.Relu(16),
-            layers.Sigmoid(1)
+                Input(17),
+            ]),
+            Concatenate(),
+            Relu(16),
+            Sigmoid(1),
         ],
 
         step=0.5,
@@ -93,42 +75,26 @@ NeuPy allows to train networks with multiple inputs.
 
     # Categorical variable should be the first, because
     # categorical input layer was defined first in the network
-    network.train([x_train_cat, x_train_num], y_train,
-                  [x_test_cat, x_test_num], y_test,
-                  epochs=180)
-    y_predicted = network.predict(x_test_cat, x_test_num)
-
-From the example above, you can see that we specified first layer as a list of lists. Each list has small sequence of layers specified and each sequence starts with the ``Input`` layer. This list of lists is just simple syntax sugar around the ``parallel`` function. Exactly the same architecture can be rewritten in the following way.
-
-.. code-block:: python
-
-    gdnet = algorithms.GradientDescent(
-        [
-            layers.parallel([
-                # 3 categorical inputs
-                layers.Input(3),
-                layers.Embedding(n_unique_categories, 4),
-                layers.Reshape(),
-            ], [
-                # 17 numerical inputs
-                layers.Input(17),
-            ]),
-            layers.Concatenate(),
-            layers.Relu(16),
-            layers.Sigmoid(1)
-        ]
+    optimizer.train(
+        [x_train_cat, x_train_num], y_train,
+        [x_test_cat, x_test_num], y_test,
+        epochs=180,
     )
+    y_predicted = optimizer.predict(x_test_cat, x_test_num)
 
-The training and prediction looks slightly different as well.
+Network in the example above has two inputs. Order of the inputs is important since first specified layer in the network will correspond to the first networks input. It's tru for the ``train``, ``score`` and ``predict`` methods
 
 .. code-block:: python
 
-    network.train([x_train_cat, x_train_num], y_train,
-                  [x_test_cat, x_test_num], y_test,
-                  epochs=180)
-    y_predicted = network.predict(x_test_cat, x_test_num)
+    optimizer.train(
+        [x_train_cat, x_train_num], y_train,
+        [x_test_cat, x_test_num], y_test,
+        epochs=180,
+    )
+    loss = optimizer.score([x_test_cat, x_test_num], y_test)
+    y_predicted = optimizer.predict(x_test_cat, x_test_num)
 
-Input we specified as a list where number of values equal to the number of input layers in the network. The order in the list is also important. We defined first input layer for categorical variables and therefore we need to pass it as the first element to the input list. The same is true for the ``predict`` method.
+Notice that ``predict`` method expects multiple inputs, unlike ``score`` and ``train`` methods. It's because for other methods it's important to differentiate between inputs and targets.
 
 Algorithms
 ----------
