@@ -141,7 +141,7 @@ Because our neural network is quite small, we can rewrite this architecture with
 
 .. code-block:: python
 
-    network = Input(784) > Relu(500) > Relu(300) > Softmax(10)
+    network = Input(784) >> Relu(500) >> Relu(300) >> Softmax(10)
 
 Now that we have our architecture we can initialize training algorithm.
 
@@ -149,7 +149,7 @@ Now that we have our architecture we can initialize training algorithm.
 
     from neupy import algorithms
 
-    mnet = algorithms.Momentum(
+    optimizer = algorithms.Momentum(
         network,
 
         # Categorical cross-entropy is very popular loss function
@@ -185,17 +185,19 @@ All the most important information related to the neural network you can find in
     [ALGORITHM] Momentum
 
     [OPTION] batch_size = 128
-    [OPTION] verbose = True
-    [OPTION] signals = None
-    [OPTION] show_epoch = 1
-    [OPTION] shuffle_data = True
-    [OPTION] step = 0.01
-    [OPTION] error = categorical_crossentropy
+    [OPTION] loss = categorical_crossentropy
     [OPTION] momentum = 0.99
     [OPTION] nesterov = True
+    [OPTION] regularizer = None
+    [OPTION] show_epoch = 1
+    [OPTION] shuffle_data = True
+    [OPTION] signals = None
+    [OPTION] step = 0.01
+    [OPTION] target = Tensor("placeholder/target/softmax-9:0", shape=(?, 10), dtype=float32)
+    [OPTION] verbose = True
 
     [TENSORFLOW] Initializing Tensorflow variables and functions.
-    [TENSORFLOW] Initialization finished successfully. It took 0.30 seconds
+    [TENSORFLOW] Initialization finished successfully. It took 0.47 seconds
 
 Training
 --------
@@ -204,28 +206,17 @@ Now that we have everything specified we are finally can train our network. In a
 
 .. code-block:: python
 
-    >>> mnet.train(x_train, y_train, x_test, y_test, epochs=10)
-
-    Start training
-
-    [TRAINING DATA] shapes: (60000, 784)
-    [TEST DATA] shapes: (10000, 784)
-    [TRAINING] Total epochs: 10
-
-    ---------------------------------------------------------
-    |    Epoch    |  Train err  |  Valid err  |    Time     |
-    ---------------------------------------------------------
-    |           1 |     0.27667 |    0.099501 |       2 sec |
-    |           2 |    0.068402 |    0.089827 |       2 sec |
-    |           3 |    0.037638 |    0.080401 |       2 sec |
-    |           4 |    0.023067 |     0.07487 |       2 sec |
-    |           5 |    0.014583 |    0.069704 |       2 sec |
-    |           6 |   0.0083044 |      0.0672 |       2 sec |
-    |           7 |   0.0037654 |    0.068787 |       2 sec |
-    |           8 |   0.0019174 |    0.071364 |       2 sec |
-    |           9 |   0.0010768 |    0.071117 |       2 sec |
-    |          10 |  0.00082685 |     0.07037 |       2 sec |
-    ---------------------------------------------------------
+    >>> optimizer.train(x_train, y_train, x_test, y_test, epochs=10)
+    #1 : [2 sec] train: 0.124558, valid: 0.123087
+    #2 : [2 sec] train: 0.011129, valid: 0.079253
+    #3 : [2 sec] train: 0.052001, valid: 0.081510
+    #4 : [2 sec] train: 0.008683, valid: 0.071755
+    #5 : [2 sec] train: 0.033496, valid: 0.076705
+    #6 : [2 sec] train: 0.002223, valid: 0.073506
+    #7 : [2 sec] train: 0.002255, valid: 0.076624
+    #8 : [2 sec] train: 0.036734, valid: 0.080020
+    #9 : [2 sec] train: 0.000858, valid: 0.076834
+    #10 : [2 sec] train: 0.001999, valid: 0.078267
 
 Evaluations
 -----------
@@ -234,11 +225,10 @@ From the table it's hard to see network's training progress. We can make error p
 
 .. code-block:: python
 
-    >>> from neupy import plots
-    >>> plots.error_plot(mnet)
+    >>> optimizer.plot_errors()
 
 .. image:: images/bpnet-train-errors-plot.png
-    :width: 70%
+    :width: 100%
     :align: center
     :alt: GradientDescent epoch errors plot
 
@@ -268,7 +258,7 @@ Instead of using cross-entropy error for model performance assessment we can bui
 
     >>> from sklearn import metrics
     >>>
-    >>> y_predicted = mnet.predict(x_test).argmax(axis=1)
+    >>> y_predicted = optimizer.predict(x_test).argmax(axis=1)
     >>> y_actual = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
     >>>
     >>> print(metrics.classification_report(y_actual, y_predicted))

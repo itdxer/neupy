@@ -9,13 +9,13 @@ Cheat sheet
 Algorithms
 **********
 
-Algorithms based on backpropagation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Deep Learning
+~~~~~~~~~~~~~
+
+Optimizers
+----------
 
 .. _cheatsheet-backprop-algorithms:
-
-Training algorithms
-+++++++++++++++++++
 
 .. autosummary::
     :toctree: ../modules/generated/
@@ -36,8 +36,8 @@ Training algorithms
    neupy.algorithms.RPROP
    neupy.algorithms.IRPROPPlus
 
-Regularization methods
-++++++++++++++++++++++
+Regularizers
+------------
 
 .. code-block:: python
 
@@ -59,7 +59,7 @@ Regularization methods
     neupy.algorithms.maxnorm
 
 Learning rate update rules
-++++++++++++++++++++++++++
+--------------------------
 
 .. code-block:: python
 
@@ -239,9 +239,22 @@ Other layers
     :template: autosummary/class.rst
 
     neupy.layers.Input
+    neupy.layers.Identity
     neupy.layers.Reshape
     neupy.layers.Transpose
     neupy.layers.Embedding
+
+Operations
+~~~~~~~~~~
+
+Additional operations that can be performed on the layers or graphs
+
+.. autosummary::
+    :toctree: ../modules/generated/
+    :template: autosummary/function.rst
+
+    neupy.layers.join
+    neupy.layers.parallel
 
 Architectures
 *************
