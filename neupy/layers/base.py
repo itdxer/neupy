@@ -1,6 +1,7 @@
 import re
 import types
 import inspect
+from functools import partial
 from collections import OrderedDict, defaultdict
 
 import six
@@ -78,6 +79,10 @@ class BaseLayer(BaseGraph):
         # `output` method will be marked under layer's name scope.
         self.output = types.MethodType(
             tf_utils.class_method_name_scope(self.output), self)
+
+    @classmethod
+    def define(cls, *args, **kwargs):
+        return partial(cls, *args, **kwargs)
 
     @property
     def input_shape(self):

@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from neupy import layers, algorithms
+from neupy import layers, algorithms, init
 from neupy.utils import asfloat
 
 from base import BaseTestCase
@@ -38,6 +38,29 @@ class LayersBasicsTestCase(BaseTestCase):
         output_value = network.predict(input_value)
 
         self.assertEqual(output_value.shape, (7, 5))
+
+    def test_layer_definitions(self):
+        Conv = layers.Convolution.define(
+            padding='SAME',
+            weight=init.Constant(1),
+            bias=None,
+        )
+        network = layers.join(
+            layers.Input((28, 28, 1)),
+            Conv((3, 3, 16)),
+            Conv((3, 3, 32)),
+        )
+        network.create_variables()
+
+        self.assertShapesEqual(network.output_shape, (None, 28, 28, 32))
+
+        weight_1 = self.eval(network.layers[1].weight)
+        self.assertEqual(weight_1.sum(), 1 * 3 * 3 * 16)
+        self.assertIsNone(network.layers[1].bias)
+
+        weight_2 = self.eval(network.layers[2].weight)
+        self.assertEqual(weight_2.sum(), 16 * 3 * 3 * 32)
+        self.assertIsNone(network.layers[2].bias)
 
 
 class LayerNameTestCase(BaseTestCase):
@@ -115,46 +138,3 @@ class LayerNameTestCase(BaseTestCase):
 
         layer_3 = abcDef()
         self.assertEqual(layer_3.name, 'abc-def-1')
-
-
-class CustomLayerTestCase(BaseTestCase):
-    def test_custom_layer(self):
-        class NewLayer(layers.BaseLayer):
-            def __init__(self, *args, **kwargs):
-                super(NewLayer, self).__init__(*args, **kwargs)
-                self._input_shape = tf.TensorShape((None, None, None))
-
-            def create_variables(self, input_shape):
-                self.input_shape = input_shape
-
-            def output(self, input):
-                return input
-
-        new_layer = NewLayer()
-        network = layers.join(layers.Input((10, 5)), new_layer)
-        self.assertShapesEqual(network.output_shape, None)
-        self.assertShapesEqual(new_layer.input_shape, (None, None, None))
-
-        network.create_variables()
-        self.assertShapesEqual(network.output_shape, None)
-        self.assertShapesEqual(new_layer.input_shape, (None, 10, 5))
-
-    def test_custom_layer_incompatible_shape_assign(self):
-        class NewLayer(layers.BaseLayer):
-            def __init__(self, *args, **kwargs):
-                super(NewLayer, self).__init__(*args, **kwargs)
-                self._input_shape = tf.TensorShape((None, None, None))
-
-            def create_variables(self, input_shape):
-                self.input_shape = (None, None)
-
-            def output(self, input):
-                return input
-
-        network = layers.join(layers.Input((10, 5)), NewLayer())
-        message = (
-            "Cannot update input shape of the layer, because it's "
-            "incompatible with current input shape"
-        )
-        with self.assertRaisesRegexp(ValueError, message):
-            network.create_variables()
