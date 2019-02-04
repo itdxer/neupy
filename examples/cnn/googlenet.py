@@ -7,21 +7,15 @@ def Inception(nfilters):
     return join(
         parallel([
             MaxPooling((3, 3), stride=1, padding='SAME'),
-            Convolution((1, 1, nfilters[0])),
-            Relu(),
+            Convolution((1, 1, nfilters[0])) >> Relu(),
         ], [
-            Convolution((1, 1, nfilters[1])),
-            Relu(),
+            Convolution((1, 1, nfilters[1])) >> Relu(),
         ], [
-            Convolution((1, 1, nfilters[2])),
-            Relu(),
-            Convolution((3, 3, nfilters[3]), padding='SAME'),
-            Relu(),
+            Convolution((1, 1, nfilters[2])) >> Relu(),
+            Convolution((3, 3, nfilters[3]), padding='SAME') >> Relu(),
         ], [
-            Convolution((1, 1, nfilters[4])),
-            Relu(),
-            Convolution((5, 5, nfilters[5]), padding='SAME'),
-            Relu(),
+            Convolution((1, 1, nfilters[4])) >> Relu(),
+            Convolution((5, 5, nfilters[5]), padding='SAME') >> Relu(),
         ]),
         Concatenate(),
     )
