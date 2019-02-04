@@ -361,7 +361,7 @@ Does it look simple to you? Most likely not. However, this is a really simple ne
 
         Reshape(),
 
-        Relu(1024) > BatchNorm(),
+        Relu(1024) >> BatchNorm(),
         Softmax(10),
     )
 

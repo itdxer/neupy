@@ -49,47 +49,6 @@ class HessianDiagonal(BaseOptimizer):
     >>> optimizer = algorithms.HessianDiagonal(network)
     >>> optimizer.train(x_train, y_train)
 
-    Diabets dataset example
-
-    >>> import numpy as np
-    >>> from sklearn.model_selection import train_test_split
-    >>> from sklearn import datasets, preprocessing
-    >>> from neupy import algorithms, layers, utils
-    >>> from neupy.estimators import rmsle
-    >>>
-    >>> utils.reproducible()
-    >>>
-    >>> dataset = datasets.load_diabetes()
-    >>> data, target = dataset.data, dataset.target
-    >>>
-    >>> input_scaler = preprocessing.StandardScaler()
-    >>> target_scaler = preprocessing.StandardScaler()
-    >>>
-    >>> x_train, x_test, y_train, y_test = train_test_split(
-    ...     input_scaler.fit_transform(data),
-    ...     target_scaler.fit_transform(target),
-    ...     test_size=0.2
-    ... )
-    >>>
-    >>> nw = algorithms.HessianDiagonal(
-    ...     network=[
-    ...         layers.Input(10),
-    ...         layers.Sigmoid(20),
-    ...         layers.Sigmoid(1),
-    ...     ],
-    ...     step=1.5,
-    ...     shuffle_data=False,
-    ...     verbose=False,
-    ...     min_eigval=1e-10
-    ... )
-    >>> nw.train(x_train, y_train, epochs=10)
-    >>> y_predict = nw.predict(x_test)
-    >>>
-    >>> error = rmsle(target_scaler.inverse_transform(y_test),
-    ...               target_scaler.inverse_transform(y_predict).round())
-    >>> error
-    0.50315919814691346
-
     Notes
     -----
     - Method requires all training data during propagation, which means

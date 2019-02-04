@@ -57,14 +57,15 @@ class GRNN(BaseSkeleton):
 
     Examples
     --------
+    >>> import numpy as np
     >>> from sklearn import datasets, preprocessing
     >>> from sklearn.model_selection import train_test_split
-    >>> from neupy import algorithms, estimators
+    >>> from neupy import algorithms
     >>>
     >>> dataset = datasets.load_diabetes()
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     preprocessing.minmax_scale(dataset.data),
-    ...     preprocessing.minmax_scale(dataset.target.reshape((-1, 1))),
+    ...     preprocessing.minmax_scale(dataset.target.reshape(-1, 1)),
     ...     test_size=0.3,
     ... )
     >>>
@@ -72,8 +73,9 @@ class GRNN(BaseSkeleton):
     >>> nw.train(x_train, y_train)
     >>>
     >>> y_predicted = nw.predict(x_test)
-    >>> estimators.rmse(y_predicted, y_test)
-    0.2381013391408185
+    >>> mse = np.mean((y_predicted - y_test) ** 2)
+    >>> mse
+    0.05280970704568171
     """
     std = BoundedProperty(minval=0)
 
