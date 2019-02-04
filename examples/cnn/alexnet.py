@@ -52,48 +52,38 @@ class SliceChannels(BaseLayer):
 alexnet = join(
     Input((227, 227, 3)),
 
-    Convolution((11, 11, 96), stride=(4, 4), name='conv_1'),
-    Relu(),
-
+    Convolution((11, 11, 96), stride=(4, 4), name='conv_1') >> Relu(),
     MaxPooling((3, 3), stride=(2, 2)),
     LocalResponseNorm(),
 
     parallel([
         SliceChannels(0, 48),
-        Convolution((5, 5, 128), padding='SAME', name='conv_2_1'),
-        Relu(),
+        Convolution((5, 5, 128), padding='SAME', name='conv_2_1') >> Relu(),
     ], [
         SliceChannels(48, 96),
-        Convolution((5, 5, 128), padding='SAME', name='conv_2_2'),
-        Relu(),
+        Convolution((5, 5, 128), padding='SAME', name='conv_2_2') >> Relu(),
     ]),
     Concatenate(),
 
     MaxPooling((3, 3), stride=(2, 2)),
     LocalResponseNorm(),
-
-    Convolution((3, 3, 384), padding='SAME', name='conv_3'),
-    Relu(),
+    Convolution((3, 3, 384), padding='SAME', name='conv_3') >> Relu(),
 
     parallel([
         SliceChannels(0, 192),
-        Convolution((3, 3, 192), padding='SAME', name='conv_4_1'),
-        Relu(),
+        Convolution((3, 3, 192), padding='SAME', name='conv_4_1') >> Relu(),
     ], [
         SliceChannels(192, 384),
-        Convolution((3, 3, 192), padding='SAME', name='conv_4_2'),
-        Relu(),
+        Convolution((3, 3, 192), padding='SAME', name='conv_4_2') >> Relu(),
     ]),
     Concatenate(),
 
     parallel([
         SliceChannels(0, 192),
-        Convolution((3, 3, 128), padding='SAME', name='conv_5_1'),
-        Relu(),
+        Convolution((3, 3, 128), padding='SAME', name='conv_5_1') >> Relu(),
     ], [
         SliceChannels(192, 384),
-        Convolution((3, 3, 128), padding='SAME', name='conv_5_2'),
-        Relu(),
+        Convolution((3, 3, 128), padding='SAME', name='conv_5_2') >> Relu(),
     ]),
     Concatenate(),
     MaxPooling((3, 3), stride=(2, 2)),
