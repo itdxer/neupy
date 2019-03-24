@@ -13,3 +13,4 @@ These topics are relevant only to the deep learning models.
     layers/create-custom-layers
     layers/init-methods
     layers/debug
+    layers/with-tensorflow
