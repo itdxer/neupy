@@ -101,7 +101,7 @@ class BaseLayer(BaseGraph):
                 "New shape: {}, Layer: {}".format(
                     self._input_shape, shape, self))
 
-        self._input_shape = shape
+        self._input_shape = tf.TensorShape(shape)
 
     @property
     def output_shape(self):
@@ -246,7 +246,7 @@ class Input(BaseLayer):
 
         self.shape = as_tuple(shape)
 
-    @property
+    @BaseLayer.input_shape.getter
     def input_shape(self):
         batch_shape = tf.TensorShape([None])
         return batch_shape.concatenate(self.shape)
