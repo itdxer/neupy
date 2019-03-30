@@ -63,7 +63,14 @@ class DropBlockTestCase(BaseTestCase):
         output = dropblock_layer.output(test_input, training=True)
         actual_output = self.eval(output)
 
-        self.assertTrue(0.88 <= np.mean(actual_output) <= 0.92)
+        fraction_masked = np.mean(actual_output != 0)
+
+        self.assertTrue(0.88 <= fraction_masked <= 0.92)
+        self.assertGreater(actual_output.max(), 1)
+        self.assertAlmostEqual(
+            actual_output.max(),
+            1 / fraction_masked,
+        )
 
     def test_drop_block_during_inference(self):
         test_input = np.ones((1, 20, 20, 1))

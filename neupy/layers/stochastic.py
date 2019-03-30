@@ -256,4 +256,6 @@ class DropBlock(Identity):
             padding='SAME',
         )
         mask = tf.cast(1 - mask, tf.float32)
-        return tf.multiply(input, mask)
+
+        feature_normalizer = asfloat(tf.size(mask)) / tf.reduce_sum(mask)
+        return tf.multiply(input, mask) * feature_normalizer
