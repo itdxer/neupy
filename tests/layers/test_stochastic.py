@@ -53,3 +53,14 @@ class GaussianNoiseLayerTestCase(BaseTestCase):
         self.assertEqual(
             "GaussianNoise(mean=0, std=1, name='gaussian-noise-1')",
             str(layer))
+
+
+class DropBlockTestCase(BaseTestCase):
+    def test_drop_block(self):
+        test_input = np.ones((2, 100, 100, 1))
+        dropblock_layer = layers.DropBlock(keep_proba=0.9, block_size=(2, 10))
+
+        output = dropblock_layer.output(test_input, training=True)
+        actual_output = self.eval(output)
+
+        self.assertTrue(0.88 <= np.mean(actual_output) <= 0.92)
