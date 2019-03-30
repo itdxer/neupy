@@ -370,7 +370,7 @@ As you can see, we use an ability to organize sequence of simple layer in one sm
 Layer definitions
 =================
 
-It's common that different papers might have different configurations for some layers, but they will refer to it in the same way. For example, saying that network uses convolutional layers, doesn't tell us much about their configurations, since convolutional layer might have some paddings or initialization for weights might be different. In order to solve this problem NeuPy allow to customize layer's definition.
+It's common that different papers might have different configurations for some layers, but they will refer to it in the same way. For example, saying that network uses convolutional layers, doesn't tell us much about their configurations, since convolutional layer might have some paddings or initialization for weights might be different. In order to solve this problem, NeuPy allows to customize layer's definition.
 
 .. code-block:: python
 
