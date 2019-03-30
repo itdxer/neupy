@@ -575,7 +575,7 @@ class PRelu(Linear):
         alpha_axes = dimensions[list(self.alpha_axes)]
 
         alpha = tf_utils.dimshuffle(self.alpha, ndim, alpha_axes)
-        return tf.nn.leaky_relu(tf.to_float(input), tf.to_float(alpha))
+        return tf.maximum(0.0, input) + alpha * tf.minimum(0.0, input)
 
     def __repr__(self):
         if self.n_units is None:
