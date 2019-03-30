@@ -2,6 +2,7 @@ from scipy import stats
 import numpy as np
 
 from neupy import layers
+from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -59,8 +60,30 @@ class DropBlockTestCase(BaseTestCase):
     def test_drop_block(self):
         test_input = np.ones((2, 100, 100, 1))
         dropblock_layer = layers.DropBlock(keep_proba=0.9, block_size=(2, 10))
-
         output = dropblock_layer.output(test_input, training=True)
         actual_output = self.eval(output)
 
         self.assertTrue(0.88 <= np.mean(actual_output) <= 0.92)
+
+    def test_drop_block_during_inference(self):
+        test_input = np.ones((1, 20, 20, 1))
+        dropblock_layer = layers.DropBlock(keep_proba=0.9, block_size=5)
+        actual_output = dropblock_layer.output(test_input, training=False)
+
+        self.assertIs(test_input, actual_output)
+        self.assertEqual(dropblock_layer.block_size, (5, 5))
+
+    def test_drop_block_shape(self):
+        network = layers.join(
+            layers.Input((10, 10, 3)),
+            layers.DropBlock(0.9, block_size=5),
+        )
+        self.assertShapesEqual(network.output_shape, (None, 10, 10, 3))
+
+    def test_drop_block_invalid_connection(self):
+        err_message = "DropBlock layer expects input with 4 dimensions"
+        with self.assertRaisesRegexp(LayerConnectionError, err_message):
+            layers.join(
+                layers.Input((10, 10)),
+                layers.DropBlock(0.9, block_size=5),
+            )

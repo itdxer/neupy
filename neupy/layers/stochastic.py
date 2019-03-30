@@ -208,15 +208,14 @@ class DropBlock(Identity):
 
         if input_shape and input_shape.ndims != 4:
             raise LayerConnectionError(
-                "DropBlock layer expects an input with 4 "
-                "dimensions, got {} with shape {}"
-                "".format(len(input_shape), input_shape))
+                "DropBlock layer expects input with 4 dimensions, got {} "
+                "with shape {}".format(len(input_shape), input_shape))
 
         return input_shape
 
     def output(self, input, training=False):
         if not training:
-            return input_value
+            return input
 
         input = tf.convert_to_tensor(input, tf.float32)
         input_shape = tf.shape(input)
