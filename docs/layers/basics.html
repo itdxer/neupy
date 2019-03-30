@@ -254,6 +254,7 @@
 </li>
 <li><a class="reference internal" href="#parallel-connections" id="id12">Parallel connections</a></li>
 <li><a class="reference internal" href="#subnetworks" id="id13">Subnetworks</a></li>
+<li><a class="reference internal" href="#layer-definitions" id="id14">Layer definitions</a></li>
 </ul>
 </div>
 <p>Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows to construct complex neural networks easily.</p>
@@ -544,6 +545,39 @@
 </pre></div>
 </div>
 <p>As you can see, we use an ability to organize sequence of simple layer in one small network. Each subnetwork defines a sequence of simple operations. You can think about subnetworks as a simple way to define more complicated layers. But instead of creating redundant classes or functions, that define complex layers, we can define everything in place. In addition, it improves the readability, because now everybody can see order of these simple operations inside the subnetwork.</p>
+</div>
+<div class="section" id="layer-definitions">
+<h1><a class="toc-backref" href="#id14">Layer definitions</a></h1>
+<p>It’s common that different papers might have different configurations for some layers, but they will refer to it in the same way. For example, saying that network uses convolutional layers, doesn’t tell us much about their configurations, since convolutional layer might have some paddings or initialization for weights might be different. In order to solve this problem NeuPy allow to customize layer’s definition.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">init</span>
+<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">Conv</span> <span class="o">=</span> <span class="n">Convolution</span><span class="o">.</span><span class="n">define</span><span class="p">(</span>
+    <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;SAME&#39;</span><span class="p">,</span>
+    <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierNormal</span><span class="p">(),</span>
+    <span class="n">bias</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c1"># no bias</span>
+<span class="p">)</span>
+<span class="n">BN</span> <span class="o">=</span> <span class="n">BatchNorm</span><span class="o">.</span><span class="n">define</span><span class="p">(</span>
+    <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+    <span class="n">Input</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+
+    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
+    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
+    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
+    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
+    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+
+    <span class="n">Reshape</span><span class="p">(),</span>
+    <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
     <div class="postmeta">

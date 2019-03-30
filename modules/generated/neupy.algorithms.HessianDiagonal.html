@@ -341,6 +341,47 @@ it’s not allowed to use mini-batches.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Diabets dataset example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">preprocessing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">utils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.estimators</span> <span class="k">import</span> <span class="n">rmsle</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utils</span><span class="o">.</span><span class="n">reproducible</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target_scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">input_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">target_scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">target</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span> <span class="o">=</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">HessianDiagonal</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">network</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">layers</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">],</span>
+<span class="gp">... </span>    <span class="n">step</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">shuffle_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_eigval</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">10</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nw</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_predict</span> <span class="o">=</span> <span class="n">nw</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">error</span> <span class="o">=</span> <span class="n">rmsle</span><span class="p">(</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
+<span class="gp">... </span>              <span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_predict</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">error</span>
+<span class="go">0.50315919814691346</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
