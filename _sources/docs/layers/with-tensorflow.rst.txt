@@ -3,7 +3,7 @@ Mixing NeuPy with Tensorflow
 
 NeuPy allows to get quickly from idea to the first prototype of the model, but in some cases, API can be too restrictive. Working directly with Tensorflow allows us to be very flexible with the code, even though you will need to write more code. In order to be able to use simple and convenient API provided by NeuPy and take advantage of the Tensorflow's flexibility, NeuPy provides with a direct access to all the inputs and outputs of the neural network models.
 
-Let's start with an example, let's say we have simple CNN architecture that expects 28x28 grey images and it outputs probability multinomial distribution across 10 possible output classes.
+Let's start with an example, let's say we have simple CNN architecture that expects 28x28 grey images and it returns multinomial probability distribution across 10 possible output classes.
 
 .. code-block:: python
 
@@ -36,7 +36,7 @@ Nothing has happened at this point. We've defined architecture, but nothing has 
     >>> network.outputs
     <tf.Tensor 'Sigmoid/Sigmoid:0' shape=(?, 10) dtype=float32>
 
-When network ``outputs`` triggered for the first time NeuPy creates placeholder that expects batch of the 28x28 images with single channel. After that, created placeholder will be propagated through the network and tensor associated with the output from the final layer will be returned. NeuPy caches output and each time ``outputs`` attribute triggered the same tensor will be returned.
+When network ``outputs`` was triggered for the first time NeuPy creates placeholder that expects batch of the 28x28 images with single channel. After that, created placeholder will be propagated through the network and tensor, associated with the output from the final layer, will be returned. NeuPy caches output and each time ``outputs`` attribute triggered the same tensor will be returned.
 
 .. code-block:: python
 
@@ -54,7 +54,7 @@ Placeholder has been created implicitly, but it's possible to get access to it b
 
 As for the ``outputs`` attribute, placeholder will be created in the lazy way and it will be cached and the same object will be returned each time we trigger ``inputs`` attribute.
 
-Also, It's important to note that output from the ``inputs`` and ``outputs`` attributes will be a list for cases when network's architecture has multiple inputs or outputs.
+Also, It's important to note that output from the ``inputs`` and ``outputs`` attributes will be a list, for cases, when network's architecture has multiple inputs or outputs.
 
 In certain cases, we might want to propagate custom inputs through the network. It's possible to do it using the ``output`` method.
 
@@ -94,7 +94,7 @@ The same ``train_output`` value can be obtained with ``training_outputs`` attrib
     >>> train_output = network.training_outputs
     >>> inference_output = network.outputs
 
-It's important to note, that any argument can be propagate though the network and custom layers can be designed in the way that allows to change behavior of the layer when for different argument.
+It's important to note, that any argument can be propagate though the network and custom layers can be designed in the way that allows to change behavior of the layer.
 
 Access variables
 ----------------
@@ -106,7 +106,7 @@ Variables can be accessed with the help of the ``variables`` attribute.
     >>> variables = network.variables
     >>> len(variables)  # number of variables
 
-Dictionary will be returned where each key will be a tuple with ``(layer, variable_name)`` and value will be Tensorflow variable associated with this layer.
+The ``variables`` attribute returns dictionary. In the dictionary, each key will be a tuple ``(layer, variable_name)`` and value will be Tensorflow's variable, associated with specified layer layer.
 
 .. code-block:: python
 

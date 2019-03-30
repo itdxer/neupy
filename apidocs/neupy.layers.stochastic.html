@@ -266,6 +266,19 @@ the class name. Defaults to <span class="docutils literal"><span class="pre">Non
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#neupy.layers.stochastic.DropBlock" title="neupy.layers.stochastic.DropBlock"><span class="xref py py-class docutils literal"><span class="pre">DropBlock</span></span></a></dt>
+<dd>DropBlock layer.</dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<dl class="docutils">
+<dt>[1]  Nitish Srivastava, Geoffrey Hinton, Alex Krizhevsky, Ilya Sutskever,</dt>
+<dd>Ruslan Salakhutdinov, Dropout: a simple way to prevent neural
+networks from overfitting, 2014.</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
@@ -420,6 +433,119 @@ if variables hasn’t been created yet.</p>
 <dl class="attribute">
 <dt id="neupy.layers.stochastic.GaussianNoise.std">
 <span class="descname">std</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="neupy.layers.stochastic.DropBlock">
+<em class="property">class </em><span class="descclassname">neupy.layers.stochastic.</span><span class="descname">DropBlock</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>DropBlock, a form of structured dropout, where units in a contiguous
+region of a feature map are dropped together.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>keep_proba</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Fraction of the input units to keep. Value needs to be
+between <span class="docutils literal"><span class="pre">0</span></span> and <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>block_size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or tuple</span></dt>
+<dd><p class="first last">Size of the block to be dropped. Blocks that have squared shape can
+be specified with a single integer value. For example, <cite>block_size=5</cite>
+the same as <cite>block_size=(5, 5)</cite>.</p>
+</dd>
+<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
+value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
+the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#neupy.layers.stochastic.Dropout" title="neupy.layers.stochastic.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a></dt>
+<dd>Dropout layer.</dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<dl class="docutils">
+<dt>[1] Golnaz Ghiasi, Tsung-Yi Lin, Quoc V. Le. DropBlock: A regularization</dt>
+<dd>method for convolutional networks, 2018.</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">DropBlock</span><span class="p">(</span><span class="n">keep_proba</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">DropBlock</span><span class="p">(</span><span class="n">keep_proba</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>variables</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">Variable names and their values. Dictionary can be empty in case
+if variables hasn’t been created yet.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
+<td>Initializes variable with specified values.</td>
+</tr>
+<tr class="row-even"><td><strong>get_output_shape(input_shape)</strong></td>
+<td>Computes expected output shape from the layer based on the specified input shape.</td>
+</tr>
+<tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
+<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="neupy.layers.stochastic.DropBlock.block_size">
+<span class="descname">block_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.stochastic.DropBlock.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.stochastic.DropBlock.keep_proba">
+<span class="descname">keep_proba</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.stochastic.DropBlock.options">
+<span class="descname">options</span><em class="property"> = {'block_size': Option(class_name='DropBlock', value=TypedListProperty(name=&quot;block_size&quot;)), 'keep_proba': Option(class_name='DropBlock', value=ProperFractionProperty(name=&quot;keep_proba&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.stochastic.DropBlock.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>training=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
         <meta name="viewport" content="width=device-width">
-        <title>neupy.layers.Dropout &mdash; NeuPy</title>
+        <title>neupy.layers.DropBlock &mdash; NeuPy</title>
             <link rel="stylesheet" href="../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../_static/main.css" type="text/css">
@@ -233,28 +233,26 @@
     </nav>
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
-    <div class="section" id="neupy-layers-dropout">
-<h1>neupy.layers.Dropout</h1>
+    <div class="section" id="neupy-layers-dropblock">
+<h1>neupy.layers.DropBlock</h1>
 <dl class="class">
-<dt id="neupy.layers.Dropout">
-<em class="property">class </em><span class="descclassname">neupy.layers.</span><span class="descname">Dropout</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Dropout layer. It randomly switches of (multiplies by zero)
-input values, where probability to be switched per each value
-can be controlled with the <span class="docutils literal"><span class="pre">proba</span></span> parameter. For example,
-<span class="docutils literal"><span class="pre">proba=0.2</span></span> will mean that only 20% of the input values will
-be multiplied by 0 and 80% of the will be unchanged.</p>
-<p>It’s important to note that output from the dropout is controled by
-the <span class="docutils literal"><span class="pre">training</span></span> parameter in the <span class="docutils literal"><span class="pre">output</span></span> method. Droput
-will be applied only in cases when <span class="docutils literal"><span class="pre">training=True</span></span> propagated
-through the network, otherwise it will act as an identity.</p>
+<dt id="neupy.layers.DropBlock">
+<em class="property">class </em><span class="descclassname">neupy.layers.</span><span class="descname">DropBlock</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/stochastic.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>DropBlock, a form of structured dropout, where units in a contiguous
+region of a feature map are dropped together.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>proba</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Fraction of the input units to drop. Value needs to be
+<dt><strong>keep_proba</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">Fraction of the input units to keep. Value needs to be
 between <span class="docutils literal"><span class="pre">0</span></span> and <span class="docutils literal"><span class="pre">1</span></span>.</p>
+</dd>
+<dt><strong>block_size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int or tuple</span></dt>
+<dd><p class="first last">Size of the block to be dropped. Blocks that have squared shape can
+be specified with a single integer value. For example, <cite>block_size=5</cite>
+the same as <cite>block_size=(5, 5)</cite>.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
 <dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
@@ -269,26 +267,26 @@ the class name. Defaults to <span class="docutils literal"><span class="pre">Non
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="../../apidocs/neupy.layers.stochastic.html#neupy.layers.stochastic.DropBlock" title="neupy.layers.stochastic.DropBlock"><span class="xref py py-class docutils literal"><span class="pre">DropBlock</span></span></a></dt>
-<dd>DropBlock layer.</dd>
+<dt><a class="reference internal" href="../../apidocs/neupy.layers.stochastic.html#neupy.layers.stochastic.Dropout" title="neupy.layers.stochastic.Dropout"><span class="xref py py-class docutils literal"><span class="pre">Dropout</span></span></a></dt>
+<dd>Dropout layer.</dd>
 </dl>
 </div>
 <p class="rubric">References</p>
 <dl class="docutils">
-<dt>[1]  Nitish Srivastava, Geoffrey Hinton, Alex Krizhevsky, Ilya Sutskever,</dt>
-<dd>Ruslan Salakhutdinov, Dropout: a simple way to prevent neural
-networks from overfitting, 2014.</dd>
+<dt>[1] Golnaz Ghiasi, Tsung-Yi Lin, Quoc V. Le. DropBlock: A regularization</dt>
+<dd>method for convolutional networks, 2018.</dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">Input</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">Relu</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Input</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">DropBlock</span><span class="p">(</span><span class="n">keep_proba</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">DropBlock</span><span class="p">(</span><span class="n">keep_proba</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span>
-<span class="go">(?, 10) -&gt; [... 6 layers ...] -&gt; (?, 1)</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -324,18 +322,28 @@ if variables hasn’t been created yet.</p>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="neupy.layers.Dropout.options">
-<span class="descname">options</span><em class="property"> = {'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;)), 'proba': Option(class_name='Dropout', value=ProperFractionProperty(name=&quot;proba&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.DropBlock.block_size">
+<span class="descname">block_size</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="neupy.layers.Dropout.output">
-<span class="descname">output</span><span class="sig-paren">(</span><em>input_value</em>, <em>training=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.DropBlock.get_output_shape">
+<span class="descname">get_output_shape</span><span class="sig-paren">(</span><em>input_shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="neupy.layers.Dropout.proba">
-<span class="descname">proba</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="neupy.layers.DropBlock.keep_proba">
+<span class="descname">keep_proba</span><em class="property"> = None</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="neupy.layers.DropBlock.options">
+<span class="descname">options</span><em class="property"> = {'block_size': Option(class_name='DropBlock', value=TypedListProperty(name=&quot;block_size&quot;)), 'keep_proba': Option(class_name='DropBlock', value=ProperFractionProperty(name=&quot;keep_proba&quot;)), 'name': Option(class_name='BaseLayer', value=Property(name=&quot;name&quot;))}</em><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="neupy.layers.DropBlock.output">
+<span class="descname">output</span><span class="sig-paren">(</span><em>input</em>, <em>training=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

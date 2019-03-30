@@ -1,0 +1,6 @@
+neupy.layers.DropBlock
+======================
+
+.. currentmodule:: neupy.layers
+
+.. autoclass:: DropBlock
