@@ -379,11 +379,11 @@ class Convolution(BaseLayer):
         padding = self.padding
 
         if not isinstance(padding, six.string_types):
-            height_pad, weight_pad = padding
+            height_pad, width_pad = padding
             input = tf.pad(input, [
                 [0, 0],
                 [height_pad, height_pad],
-                [weight_pad, weight_pad],
+                [width_pad, width_pad],
                 [0, 0],
             ])
             # VALID option will make sure that

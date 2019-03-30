@@ -219,6 +219,7 @@ Stochastic layers
 
     neupy.layers.Dropout
     neupy.layers.GaussianNoise
+    neupy.layers.DropBlock
 
 Merge layers
 ~~~~~~~~~~~~
