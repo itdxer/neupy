@@ -33,7 +33,7 @@ before_script:
   - sleep 3  # give xvfb some time to start
 
 script:
-  - pytest
+  - pytest --cov=neupy
   - flake8 neupy
 
 after_success:
