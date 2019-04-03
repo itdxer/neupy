@@ -1,8 +1,11 @@
+import copy
+
 import numpy as np
 import tensorflow as tf
 
 from neupy import layers, algorithms, init
 from neupy.utils import asfloat
+from neupy.exceptions import LayerConnectionError
 
 from base import BaseTestCase
 
@@ -138,3 +141,44 @@ class LayerNameTestCase(BaseTestCase):
 
         layer_3 = abcDef()
         self.assertEqual(layer_3.name, 'abc-def-1')
+
+
+class LayerCopyTestCase(BaseTestCase):
+    def test_layer_copy(self):
+        relu = layers.Relu(10, weight=init.Normal(), bias=None)
+        copied_relu = copy.copy(relu)
+
+        self.assertEqual(relu.name, 'relu-1')
+        self.assertEqual(copied_relu.name, 'relu-2')
+
+        self.assertIsInstance(relu.weight, init.Normal)
+        self.assertIsNone(relu.bias)
+
+    def test_initialized_layer_copy(self):
+        network = layers.Input(10) >> layers.Relu(5)
+        network.create_variables()
+
+        relu = network.layers[1]
+        copied_relu = copy.copy(relu)
+
+        self.assertEqual(relu.name, 'relu-1')
+        self.assertEqual(copied_relu.name, 'relu-2')
+        self.assertIsInstance(copied_relu.weight, np.ndarray)
+
+        error_message = (
+            "Cannot connect layer `relu-1` to layer `relu-2`, because output "
+            "shape \(\(\?, 5\)\) of the first layer is incompatible with the "
+            "input shape \(\(\?, 10\)\) of the second layer."
+        )
+        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+            # copied relu expects 10 input features, but network outputs 5
+            layers.join(network, copied_relu)
+
+    def test_layer_deep_copy(self):
+        relu = layers.Relu(10, weight=np.zeros((5, 10)))
+
+        copied_relu = copy.copy(relu)
+        self.assertIs(relu.weight, copied_relu.weight)
+
+        deepcopied_relu = copy.deepcopy(relu)
+        self.assertIsNot(relu.weight, deepcopied_relu.weight)
