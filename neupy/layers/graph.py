@@ -18,7 +18,7 @@ from neupy.utils import as_tuple, tf_utils, iters
 
 __all__ = (
     'BaseGraph', 'LayerGraph',
-    'join', 'parallel', 'merge',
+    'join', 'parallel', 'merge', 'repeat',
 )
 
 
@@ -799,3 +799,48 @@ def join(*networks):
         graph = merge(graph, network, combine=True)
 
     return graph
+
+
+def repeat(network_or_layer, n):
+    """
+    Function copies input `n - 1` times and connects everything in sequential
+    order.
+
+    Parameters
+    ----------
+    network_or_layer : network or layer
+        Layer or network (connection of layers).
+
+    n : int
+        Number of times input should be replicated.
+
+    Examples
+    --------
+    >>> from neupy.layers import *
+    >>>
+    >>> block = Conv((3, 3, 32)) >> Relu() >> BN()
+    >>> block
+    <unknown> -> [... 3 layers ...] -> (?, ?, ?, 32)
+    >>>
+    >>> repeat(block, n=5)
+    <unknown> -> [... 15 layers ...] -> (?, ?, ?, 32)
+    """
+    if n <= 0 or not isinstance(n, int):
+        raise ValueError(
+            "The `n` parameter should be a positive integer, "
+            "got {} instead".format(n))
+
+    if n == 1:
+        return network_or_layer
+
+    input_shape = network_or_layer.input_shape
+    output_shape = network_or_layer.output_shape
+
+    if not input_shape.is_compatible_with(output_shape):
+        raise LayerConnectionError(
+            "Cannot connect network/layer to its copy, because input "
+            "shape is incompatible with the output shape. Input shape: {}, "
+            "Output shape: {}".format(input_shape, output_shape))
+
+    new_networks = [copy.deepcopy(network_or_layer) for _ in range(n - 1)]
+    return join(network_or_layer, *new_networks)
