@@ -1,4 +1,5 @@
 import re
+import copy
 import types
 import inspect
 from functools import partial
@@ -65,6 +66,7 @@ class BaseLayer(BaseGraph):
     def __init__(self, name=None):
         # Layer by default gets intialized as a graph with single node in it
         super(BaseLayer, self).__init__(forward_graph=[(self, [])])
+        self.original_name = name
 
         if name is None:
             name = generate_layer_name(layer=self)
@@ -154,6 +156,33 @@ class BaseLayer(BaseGraph):
         return '{clsname}({formatted_args})'.format(
             clsname=self.__class__.__name__,
             formatted_args=', '.join(formatted_args))
+
+    def __copy__(self):
+        params = self.get_params()
+        # We make sure that new name will be created if user
+        # specified name=None
+        params['name'] = self.original_name
+
+        copied_layer = self.__class__(**params)
+        # Input shape can change and it cannot be controled from
+        # the __init__ method
+        copied_layer.input_shape = self.input_shape
+
+        return copied_layer
+
+    def __deepcopy__(self, memo):
+        memo[id(self)] = copied_layer = self.__copy__()
+
+        for key, new_value in copied_layer.get_params().items():
+            old_value = getattr(self, key)
+
+            # Some of the objects could be already copied
+            # (for example, tensorflow's variables)
+            if old_value is new_value:
+                copied_new_value = copy.deepcopy(new_value, memo)
+                setattr(copied_layer, key, copied_new_value)
+
+        return copied_layer
 
     def __repr__(self):
         kwargs = {}
