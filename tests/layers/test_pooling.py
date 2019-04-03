@@ -265,13 +265,13 @@ class GlobalPoolingLayersTestCase(BaseTestCase):
 
     def test_global_pooling_late_shape_init(self):
         network = layers.join(
-            layers.Convolution((3, 3, 12)),
+            layers.Relu(),
             layers.GlobalPooling('max'),
         )
         self.assertShapesEqual(network.output_shape, (None, None))
 
-        network = layers.join(layers.Input((10, 10, 1)), network)
-        self.assertShapesEqual(network.output_shape, (None, 12))
+        network = layers.join(layers.Input((10, 10, 3)), network)
+        self.assertShapesEqual(network.output_shape, (None, 3))
 
     def test_global_pooling_repr(self):
         layer = layers.GlobalPooling('max')

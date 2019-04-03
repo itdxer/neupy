@@ -247,6 +247,15 @@ class ConvLayersTestCase(BaseTestCase):
             )
         )
 
+    def test_conv_output_shape_when_input_unknown(self):
+        block = layers.join(
+            layers.Convolution((3, 3, 32)),
+            layers.Relu(),
+            layers.BatchNorm(),
+        )
+        self.assertShapesEqual(block.input_shape, None)
+        self.assertShapesEqual(block.output_shape, (None, None, None, 32))
+
 
 class DeconvolutionTestCase(BaseTestCase):
     def test_deconvolution(self):
