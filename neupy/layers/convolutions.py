@@ -353,7 +353,8 @@ class Convolution(BaseLayer):
 
         if input_shape.ndims is None:
             n_samples = input_shape[0]
-            return tf.TensorShape((n_samples, None, None, None))
+            n_kernels = self.size[-1]
+            return tf.TensorShape((n_samples, None, None, n_kernels))
 
         return tf.TensorShape(self.expected_output_shape(input_shape))
 
