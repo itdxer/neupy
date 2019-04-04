@@ -163,7 +163,7 @@ Layers with activation function
     neupy.layers.LeakyRelu
     neupy.layers.Elu
     neupy.layers.PRelu
-    neupy.layers.Sofplus
+    neupy.layers.Softplus
     neupy.layers.Softmax
 
 Convolutional layers
