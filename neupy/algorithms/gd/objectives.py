@@ -10,7 +10,7 @@ __all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
            'categorical_crossentropy', 'binary_hinge', 'categorical_hinge')
 
 
-smallest_positive_number = 1e-7  # for 32-bit float nubmers
+smallest_positive_number = 1e-7  # for 32-bit float numbers
 
 
 def error_function(expected, predicted):
@@ -214,7 +214,7 @@ def binary_hinge(expected, predicted, delta=1):
         Targets in {-1, 1} such as ground truth labels.
 
     predicted : Tensorfow tensor
-        Predictions in (-1, 1), such as hyprbolic tangent
+        Predictions in (-1, 1), such as hyperbolic tangent
         output of a neural network.
 
     delta : scalar

@@ -230,7 +230,7 @@ def quadratic_minimizer(x_a, y_a, y_prime_a, x_b, y_b, bound_size_ratio=0.1):
             tf.less(minimizer, x_a + bound_size_ratio * x_range),
         ),
         x_a + asfloat(0.5) * x_range,
-        # Since we shifted funciton to the left, we need to shift
+        # Since we shifted function's output to the left, we need to shift
         # the result to the right to make it correct for
         # the specified region. That's why we are adding ``x_a``
         # at the end.

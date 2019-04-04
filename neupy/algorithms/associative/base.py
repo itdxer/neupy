@@ -23,7 +23,7 @@ class BaseAssociative(BaseNetwork):
 
     weight : array-like, Initializer
         Neural network weights.
-        Value defined manualy should have shape ``(n_inputs, n_outputs)``.
+        Value defined manually should have shape ``(n_inputs, n_outputs)``.
         Defaults to :class:`Normal() <neupy.init.Normal>`.
 
     {BaseNetwork.Parameters}
@@ -92,13 +92,13 @@ class BaseStepAssociative(BaseAssociative):
     {BaseAssociative.n_outputs}
 
     n_unconditioned : int
-        Number of unconditioned units in neraul networks. All these
+        Number of unconditioned units in neural networks. All these
         units wouldn't update during the training procedure.
         Unconditioned should be the first feature in the dataset.
 
     weight : array-like
         Neural network weights.
-        Value defined manualy should have shape ``(n_inputs, n_outputs)``.
+        Value defined manually should have shape ``(n_inputs, n_outputs)``.
         Defaults to ``None`` which means that all unconditional
         weights will be equal to ``1``. Other weights equal to ``0``.
 
@@ -121,7 +121,7 @@ class BaseStepAssociative(BaseAssociative):
     def init_weights(self):
         if self.n_inputs <= self.n_unconditioned:
             raise ValueError(
-                "Number of uncondition features should be less than total "
+                "Number of unconditioned features should be less than total "
                 "number of features. `n_inputs`={} and `n_unconditioned`={}"
                 "".format(self.n_inputs, self.n_unconditioned))
 
@@ -169,7 +169,7 @@ class BaseStepAssociative(BaseAssociative):
             weight[n_unconditioned:, :] += delta
 
             # This error can tell us whether network has converged
-            # to some value of weihts. Low errors will mean that weights
+            # to some value of weights. Low errors will mean that weights
             # hasn't been updated much during the training epoch.
             error += np.linalg.norm(delta)
 

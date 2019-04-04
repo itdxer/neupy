@@ -67,7 +67,7 @@ class BasePooling(BaseLayer):
     stride : tuple or int.
         Stride size, which is the number of shifts over
         rows/cols to get the next pool region. If stride is
-        None, it is considered equal to ds (no overlap on
+        ``None``, it is considered equal to ``size`` (no overlap on
         pooling regions).
 
     padding : {{``valid``, ``same``}}

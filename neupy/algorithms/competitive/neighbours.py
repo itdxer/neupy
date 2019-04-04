@@ -91,8 +91,7 @@ def find_neighbours_on_rect_grid(grid, center, radius):
     {find_neighbour_distance.center}
 
     radius : int
-        Radius indetify which neurons around the center
-        are neighbours.
+        Radius specifies what neurons, around the center, are neighbours.
 
     Returns
     -------
@@ -192,8 +191,7 @@ def find_neighbours_on_hexagon_grid(grid, center, radius):
         Should be a tuple with two integers: ``(x, y)``.
 
     radius : int
-        Radius indetify which neurons around the center
-        are neighbours.
+        Radius specifies what neurons, around the center, are neighbours.
 
     Returns
     -------
@@ -206,7 +204,7 @@ def find_neighbours_on_hexagon_grid(grid, center, radius):
     center_x, center_y = center
     pattern = generate_neighbours_pattern(radius)
 
-    # We adding zero paddings in order to be able
+    # We add zero padding in order to be able
     # insert full pattern into the matrix. It's
     # useful in case if we are not able to mark all
     # neighbours from the pattern for specific neuron.
@@ -229,15 +227,15 @@ def find_neighbours_on_hexagon_grid(grid, center, radius):
 
     grid[x_range, y_range] = pattern
 
-    # removing paddings
+    # removing padding
     return grid[radius:-radius, radius:-radius]
 
 
 @shared_docs(find_step_scaler_on_rect_grid)
 def find_step_scaler_on_hexagon_grid(grid, center=None, std=1):
     """
-    Find step scaler for neighbouring neurons. The further
-    neuron from the center the lower step scaler it has.
+    Find step scale for neighbouring neurons. The further
+    neuron from the center the lower step scale it has.
 
     Notes
     -----

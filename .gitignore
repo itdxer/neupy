@@ -20,6 +20,7 @@ build/
 .python-version
 notebooks/.ipynb_checkpoints/*
 .ipynb_checkpoints
+.idea
 
 # Storage files
 *.dill

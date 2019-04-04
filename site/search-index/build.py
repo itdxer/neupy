@@ -212,7 +212,7 @@ if __name__ == '__main__':
     term_frequency = defaultdict(int)
 
     index_pointers = [0]
-    indeces = []
+    indices = []
     data = []
 
     logging.info("Collecting documents")
@@ -241,10 +241,10 @@ if __name__ == '__main__':
             termid = vocabulary[term]
             term_frequency[termid] += 1
 
-            indeces.append(termid)
+            indices.append(termid)
             data.append(1)
 
-        index_pointers.append(len(indeces))
+        index_pointers.append(len(indices))
         documents.append(document._asdict())
 
     n_documents = len(documents)
@@ -258,7 +258,7 @@ if __name__ == '__main__':
     logging.info("Found {} terms".format(n_terms))
 
     logging.info("Calculation TF and IDF")
-    frequencies = sp.csr_matrix((data, indeces, index_pointers),
+    frequencies = sp.csr_matrix((data, indices, index_pointers),
                                 shape=(n_documents, n_terms))
     df = (frequencies >= 1).sum(axis=0)
     idf = np.log((n_documents / df) + 1)

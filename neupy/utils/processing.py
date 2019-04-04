@@ -18,7 +18,7 @@ def format_data(data, is_feature1d=True, copy=False, make_float=True):
     Parameters
     ----------
     data : array-like
-        Data that should be formated. That could be, matrix, vector or
+        Data that should be formatted. That could be, matrix, vector or
         Pandas DataFrame instance.
 
     is_feature1d : bool

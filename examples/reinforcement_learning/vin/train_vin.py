@@ -50,7 +50,7 @@ class SelectValueAtStatePosition(BaseLayer):
             n_states = input_shape[1]
             Q_shape = tf.shape(Q)
 
-            indeces = tf.stack([
+            indices = tf.stack([
                 # Numer of repetitions depends on the size of
                 # the state batch
                 tf_utils.repeat(tf.range(Q_shape[0]), n_states),
@@ -63,7 +63,7 @@ class SelectValueAtStatePosition(BaseLayer):
 
             # Output is a matrix that has n_samples * n_states rows
             # and n_filters (which is Q.shape[1]) columns.
-            return tf.gather_nd(Q, indeces)
+            return tf.gather_nd(Q, indices)
 
 
 def create_VIN(input_image_shape=(8, 8, 2), n_hidden_filters=150,
@@ -127,8 +127,8 @@ def loss_function(expected, predicted):
     expected = tf.cast(tf_utils.flatten(expected), tf.int32)
 
     log_predicted = tf.log(predicted)
-    indeces = tf.stack([tf.range(tf.size(expected)), expected], axis=1)
-    errors = tf.gather_nd(log_predicted, indeces)
+    indices = tf.stack([tf.range(tf.size(expected)), expected], axis=1)
+    errors = tf.gather_nd(log_predicted, indices)
 
     return -tf.reduce_mean(errors)
 

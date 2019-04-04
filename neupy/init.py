@@ -161,7 +161,7 @@ class Normal(Initializer):
 
 class Uniform(Initializer):
     """
-    Initialize parameter sampling from the uniformal
+    Initialize parameter sampling from the uniform
     distribution.
 
     Parameters

@@ -13,8 +13,8 @@ __all__ = ('GrowingNeuralGas', 'NeuralGasGraph', 'NeuronNode')
 
 
 def sample_data_point(data, n=1):
-    indeces = np.random.choice(len(data), n)
-    return data[indeces, :]
+    indices = np.random.choice(len(data), n)
+    return data[indices, :]
 
 
 class NeuralGasGraph(object):
@@ -133,11 +133,11 @@ class GrowingNeuralGas(BaseNetwork):
     in the paper, but they help to speed up training.
 
     - The ``n_start_nodes`` parameter provides possibility to increase
-      number of nodes during initialization step. It's usefull when
+      number of nodes during initialization step. It's useful when
       algorithm takes a lot of time building up large amount of neurons.
 
     - The ``min_distance_for_update`` parameter allows to speed up
-      training when some data samples has eurons very close to them. The
+      training when some data samples has neurons very close to them. The
       ``min_distance_for_update`` parameter controls threshold for the
       minimum distance for which we will want to update weights.
 
@@ -185,7 +185,7 @@ class GrowingNeuralGas(BaseNetwork):
 
     min_distance_for_update : float
         Parameter controls for which neurons we want to apply updates.
-        In case if euclidian distance between data sample and closest
+        In case if euclidean distance between data sample and closest
         neurons will be less than the ``min_distance_for_update`` value than
         update would be skipped for this data sample. Setting value to zero
         will disable effect provided by this parameter. Defaults to ``0``.
@@ -202,7 +202,7 @@ class GrowingNeuralGas(BaseNetwork):
     -------
     train(X_train, epochs=100)
         Network learns topological structure of the data. Learned
-        topolog is stored in the ``graph`` attribute.
+        structure will be stored in the ``graph`` attribute.
 
     {BaseSkeleton.fit}
 
@@ -216,8 +216,8 @@ class GrowingNeuralGas(BaseNetwork):
     Notes
     -----
     - Unlike other algorithms this network doesn't make predictions.
-      Intead, it learns topological structure of the data in form of
-      the graph. After that training, stucture of the network can be
+      Instead, it learns topological structure of the data in form of
+      the graph. After that training, structure of the network can be
       extracted from the ``graph`` attribute.
 
     - In order to speed up training, it might be useful to increase

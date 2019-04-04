@@ -51,9 +51,9 @@ class LSTMTestCase(BaseTestCase):
 
         data, labels = reber.make_reber_classification(
             n_samples=100,
-            return_indeces=True,
+            return_indices=True,
         )
-        data = add_sequence_padding(data + 1)  # +1 to shift indeces
+        data = add_sequence_padding(data + 1)  # +1 to shift indices
 
         self.data = train_test_split(data, labels, test_size=0.2)
         self.n_categories = len(reber.avaliable_letters) + 1
@@ -191,9 +191,9 @@ class GRUTestCase(BaseTestCase):
 
         data, labels = reber.make_reber_classification(
             n_samples=100,
-            return_indeces=True,
+            return_indices=True,
         )
-        data = add_sequence_padding(data + 1)  # +1 to shift indeces
+        data = add_sequence_padding(data + 1)  # +1 to shift indices
 
         self.data = train_test_split(data, labels, test_size=0.2)
         self.n_categories = len(reber.avaliable_letters) + 1

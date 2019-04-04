@@ -15,12 +15,11 @@ __all__ = ('Hessian',)
 @function_name_scope
 def find_hessian_and_gradient(error_function, parameters):
     """
-    Compute jacobian.
+    Compute hessian matrix and gradient vector.
 
     Parameters
     ----------
-    values : Tensorfow variable
-        Computed MSE for each sample separetly.
+    error_function : Tensor
 
     parameters : list of Tensorfow variable
         Neural network parameters (e.g. weights, biases).
@@ -56,7 +55,7 @@ class Hessian(BaseOptimizer):
     """
     Hessian gradient decent optimization, also known as Newton's method. This
     algorithm uses second-order derivative (hessian matrix) in order to
-    choose correct step during the training itration. Because of this,
+    choose correct step during the training iteration. Because of this,
     method doesn't have ``step`` parameter.
 
     Parameters
@@ -91,7 +90,7 @@ class Hessian(BaseOptimizer):
     Notes
     -----
     - Method requires all training data during propagation, which means
-      it's not allowed to use mini-batches.
+      it cannot be trained with mini-batches.
 
     - This method calculates full hessian matrix which means it will compute
       matrix with NxN parameters, where N = number of parameters in the

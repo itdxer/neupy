@@ -8,7 +8,7 @@ __all__ = ('Instar',)
 
 class Instar(BaseStepAssociative):
     """
-    Instar is a simple unsupervised Neural Network algortihm
+    Instar is a simple unsupervised Neural Network algorithm
     which detects associations.
 
     Parameters

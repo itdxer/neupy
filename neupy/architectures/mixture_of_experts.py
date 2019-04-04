@@ -18,20 +18,20 @@ def check_if_network_is_valid(network, index):
     if len(network.input_layers) > 1:
         raise ValueError(
             "Each network from the mixture of experts has to process single "
-            "input tensor. Network #{} (0-based indeces) has more than one "
+            "input tensor. Network #{} (0-based indices) has more than one "
             "input layer. Input layers: {}"
             "".format(index, network.output_layers))
 
     if len(network.output_layers) > 1:
         raise ValueError(
             "Each network from the mixture of experts has to output single "
-            "tensor. Network #{} (0-based indeces) has more than one output "
+            "tensor. Network #{} (0-based indices) has more than one output "
             "layer. Output layers: {}".format(index, network.output_layers))
 
     if network.input_shape.ndims != 2:
         raise ValueError(
             "Each network from the mixture of experts has to process "
-            "only 2-dimensional inputs. Network #{} (0-based indeces) "
+            "only 2-dimensional inputs. Network #{} (0-based indices) "
             "processes only {}-dimensional inputs. Input layer's shape: {}"
             "".format(index, network.input_shape.ndims, network.input_shape))
 

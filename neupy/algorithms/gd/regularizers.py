@@ -41,11 +41,11 @@ def define_regularizer(function):
 
     Examples
     --------
-    >>> import tensorfow as tf
-    >>> from neupy.algorithms import regularizer
+    >>> import tensorflow as tf
+    >>> from neupy import algorithms
     >>> from neupy.layers import *
     >>>
-    >>> @define_regularizer
+    >>> @algorithms.define_regularizer
     ... def l2(weight, decay_rate=0.01):
     ...     return decay_rate * tf.reduce_sum(tf.pow(weight, 2))
     ...
@@ -80,7 +80,7 @@ def l1(weight, decay_rate=0.01):
 
     exclude : list
         List of parameter names that has to be excluded from the
-        regularization. Defauts to ``['bias']``.
+        regularization. Defaults to ``['bias']``.
 
     Examples
     --------
@@ -126,7 +126,7 @@ def l2(weight, decay_rate=0.01):
 
     exclude : list
         List of parameter names that has to be excluded from the
-        regularization. Defauts to ``['bias']``.
+        regularization. Defaults to ``['bias']``.
 
     Examples
     --------
@@ -173,7 +173,7 @@ def maxnorm(weight, decay_rate=0.01):
 
     exclude : list
         List of parameter names that has to be excluded from the
-        regularization. Defauts to ``['bias']``.
+        regularization. Defaults to ``['bias']``.
 
     Examples
     --------

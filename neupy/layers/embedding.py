@@ -11,16 +11,16 @@ __all__ = ('Embedding',)
 
 class Embedding(BaseLayer):
     """
-    Embedding layer accepts indeces as an input and returns
-    rows from the weight matrix associated with these indeces.
+    Embedding layer accepts indices as an input and returns
+    rows from the weight matrix associated with these indices.
     It's useful when inputs are categorical features or for the
     word embedding tasks.
 
     Parameters
     ----------
     input_size : int
-        Layer's input vector dimension. Usualy associated with number
-        of categories or number of unique words that input vector has.
+        Layer's input vector dimension. It's, typically, associated with
+        number of categories or number of unique words that input vector has.
 
     output_size : int
         Layer's output vector dimension.
@@ -56,11 +56,11 @@ class Embedding(BaseLayer):
     ...     ['hot',  'low'],
     ... ])
     >>>
-    >>> unique_value, dataset_indeces = np.unique(
+    >>> unique_value, dataset_indices = np.unique(
     ...     dataset, return_inverse=True
     ... )
-    >>> dataset_indeces = dataset_indeces.reshape((4, 2))
-    >>> dataset_indeces
+    >>> dataset_indices = dataset_indices.reshape((4, 2))
+    >>> dataset_indices
     array([[0, 1],
            [2, 3],
            [0, 3],

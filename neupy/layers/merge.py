@@ -128,7 +128,7 @@ class Concatenate(BaseLayer):
 
     def get_output_shape(self, *input_shapes):
         input_shapes = [tf.TensorShape(shape) for shape in input_shapes]
-        # The axis value has 0-based indeces where 0s index points
+        # The axis value has 0-based indices where 0s index points
         # to the batch dimension of the input. Shapes in the neupy
         # do not store information about the batch and we need to
         # put None value on the 0s position.
@@ -137,7 +137,7 @@ class Concatenate(BaseLayer):
         if any(shape.ndims is None for shape in input_shapes):
             return tf.TensorShape(None)
 
-        # Avoid using negative indeces
+        # Avoid using negative indices
         possible_axes = list(range(len(valid_shape)))
         concat_axis = possible_axes[self.axis]
 
@@ -152,7 +152,7 @@ class Concatenate(BaseLayer):
                 if axis != concat_axis and valid_shape[axis] != axis_size:
                     raise LayerConnectionError(
                         "Cannot concatenate layers, because some of them "
-                        "don't match over dimension #{} (0-based indeces). "
+                        "don't match over dimension #{} (0-based indices). "
                         "Shapes: {} and {}"
                         "".format(axis, valid_shape, input_shape))
 
@@ -178,7 +178,7 @@ def exclude_index(array, index):
     array : list or tuple
 
     index : int
-        Index of the value that has to be excluded from the arrray
+        Index of the value that has to be excluded from the array
 
     Returns
     -------
@@ -278,7 +278,7 @@ class GatedAverage(BaseLayer):
 
         if self.gate_index >= 0:
             # Take layer from the left side from the gating layer.
-            # In case if gating layer at th zeros position then
+            # In case if gating layer at the zeros position then
             # it will take the last layer (-1 index).
             return input_shapes[self.gate_index - 1]
 

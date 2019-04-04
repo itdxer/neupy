@@ -27,8 +27,8 @@ class Dropout(Identity):
     ``proba=0.2`` will mean that only 20% of the input values will
     be multiplied by 0 and 80% of the will be unchanged.
 
-    It's important to note that output from the dropout is controled by
-    the ``training`` parameter in the ``output`` method. Droput
+    It's important to note that output from the dropout is controlled by
+    the ``training`` parameter in the ``output`` method. Dropout
     will be applied only in cases when ``training=True`` propagated
     through the network, otherwise it will act as an identity.
 

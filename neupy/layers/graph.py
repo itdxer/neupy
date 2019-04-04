@@ -73,8 +73,6 @@ def is_cyclic(graph):
     Parameters
     ----------
     graph : dict
-        must be represented as a dictionary mapping vertices to
-        iterables of neighbouring vertices.
 
     Returns
     -------
@@ -458,8 +456,8 @@ class LayerGraph(BaseGraph):
             return layer_method(*args, **kwargs)
         except Exception as exception:
             modified_exception = exception.__class__(
-                "{original_message}. Exception occured while propagating data "
-                "through the method `{method}`. Layer: {layer!r}".format(
+                "{original_message}. Exception occurred while propagating "
+                "data through the method `{method}`. Layer: {layer!r}".format(
                     original_message=str(exception).strip('.'),
                     method=method, layer=layer
                 )
@@ -770,7 +768,7 @@ def parallel(*networks):
 
 def join(*networks):
     """
-    Sequentialy combines layers and networks into single network.
+    Sequentially combines layers and networks into single network.
     Function will go sequentially over layers/networks and
     combine output layers from the one network that it picks
     to the input layers from the next network in the sequence.

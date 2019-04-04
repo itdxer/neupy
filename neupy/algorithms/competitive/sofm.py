@@ -26,7 +26,7 @@ __all__ = ('SOFM',)
 
 def neg_euclid_distance(X, weight):
     """
-    Negative Euclidian distance between input
+    Negative Euclidean distance between input
     data and weight.
     """
     euclid_dist = norm(X.T - weight, axis=0)
@@ -35,7 +35,7 @@ def neg_euclid_distance(X, weight):
 
 def cosine_similarity(X, weight):
     """
-    Cosine similarity between input data and weight.]
+    Cosine similarity between input data and weight.
     """
     norm_prod = norm(X) * norm(weight, axis=0)
     summated_data = np.dot(X, weight)
@@ -45,7 +45,7 @@ def cosine_similarity(X, weight):
 
 def decay_function(value, epoch, reduction_rate):
     """
-    Applies to the input value monothonical decay.
+    Applies to the input value monophonic decay.
 
     Parameters
     ----------
@@ -88,8 +88,8 @@ def sample_data(data, features_grid):
     data : matrix ``(n_samples, n_features)``
         Matrix where each row is a data sample.
 
-    n_outputs : int
-        Number of samples in the output.
+    features_grid : tuple
+        Tuple that defines shape of the feature grid.
 
     Returns
     -------
@@ -99,10 +99,10 @@ def sample_data(data, features_grid):
     n_samples, n_features = data.shape
 
     with_replacement = n_samples < n_outputs
-    indeces = np.random.choice(n_samples, n_outputs,
+    indices = np.random.choice(n_samples, n_outputs,
                                replace=with_replacement)
 
-    return data[indeces].T
+    return data[indices].T
 
 
 def linear_initialization(data, features_grid):
@@ -240,7 +240,7 @@ class SOFM(Kohonen):
         - ``dot_product``: Just a regular dot product between
           data sample and network's weights
 
-        - ``euclid``: Euclidian distance between data sample
+        - ``euclid``: Euclidean distance between data sample
           and network's weights
 
         - ``cos``: Cosine distance between data sample and
@@ -315,7 +315,7 @@ class SOFM(Kohonen):
     Methods
     -------
     init_weights(train_data)
-        Initialized weights besed on the input data. It works only
+        Initialized weights based on the input data. It works only
         for the `init_pca` and `sample_from_data` options. For other
         cases it will throw an error.
 
@@ -492,7 +492,7 @@ class SOFM(Kohonen):
         methods = self.grid_type
         output_grid = np.reshape(layer_output, self.features_grid)
 
-        output_with_neightbours = methods.find_neighbours(
+        output_with_neighbours = methods.find_neighbours(
             grid=output_grid,
             center=winner_neuron_coords,
             radius=learning_radius)
@@ -503,7 +503,7 @@ class SOFM(Kohonen):
             std=std)
 
         index_y, = np.nonzero(
-            output_with_neightbours.reshape(self.n_outputs))
+            output_with_neighbours.reshape(self.n_outputs))
 
         step_scaler = step_scaler.reshape(self.n_outputs)
         return index_y, step * step_scaler[index_y]

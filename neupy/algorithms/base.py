@@ -145,7 +145,7 @@ class BaseNetwork(BaseSkeleton):
     {BaseSkeleton.fit}
 
     predict(X)
-        Propagetes input ``X`` through the network and
+        Propagates input ``X`` through the network and
         returns produced output.
 
     plot_errors(logx=False, show=True, **figkwargs)
@@ -207,7 +207,7 @@ class BaseNetwork(BaseSkeleton):
         """
         raise NotImplementedError()
 
-    def score(self, X_test, y_test):
+    def score(self, X, y):
         raise NotImplementedError()
 
     def plot_errors(self, logx=False, show=True, **figkwargs):

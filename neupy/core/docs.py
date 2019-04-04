@@ -52,7 +52,6 @@ def iter_doc_parameters(docs):
         Yields tuple that contain 2 values, namely parameter
         name and full parameter description
     """
-
     n_indents = find_numpy_doc_indent(docs)
     doc_indent = ' ' * n_indents if n_indents else ''
     parser = re.compile(
@@ -149,7 +148,7 @@ def parse_variables_from_docs(instances):
     variables = {}
     # Note: We do not include 'Examples' section because it
     # includes class/function name which will be useless when
-    # we inerit documentation for the new object.
+    # we inherit documentation for the new object.
     doc_sections = ['Warns', 'Returns', 'Yields', 'Raises', 'See Also',
                     'Parameters', 'Attributes', 'Methods', 'Notes']
 
@@ -194,7 +193,7 @@ def format_docs(instance, parent_instances):
     Returns
     -------
     str
-        Formated documentation.
+        Formatted documentation.
 
     Raises
     ------
@@ -268,9 +267,9 @@ def inherit_docs_for_methods(class_, attrs):
 
 class SharedDocsMeta(type):
     """
-    Meta-class for shared documentation. This class conatains
+    Meta-class for shared documentation. This class contains
     main functionality that help inherit parameters and methods
-    descriptions from parent classes. This class automaticaly
+    descriptions from parent classes. This class automatically
     format class documentation using basic python format syntax
     for objects.
     """

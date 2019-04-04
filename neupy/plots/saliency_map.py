@@ -148,7 +148,7 @@ def saliency_map(network, image, mode='heatmap', sigma=8,
     elif mode == 'raw':
         kwargs.setdefault('cmap', 'gray')
 
-    ax.set_title('Predicted output #{} (0-based indeces)'.format(output))
+    ax.set_title('Predicted output #{} (0-based indices)'.format(output))
     ax.imshow(saliency, **kwargs)
 
     if show:

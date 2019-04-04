@@ -14,7 +14,7 @@ class HebbRule(BaseStepAssociative):
     -----
     - Network always generates weights that contains ``0``
       weight for the conditioned stimulus and ``1`` for the other.
-      Such initialization helps to controll your default state
+      Such initialization helps to control your default state
       for the feature learning.
 
     Parameters

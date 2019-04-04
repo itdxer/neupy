@@ -32,7 +32,7 @@ class Linear(BaseLayer):
         through this layer. The ``None`` value means that layer will not have
         parameters and it will only apply activation function to the input
         without linear transformation output for the specified input value.
-        Defaulst to ``None``.
+        Defaults to ``None``.
 
     weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Default initialization methods
@@ -554,7 +554,7 @@ class PRelu(Linear):
 
             raise LayerConnectionError(
                 "Cannot specify alpha for the axis #{}. Maximum "
-                "available axis is {} (0-based indeces)."
+                "available axis is {} (0-based indices)."
                 "".format(max(self.alpha_axes), max_axis_index))
 
         return super(PRelu, self).get_output_shape(input_shape)

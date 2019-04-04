@@ -27,11 +27,11 @@ def add_padding(data):
 # >>> labels
 # array([1, 0, 0])
 data, labels = reber.make_reber_classification(
-    n_samples=10000, return_indeces=True)
+    n_samples=10000, return_indices=True)
 
-# Shift all indeces by 1. In the next row we will add zero
+# Shift all indices by 1. In the next row we will add zero
 # paddings, so we need to make sure that we will not confuse
-# paddings with zero indeces.
+# paddings with zero indices.
 data = data + 1
 
 # Add paddings at the beggining of each vector to make sure

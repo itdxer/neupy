@@ -29,14 +29,14 @@ def answer_query(query, index, n_results=10):
     # document_norm = sp.linalg.norm(tf, axis=1)
 
     query_tokens = nltk.word_tokenize(query.lower())
-    indeces = [vocabulary[t] for t in query_tokens if t in vocabulary]
+    indices = [vocabulary[t] for t in query_tokens if t in vocabulary]
 
-    if not indeces:
+    if not indices:
         print('\nCannot find documents relevant to the specified query')
         return
 
-    document_vector = tf[:, indeces]
-    query_vector = idf[indeces]
+    document_vector = tf[:, indices]
+    query_vector = idf[indices]
     rank = document_vector.dot(query_vector)  # / document_norm
 
     document_ids, = rank.nonzero()

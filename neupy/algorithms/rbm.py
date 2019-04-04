@@ -21,11 +21,11 @@ def random_sample(data, n_samples):
     with tf.name_scope('random-sample'):
         data_shape = tf.shape(data)
         max_index = data_shape[0]
-        sample_indeces = tf.random_uniform(
+        sample_indices = tf.random_uniform(
             (n_samples,), minval=0, maxval=max_index,
             dtype=tf.int32
         )
-        return tf.gather(data, sample_indeces)
+        return tf.gather(data, sample_indices)
 
 
 class RBM(BaseNetwork, DumpableObject):
@@ -74,7 +74,7 @@ class RBM(BaseNetwork, DumpableObject):
         Alias to the ``visible_to_hidden`` method.
 
     visible_to_hidden(visible_input)
-        Populates data throught the network and returns output
+        Propagates data through the network and returns output
         from the hidden layer.
 
     hidden_to_visible(hidden_input)
@@ -370,7 +370,7 @@ class RBM(BaseNetwork, DumpableObject):
 
     def visible_to_hidden(self, visible_input):
         """
-        Populates data throught the network and returns output
+        Propagates data through the network and returns output
         from the hidden layer.
 
         Parameters
