@@ -176,7 +176,7 @@ def collect_documents(directory):
         filename = os.path.basename(filepath)
 
         if ignore_link(current_page_url):
-            logging.debug('Skip "%s", bacause file is defined in the '
+            logging.debug('Skip "%s", because file is defined in the '
                           'ignore list', filename)
             continue
 

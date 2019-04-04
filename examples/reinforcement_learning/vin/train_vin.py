@@ -51,7 +51,7 @@ class SelectValueAtStatePosition(BaseLayer):
             Q_shape = tf.shape(Q)
 
             indices = tf.stack([
-                # Numer of repetitions depends on the size of
+                # Number of repetitions depends on the size of
                 # the state batch
                 tf_utils.repeat(tf.range(Q_shape[0]), n_states),
 
