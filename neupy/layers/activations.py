@@ -440,9 +440,9 @@ class Softmax(Linear):
 
 class Elu(Linear):
     """
-    Layer with the exponensial linear unit (ELU) used as an activation
+    Layer with the exponential linear unit (ELU) used as an activation
     function. It applies linear transformation when the ``n_units``
-    arameter specified and elu function after the transformation.
+    parameter specified and elu function after the transformation.
     When ``n_units`` is not specified, only elu function will be
     applied to the input.
 

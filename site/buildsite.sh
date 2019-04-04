@@ -6,7 +6,7 @@ sphinx-apidoc -e \
               -o apidocs \
               ../neupy && \
 tinker --build && \
-python search-index/build.py --for-deploy && \
+#python search-index/build.py --for-deploy && \
 export IS_SUCCESS=1
 
 if [ $IS_SUCCESS ]; then
