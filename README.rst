@@ -22,7 +22,7 @@
     </div>
 
 
-NeuPy v0.8.1
+NeuPy v0.8.2
 ============
 
 NeuPy is a python library for prototyping and building neural networks. NeuPy uses Tensorflow as a computational backend for deep learning models.

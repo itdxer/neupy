@@ -178,24 +178,25 @@ class BaseOptimizer(BaseNetwork):
 
         tf_utils.initialize_uninitialized_variables()
 
-        self.functions.update(
-            predict=tf_utils.function(
-                inputs=as_tuple(self.network.inputs),
-                outputs=self.network.outputs,
-                name='optimizer/predict'
-            ),
-            one_training_update=tf_utils.function(
-                inputs=as_tuple(self.network.inputs, self.target),
-                outputs=loss,
-                updates=training_updates,
-                name='optimizer/one-update-step'
-            ),
-            score=tf_utils.function(
-                inputs=as_tuple(self.network.inputs, self.target),
-                outputs=val_loss,
-                name='optimizer/score'
+        with tf.name_scope('optimizer'):
+            self.functions.update(
+                predict=tf_utils.function(
+                    inputs=as_tuple(self.network.inputs),
+                    outputs=self.network.outputs,
+                    name='predict'
+                ),
+                one_training_update=tf_utils.function(
+                    inputs=as_tuple(self.network.inputs, self.target),
+                    outputs=loss,
+                    updates=training_updates,
+                    name='one-update-step'
+                ),
+                score=tf_utils.function(
+                    inputs=as_tuple(self.network.inputs, self.target),
+                    outputs=val_loss,
+                    name='score'
+                ),
             )
-        )
 
     def format_input(self, X):
         X = as_tuple(X)
