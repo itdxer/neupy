@@ -256,6 +256,7 @@ Additional operations that can be performed on the layers or graphs
 
     neupy.layers.join
     neupy.layers.parallel
+    neupy.layers.repeat
 
 Architectures
 *************
