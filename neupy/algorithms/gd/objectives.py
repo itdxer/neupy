@@ -6,8 +6,11 @@ from neupy.core.docs import shared_docs
 from neupy.utils import asfloat, function_name_scope
 
 
-__all__ = ('mse', 'rmse', 'mae', 'msle', 'rmsle', 'binary_crossentropy',
-           'categorical_crossentropy', 'binary_hinge', 'categorical_hinge')
+__all__ = (
+    'mse', 'rmse', 'mae', 'msle', 'rmsle',
+    'binary_crossentropy', 'categorical_crossentropy',
+    'binary_hinge', 'categorical_hinge',
+)
 
 
 smallest_positive_number = 1e-7  # for 32-bit float numbers

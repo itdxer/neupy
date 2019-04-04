@@ -17,7 +17,7 @@ def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
 
     n_output_filters = 4 * n_input_filters
     main_branch = layers.join(
-        # The main purpose of this 1x1 convolutional layer is to
+        # The main purpose of this 1x1 convolution layer is to
         # reduce number of filters. For instance, for the tensor with
         # 256 filters it can be reduced to 64. This trick allows to
         # reduce computation by factor of 4.
@@ -30,7 +30,7 @@ def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
         layers.BatchNorm(name=bn_name('2a')),
         layers.Relu(),
 
-        # This convolutional layer applies 3x3 filter in order to
+        # This convolution layer applies 3x3 filter in order to
         # extract features.
         layers.Convolution(
             (3, 3, n_input_filters),

@@ -42,7 +42,7 @@ optimizer = algorithms.Momentum(
     # It's suitable for classification with 3 and more classes.
     loss='categorical_crossentropy',
 
-    # Mini-batch size. It defined how many samples will be propagated
+    # Mini-batch size. It defines how many samples will be propagated
     # through the network at once. During the training, weights will
     # be updated after every mini-batch propagation.
     # Note: When number of training samples is not divisible by 128
