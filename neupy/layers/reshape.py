@@ -73,11 +73,11 @@ class Reshape(BaseLayer):
 
             missing_value = int(n_feature_values // n_expected_values)
 
-        n_sampes = input_shape[0]
+        n_samples = input_shape[0]
         new_feature_shape = [
             missing_value if val == -1 else val for val in self.shape]
 
-        return tf.TensorShape([n_sampes] + new_feature_shape)
+        return tf.TensorShape([n_samples] + new_feature_shape)
 
     def output(self, input, **kwargs):
         """
@@ -146,7 +146,7 @@ class Transpose(BaseLayer):
         if input_shape and max(self.perm) >= input_shape.ndims:
             raise LayerConnectionError(
                 "Cannot apply transpose operation to the "
-                "input. Permuntation: {}, Input shape: {}"
+                "input. Permutation: {}, Input shape: {}"
                 "".format(self.perm, input_shape))
 
     def get_output_shape(self, input_shape):
@@ -165,7 +165,7 @@ class Transpose(BaseLayer):
     def output(self, input, **kwargs):
         # Input value has batch dimension, but perm will never have it
         # specified as (zero index), so we need to add it in order to
-        # fix batch dimesnion in place.
+        # fix batch dimension in place.
         return tf.transpose(input, list(self.perm))
 
     def __repr__(self):

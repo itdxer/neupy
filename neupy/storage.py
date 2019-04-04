@@ -138,32 +138,32 @@ def validate_data_structure(data):
     for layer_index, layer in enumerate(data['layers']):
         if not isinstance(layer, dict):
             raise InvalidFormat(
-                "Layer in the {} position (0-based indeces) is not a "
+                "Layer in the {} position (0-based indices) is not a "
                 "dictionary (it is {})".format(layer_index, type(layer)))
 
         for attr in ('parameters', 'name'):
             if attr not in layer:
                 raise InvalidFormat(
-                    "Layer in the {} position (0-based indeces) don't "
+                    "Layer in the {} position (0-based indices) don't "
                     "have key `{}` specified".format(layer_index, attr))
 
         if not isinstance(layer['parameters'], dict):
             raise InvalidFormat(
-                "Layer in the {} position (0-based indeces) parameters "
+                "Layer in the {} position (0-based indices) parameters "
                 "specified as `{}`, but dictionary expected"
                 "".format(layer_index, type(layer['parameters'])))
 
         for param_name, param in layer['parameters'].items():
             if not isinstance(param, dict):
                 raise InvalidFormat(
-                    "Layer in the {} position (0-based indeces) has "
+                    "Layer in the {} position (0-based indices) has "
                     "incorrect value for parameter named `{}`. It has "
                     "to be a dictionary, but got {}"
                     "".format(layer_index, param_name, type(param)))
 
             if 'value' not in param:
                 raise InvalidFormat(
-                    "Layer in the {} position (0-based indeces) has "
+                    "Layer in the {} position (0-based indices) has "
                     "incorrect value for parameter named `{}`. Parameter "
                     "doesn't have key named `value`"
                     "".format(layer_index, param_name))
@@ -189,15 +189,13 @@ def load_dict(network, data, ignore_missing=False,
     load_by : {``names``, ``order``, ``names_or_order``}
         Defines strategy that will be used during parameter loading
 
-        - ``names`` - Matches layers in the network with stored layer
-          using their names.
+        - ``names`` - Matches layers using their names.
 
-        - ``order`` - Matches layers in the network with stored layer
-          using exect order of layers.
+        - ``order`` - Matches layers using their relative position.
 
-        - ``names_or_order`` - Matches layers in the network with stored
-          layer trying to do it first using the same names and then
-          matching them sequentialy.
+        - ``names_or_order`` - First, method tries to match layers using
+          their names. If that doesn't work, then layer's relative position
+          will be used.
 
         Defaults to ``names_or_order``.
 
@@ -223,9 +221,8 @@ def load_dict(network, data, ignore_missing=False,
 
     network = extract_network(network)
 
-    # We need to initalize network, to make sure
+    # We need to initialize network, to make sure
     # that each layer will generate shared variables
-    # and validate networks
     network.create_variables()
 
     # We are only interested in layers that has parameters

@@ -170,7 +170,7 @@ class BatchNorm(Identity):
 
             raise WeightInitializationError(
                 "Cannot create variables for batch normalization, because "
-                "input has unknown dimension #{} (0-based indeces). "
+                "input has unknown dimension #{} (0-based indices). "
                 "Input shape: {}, Layer: {}".format(
                     unknown_dim_index, input_shape, self))
 

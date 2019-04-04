@@ -101,8 +101,7 @@ class BaseProperty(SharedDocs):
 
 class WithdrawProperty(object):
     """
-    Defines inherited property that needs to
-    be withdrawed.
+    Defines inherited property that needs to be withdrawn.
 
     Attributes
     ----------
@@ -111,20 +110,20 @@ class WithdrawProperty(object):
         wasn't specified.
     """
     def __get__(self, instance, owner):
-        # Remove itself, to make sure that instance doen't
+        # Remove itself, to make sure that instance doesn't
         # have reference to this property. Instead user should
         # be able to see default value from the parent classes,
-        # but not alowed to assign different value in __init__
+        # but not allowed to assign different value in __init__
         # method.
         #
-        # Other part of functioality defined in the
+        # Other part of functionality defined in the
         # ``ConfigMeta`` class.
         del self
 
 
 class Property(BaseProperty):
     """
-    Simple and flexible class that helps indetify properties with
+    Simple and flexible class that helps identity properties with
     specified type.
 
     Parameters
@@ -157,13 +156,12 @@ class TypedListProperty(BaseProperty):
     Parameters
     ----------
     n_elements : int
-        Indentify fixed number of elements in list. ``None``
+        Number of elements in the list. The ``None``
         value mean that list can contains any number of
         elements. Defaults to ``None``.
 
     element_type : object or tuple
-        There are could be defined valid list elementy type
-        or a bunch of them as tuple.
+        Type of the elements within the list.
 
     {BaseProperty.Parameters}
     """
@@ -199,7 +197,7 @@ class ChoiceProperty(BaseProperty):
     Parameters
     ----------
     choices : list, tuple or dict
-        Stores all posible choices. Defines list of possible
+        Stores all possible choices. Defines list of possible
         choices. If value specified as a dictionary than key
         would be just an alias to the expected value.
 
@@ -268,8 +266,9 @@ class BoundedProperty(BaseProperty):
         super(BoundedProperty, self).validate(value)
 
         if not (self.minval <= value <= self.maxval):
-            raise ValueError("Value `{}` should be between {} and {}"
-                             "".format(self.name, self.minval, self.maxval))
+            raise ValueError(
+                "Value `{}` should be between {} and {}"
+                "".format(self.name, self.minval, self.maxval))
 
 
 class ProperFractionProperty(BoundedProperty):

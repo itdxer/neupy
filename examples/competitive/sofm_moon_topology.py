@@ -24,8 +24,8 @@ if __name__ == '__main__':
         shuffle_data=True,
 
         # The winning neuron will be selected based on the
-        # Euclidian distance. For this task it's important
-        # that distance is Euclidian. Other distances will
+        # Euclidean distance. For this task it's important
+        # that distance is Euclidean. Other distances will
         # not give us the same results.
         distance='euclid',
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         # rates during the first iterations
         std=2,
         # Defines a rate at which parameter `std` will be reduced.
-        # Reduction is monothonical and reduces after each epoch.
+        # Reduction is monotonic and reduces after each epoch.
         # In 50 epochs std = 2 / 2 = 1 and after 100 epochs
         # std = 2 / 3 and so on.
         reduce_std_after=50,
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         # Step (or learning rate)
         step=0.3,
         # Defines a rate at which parameter `step` will reduced.
-        # Reduction is monothonical and reduces after each epoch.
+        # Reduction is monotonic and reduces after each epoch.
         # In 50 epochs step = 0.3 / 2 = 0.15 and after 100 epochs
         # std = 0.3 / 3 = 0.1 and so on.
         reduce_step_after=50,

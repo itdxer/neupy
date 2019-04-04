@@ -1,5 +1,3 @@
-from functools import partial
-
 from neupy import layers
 
 
@@ -40,44 +38,44 @@ def vgg19():
     Very Deep Convolutional Networks for Large-Scale Image Recognition.
     https://arxiv.org/abs/1409.1556
     """
-    HalfPadConvolution = partial(layers.Convolution, padding='SAME')
+    SamePadConv = layers.Convolution.define(padding='SAME')
 
     return layers.join(
         layers.Input((224, 224, 3)),
 
-        HalfPadConvolution((3, 3, 64), name='conv1_1') > layers.Relu(),
-        HalfPadConvolution((3, 3, 64), name='conv1_2') > layers.Relu(),
+        SamePadConv((3, 3, 64), name='conv1_1') >> layers.Relu(),
+        SamePadConv((3, 3, 64), name='conv1_2') >> layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((3, 3, 128), name='conv2_1') > layers.Relu(),
-        HalfPadConvolution((3, 3, 128), name='conv2_2') > layers.Relu(),
+        SamePadConv((3, 3, 128), name='conv2_1') >> layers.Relu(),
+        SamePadConv((3, 3, 128), name='conv2_2') >> layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((3, 3, 256), name='conv3_1') > layers.Relu(),
-        HalfPadConvolution((3, 3, 256), name='conv3_2') > layers.Relu(),
-        HalfPadConvolution((3, 3, 256), name='conv3_3') > layers.Relu(),
-        HalfPadConvolution((3, 3, 256), name='conv3_4') > layers.Relu(),
+        SamePadConv((3, 3, 256), name='conv3_1') >> layers.Relu(),
+        SamePadConv((3, 3, 256), name='conv3_2') >> layers.Relu(),
+        SamePadConv((3, 3, 256), name='conv3_3') >> layers.Relu(),
+        SamePadConv((3, 3, 256), name='conv3_4') >> layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((3, 3, 512), name='conv4_1') > layers.Relu(),
-        HalfPadConvolution((3, 3, 512), name='conv4_2') > layers.Relu(),
-        HalfPadConvolution((3, 3, 512), name='conv4_3') > layers.Relu(),
-        HalfPadConvolution((3, 3, 512), name='conv4_4') > layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv4_1') >> layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv4_2') >> layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv4_3') >> layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv4_4') >> layers.Relu(),
         layers.MaxPooling((2, 2)),
 
-        HalfPadConvolution((3, 3, 512), name='conv5_1') > layers.Relu(),
-        HalfPadConvolution((3, 3, 512), name='conv5_2') > layers.Relu(),
-        HalfPadConvolution((3, 3, 512), name='conv5_3') > layers.Relu(),
-        HalfPadConvolution((3, 3, 512), name='conv5_4') > layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv5_1') >> layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv5_2') >> layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv5_3') >> layers.Relu(),
+        SamePadConv((3, 3, 512), name='conv5_4') >> layers.Relu(),
         layers.MaxPooling((2, 2)),
 
         layers.Reshape(),
 
-        layers.Linear(4096, name='dense_1') > layers.Relu(),
+        layers.Linear(4096, name='dense_1') >> layers.Relu(),
         layers.Dropout(0.5),
 
-        layers.Linear(4096, name='dense_2') > layers.Relu(),
+        layers.Linear(4096, name='dense_2') >> layers.Relu(),
         layers.Dropout(0.5),
 
-        layers.Linear(1000, name='dense_3') > layers.Softmax(),
+        layers.Linear(1000, name='dense_3') >> layers.Softmax(),
     )

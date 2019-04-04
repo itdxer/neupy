@@ -78,8 +78,8 @@ class RPROP(BaseOptimizer):
     minstep = BoundedProperty(default=0.001, minval=0)
     maxstep = BoundedProperty(default=10, minval=0)
 
-    # This properties increase/decrease step by deviding it to
-    # some coeffitient.
+    # This properties increase/decrease step by dividing it to
+    # some coefficient.
     increase_factor = BoundedProperty(minval=1, default=1.2)
     decrease_factor = ProperFractionProperty(default=0.5)
 

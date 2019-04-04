@@ -114,9 +114,9 @@ def top_n(probs, n=5):
         class_names = f.read().splitlines()
         class_names = np.array(class_names)
 
-    max_probs_indeces = probs.argsort()[-n:][::-1]
-    class_probs = probs[max_probs_indeces]
-    top_classes = class_names[max_probs_indeces]
+    max_probs_indices = probs.argsort()[-n:][::-1]
+    class_probs = probs[max_probs_indices]
+    top_classes = class_names[max_probs_indices]
 
     return top_classes, class_probs
 

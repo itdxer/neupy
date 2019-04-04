@@ -97,9 +97,9 @@ def make_reber(n_words=100):
     return words
 
 
-def convert_letters_to_indeces(samples):
+def convert_letters_to_indices(samples):
     """
-    Convert Reber Grammar words to the list of indeces where
+    Convert Reber Grammar words to the list of indices where
     each index referes to specific letter.
 
     Parameters
@@ -109,7 +109,7 @@ def convert_letters_to_indeces(samples):
 
     Examples
     --------
-    >>> convert_letters_to_indeces(['XXXXVTTSSV', 'VXXVS'])
+    >>> convert_letters_to_indices(['XXXXVTTSSV', 'VXXVS'])
     array([array([3, 3, 3, 3, 1, 0, 0, 4, 4, 1]),
            array([1, 3, 3, 1, 4])], dtype=object)
     """
@@ -121,11 +121,11 @@ def convert_letters_to_indeces(samples):
 
 
 def make_reber_classification(n_samples, invalid_size=0.5, lenrange=(3, 14),
-                              return_indeces=False):
+                              return_indices=False):
     """
     Generate random dataset for Reber grammar classification.
     Invalid words contains the same letters as at Reber grammar, but
-    they are build whithout grammar rules.
+    they are build without grammar rules.
 
     Parameters
     ----------
@@ -140,7 +140,7 @@ def make_reber_classification(n_samples, invalid_size=0.5, lenrange=(3, 14),
         Length of each word will be bounded by the two numbers
         specified in this range. Defaults to ``(3, 14)``.
 
-    return_indeces : bool
+    return_indices : bool
         If ``True``, each word will be converted to array where each
         letter converted to the index. Defaults to ``False``.
 
@@ -162,7 +162,7 @@ def make_reber_classification(n_samples, invalid_size=0.5, lenrange=(3, 14),
     array([0, 1, 0, 1, 1, 1, 0, 0, 0, 1])
     >>>
     >>> data, labels = make_reber_classification(
-    ...     4, invalid_size=0.5, return_indeces=True)
+    ...     4, invalid_size=0.5, return_indices=True)
     >>> data
     array([array([1, 3, 1, 4]),
            array([0, 3, 0, 3, 0, 4, 3, 0, 4, 4]),
@@ -193,12 +193,12 @@ def make_reber_classification(n_samples, invalid_size=0.5, lenrange=(3, 14),
     samples = np.array(valid_words + invalid_words)
     labels = np.array(valid_labels + invalid_labels)
 
-    indeces = np.arange(len(samples))
-    np.random.shuffle(indeces)
+    indices = np.arange(len(samples))
+    np.random.shuffle(indices)
 
-    samples, labels = samples[indeces], labels[indeces]
+    samples, labels = samples[indices], labels[indices]
 
-    if return_indeces:
-        samples = convert_letters_to_indeces(samples)
+    if return_indices:
+        samples = convert_letters_to_indices(samples)
 
     return samples, labels

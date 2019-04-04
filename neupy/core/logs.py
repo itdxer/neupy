@@ -111,7 +111,7 @@ class TerminalLogger(object):
         """
         Methods writes message in terminal using specific template.
         Each row should have tag and text. Tag identifies message
-        category and text information reletad to this category.
+        category and text information related to this category.
 
         Parameters
         ----------

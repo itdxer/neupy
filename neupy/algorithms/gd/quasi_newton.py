@@ -25,7 +25,7 @@ class WolfeLineSearchForStep(Configurable):
     Parameters
     ----------
     wolfe_maxiter : int
-        Controls maximun number of iteration during the line search that
+        Controls maximum number of iteration during the line search that
         identifies optimal step size during the weight update stage.
         Defaults to ``20``.
 
@@ -92,7 +92,7 @@ class WolfeLineSearchForStep(Configurable):
 def safe_reciprocal(value, epsilon):
     """
     The same as regular function in the tensorflow accept that it ensures
-    that non of the input values have magnutide smaller than epsilon.
+    that non of the input values have magnitude smaller than epsilon.
     Otherwise small values will be capped to the epsilon.
     """
     inv_epsilon = 1. / epsilon
@@ -232,7 +232,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
     Notes
     -----
     - Method requires all training data during propagation, which means
-      it's not allowed to use mini-batches.
+      it cannot be trained with mini-batches.
 
     Attributes
     ----------
@@ -335,7 +335,7 @@ class QuasiNewton(WolfeLineSearchForStep, BaseOptimizer):
         updates = setup_parameter_updates(params, updated_params)
 
         # We have to compute these values first, otherwise
-        # parallelization in tensorflow can mix update order
+        # parallelization, in tensorflow, can mix update order
         # and, for example, previous gradient can be equal to
         # current gradient value. It happens because tensorflow
         # try to execute operations in parallel.

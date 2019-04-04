@@ -122,7 +122,7 @@ class Configurable(with_metaclass(ConfigMeta, BaseConfigurable)):
 
 class ConfigABCMeta(ABCMeta, ConfigMeta):
     """
-    Meta-class that combains ``ConfigMeta`` and ``abc.ABCMeta``
+    Meta-class that combines ``ConfigMeta`` and ``abc.ABCMeta``
     meta-classes.
     """
 

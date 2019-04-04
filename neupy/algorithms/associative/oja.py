@@ -28,7 +28,7 @@ class Oja(BaseNetwork):
       For instance, if your input data have values between
       ``0`` and ``1`` error value equal to ``100`` is big.
 
-    - During the traning network report mean absolute error (MAE)
+    - During the training network report mean absolute error (MAE)
 
     Parameters
     ----------

@@ -69,8 +69,8 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
         Update function. Defaults to ``fletcher_reeves``.
 
     epsilon : float
-        Ensures computational stability during the devision in
-        ``update_function`` when denumerator is very small number.
+        Ensures computational stability during the division in
+        ``update_function`` when denominator is very small number.
         Defaults to ``1e-7``.
 
     {WolfeLineSearchForStep.Parameters}
@@ -197,7 +197,7 @@ class ConjugateGradient(WolfeLineSearchForStep, BaseOptimizer):
         updates = setup_parameter_updates(parameters, updated_parameters)
 
         # We have to compute these values first, otherwise
-        # parallelization in tensorflow can mix update order
+        # parallelization, in tensorflow, can mix update order
         # and, for example, previous gradient can be equal to
         # current gradient value. It happens because tensorflow
         # try to execute operations in parallel.

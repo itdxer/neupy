@@ -24,7 +24,7 @@ def clip_gradient(value, clip_value):
     operation_name = "ClipGradient-" + str(clip_value)
 
     if operation_name not in clip_gradient.added_gradients:
-        # Make sure that we won't create the same operation twise.
+        # Make sure that we won't create the same operation twice.
         # Otherwise tensorflow will trigger an exception.
         @tf.RegisterGradient(operation_name)
         def clip_gradient_grad(op, grad):

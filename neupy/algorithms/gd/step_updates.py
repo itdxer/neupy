@@ -47,7 +47,7 @@ def step_decay(initial_value, reduction_freq, start_iter=0, name='step'):
         returned during the first iteration.
 
     reduction_freq : int
-        Parameter controls step redution frequency. The larger the
+        Parameter controls step reduction frequency. The larger the
         value the slower step parameter decreases.
 
         For instance, if ``reduction_freq=100``
@@ -126,11 +126,11 @@ def exponential_decay(initial_value, reduction_freq, reduction_rate,
         Initial value for the learning rate.
 
     reduction_freq : int
-        Parameter controls step redution frequency. The larger the
+        Parameter controls step reduction frequency. The larger the
         value the slower step parameter decreases.
 
     reduction_rate : float
-        Parameter controls step redution rate. The larger the
+        Parameter controls step reduction rate. The larger the
         value the slower step parameter decreases.
 
     staircase : bool

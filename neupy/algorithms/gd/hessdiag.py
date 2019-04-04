@@ -14,15 +14,14 @@ __all__ = ('HessianDiagonal',)
 
 class HessianDiagonal(BaseOptimizer):
     """
-    Hissian diagonal is a Hessian algorithm approximation which require
-    only computation of hessian matrix diagonal elements and makes it
-    invertion much easier and faster.
+    Algorithm that uses calculates only diagonal values from the Hessian matrix
+    and uses it instead of the Hessian matrix.
 
     Parameters
     ----------
     min_eigval : float
-        Set up minimum eigenvalue for Hessian diagonale matrix. After a few
-        iteration elements will be extremly small and matrix inverse
+        Set up minimum eigenvalue for Hessian diagonal matrix. After a few
+        iteration elements will be extremely small and matrix inverse
         produce huge number in hessian diagonal elements. This
         parameter control diagonal elements size. Defaults to ``1e-2``.
 
@@ -52,7 +51,7 @@ class HessianDiagonal(BaseOptimizer):
     Notes
     -----
     - Method requires all training data during propagation, which means
-      it's not allowed to use mini-batches.
+      it cannot be trained with mini-batches.
 
     See Also
     --------

@@ -7,7 +7,7 @@ class SliceChannels(BaseLayer):
     """
     Layer expects image as an input with second dimension
     sepcified as a channel. Image will be sliced over the channel.
-    The ``from`` and ``to`` indeces can be specified as the parameters.
+    The ``from`` and ``to`` indices can be specified as the parameters.
 
     Parameters
     ----------

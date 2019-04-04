@@ -60,20 +60,20 @@ function sort(object) {
 
 function findRelevantDocuments(query) {
     var queryTokens = tokenize(query.toLowerCase());
-    var indeces = [];
+    var indices = [];
 
     $.each(queryTokens, function (i, token) {
-        indeces.push(searchIndex.vocabulary[token]);
+        indices.push(searchIndex.vocabulary[token]);
     });
 
-    if (indeces.length == 0) {
+    if (indices.length == 0) {
         console.log("Cannot find documents relevant to the specified query");
         return;
     }
 
     var rank = {}
 
-    $.each(indeces, function (i, index) {
+    $.each(indices, function (i, index) {
         $.each(searchIndex.tf.col, function (i, colId) {
             if (index == colId) {
                 rowId = searchIndex.tf.row[i]

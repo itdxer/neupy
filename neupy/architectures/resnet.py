@@ -17,7 +17,7 @@ def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
 
     n_output_filters = 4 * n_input_filters
     main_branch = layers.join(
-        # The main purpose of this 1x1 covolutional layer is to
+        # The main purpose of this 1x1 convolutional layer is to
         # reduce number of filters. For instance, for the tensor with
         # 256 filters it can be reduced to 64. This trick allows to
         # reduce computation by factor of 4.
@@ -188,7 +188,7 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
         layers.MaxPooling((3, 3), stride=2, padding="same"),
 
         # The branch option applies extra convolution x+ batch
-        # normalization transforamtions to the residual
+        # normalization transformations to the residual
         ResidualUnit(64, name='2a', has_branch=True),
         ResidualUnit(64, name='2b'),
         ResidualUnit(64, name='2c'),
@@ -220,8 +220,8 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
             resnet,
             # Since the final residual unit has 2048 output filters, global
             # pooling will replace every output image with single average
-            # value. Despite input iamge size output from this layer always
-            # will be vector with 2048 values
+            # value. Despite input image size, output from this layer always
+            # will be a vector with 2048 values.
             layers.GlobalPooling('avg'),
             layers.Softmax(1000, name='fc1000'),
         )

@@ -40,7 +40,7 @@ class Spatial2DProperty(TypedListProperty):
 
         if len(value) > 2:
             raise ValueError(
-                "Stide can have only one or two elements "
+                "Stride can have only one or two elements "
                 "in the list. Got {}".format(len(value)))
 
         if any(element <= 0 for element in value):
@@ -86,7 +86,7 @@ def deconv_output_shape(dimension_size, filter_size, padding, stride,
         return None
 
     if dilation != 1:
-        raise ValueError("Deconvolutional layer doesn't support dilation")
+        raise ValueError("Deconvolution layer doesn't support dilation")
 
     if padding in ('VALID', 'valid'):
         return dimension_size * stride + max(filter_size - stride, 0)
@@ -147,7 +147,7 @@ def conv_output_shape(dimension_size, filter_size, padding, stride,
             "Filter size needs to be an integer, got {} "
             "(value {!r})".format(type(filter_size), filter_size))
 
-    # We can think of the dilation as very sparse convolutional fitler
+    # We can think of the dilation as very sparse convolutional filter
     # filter=3 and dilation=2 the same as filter=5 and dilation=1
     filter_size = filter_size + (filter_size - 1) * (dilation - 1)
 
@@ -241,8 +241,8 @@ class Convolution(BaseLayer):
         Stride size. Defaults to ``(1, 1)``
 
     dilation : int, tuple
-        Rate for the fiter upsampling. When ``dilation > 1`` layer will
-        become diated convolution (or atrous convolution). Defaults to ``1``.
+        Rate for the filter upsampling. When ``dilation > 1`` layer will
+        become dilated convolution (or atrous convolution). Defaults to ``1``.
 
     weight : array-like, Tensorfow variable, scalar or Initializer
         Defines layer's weights. Shape of the weight will be equal to

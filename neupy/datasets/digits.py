@@ -99,7 +99,7 @@ def load_digits():
     tuple
         Tuple contains two values. First one is a matrix
         with shape (10, 24). Second one is a vector that contains
-        labels for each row. Each digit can be trasnformed
+        labels for each row. Each digit can be transformed
         into (6, 4) binary image.
     """
     return digits_data, digits_labels
@@ -121,7 +121,7 @@ def make_digits(n_samples=100, noise_level=0.1, mode='flip'):
         Defaults to ``0.1``.
 
     mode : {``remove``, ``flip``}
-        This opption allow to specify how additional noise will
+        This option allow to specify how additional noise will
         modify each image.
 
         - ``flip`` - Per every randomly selected pixel function flips
@@ -137,7 +137,7 @@ def make_digits(n_samples=100, noise_level=0.1, mode='flip'):
         Tuple contains two values. First one is a matrix
         with shape (n_samples, 24). Second one is a vector
         that contains labels for each row. Each digit can
-        be trasnformed into (6, 4) binary image.
+        be transformed into (6, 4) binary image.
 
     Examples
     --------
@@ -170,9 +170,9 @@ def make_digits(n_samples=100, noise_level=0.1, mode='flip'):
         raise ValueError("Number of samples should be an integer greater "
                          "or equal to 1, got {}".format(n_samples))
 
-    digit_indeces = np.random.randint(10, size=n_samples)
-    digit_images = digits_data[digit_indeces]
-    digit_labels = digits_labels[digit_indeces]
+    digit_indices = np.random.randint(10, size=n_samples)
+    digit_images = digits_data[digit_indices]
+    digit_labels = digits_labels[digit_indices]
 
     mask = np.random.binomial(
         n=1, p=noise_level, size=digit_images.shape).astype(bool)

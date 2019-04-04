@@ -185,7 +185,7 @@ class BatchNormTestCase(BaseTestCase):
         )
         message = (
             "Cannot create variables for batch normalization, because "
-            "input has unknown dimension #3 \(0-based indeces\). "
+            "input has unknown dimension #3 \(0-based indices\). "
             "Input shape: \(\?, 10, 10, \?\)"
         )
         with self.assertRaisesRegexp(WeightInitializationError, message):

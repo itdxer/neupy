@@ -21,7 +21,7 @@ class CMAC(BaseNetwork):
     ----------
     quantization : int
         Network transforms every input to discrete value.
-        Quantization value contol number of total possible
+        Quantization value controls number of total number of
         categories after quantization, defaults to ``10``.
 
     associative_unit_size : int

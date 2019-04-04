@@ -15,7 +15,7 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
     Parameters
     ----------
     matrix: array-like
-        Matrix that you want to visualise using Hinton diagram.
+        Matrix that you want to visualize using Hinton diagram.
 
     max_weight : float
         Maximum value of the matrix. If it's equal to ``None``
@@ -23,7 +23,7 @@ def hinton(matrix, max_weight=None, ax=None, add_legend=True):
         the matrix. Defaults to ``None``.
 
     ax : object
-        Matplotlib Axes instantce. If value equal to ``None``
+        Matplotlib Axes instance. If value equal to ``None``
         then function generate the new Axes instance. Defaults
         to ``None``.
 

@@ -11,7 +11,7 @@ __all__ = ('fmin_golden_search',)
 
 def interval_location(f, minstep=1e-5, maxstep=50., maxiter=1024):
     """
-    Identify interval where potentialy could be optimal step.
+    Identify interval where, potentially, optimal step could be.
 
     Parameters
     ----------
@@ -151,7 +151,7 @@ def fmin_golden_search(f, minstep=1e-5, maxstep=50., maxiter=1024, tol=1e-5):
     -------
     object
         Returns the Tensorfow instance that finally should produce
-        best possbile step for specified function.
+        best possible step for specified function.
     """
     params = (
         ('maxiter', maxiter),

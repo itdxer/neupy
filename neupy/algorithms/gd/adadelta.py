@@ -27,7 +27,7 @@ class Adadelta(GradientDescent):
     step : float
         Learning rate, defaults to ``1.0``. Original paper doesn't have
         learning rate specified in the paper. Step value equal to ``1.0``
-        allow to achive the same effect, since multiplication by one won't
+        allow to achieve the same effect, since multiplication by one won't
         have any effect on the update.
 
     {GradientDescent.batch_size}

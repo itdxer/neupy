@@ -18,12 +18,12 @@ __all__ = ('LevenbergMarquardt',)
 @function_name_scope
 def compute_jacobian(values, parameters):
     """
-    Compute jacobian.
+    Compute Jacobian matrix.
 
     Parameters
     ----------
     values : Tensorfow variable
-        Computed MSE for each sample separetly.
+        Computed MSE for each sample separately.
 
     parameters : list of Tensorfow variable
         Neural network parameters (e.g. weights, biases).
@@ -38,7 +38,7 @@ def compute_jacobian(values, parameters):
     def compute_gradient_per_value(index, result):
         gradients = tf.gradients(values[index], parameters)
         full_gradient = make_single_vector(gradients)
-        return (index + 1, result.write(index, full_gradient))
+        return index + 1, result.write(index, full_gradient)
 
     _, jacobian = tf.while_loop(
         lambda index, _: index < n_samples,
@@ -61,7 +61,7 @@ class LevenbergMarquardt(BaseOptimizer):
     Notes
     -----
     - Method requires all training data during propagation, which means
-      it's not allowed to use mini-batches.
+      it cannot be trained with mini-batches.
 
     - Network minimizes only Mean Squared Error (MSE) loss function.
 
@@ -75,11 +75,11 @@ class LevenbergMarquardt(BaseOptimizer):
     {BaseOptimizer.network}
 
     mu : float
-        Control invertion for J.T * J matrix, defaults to ``0.1``.
+        Control inversion for J.T * J matrix, defaults to ``0.1``.
 
     mu_update_factor : float
-        Factor to decrease the mu if update decrese the error, otherwise
-        increse mu by the same factor. Defaults to ``1.2``
+        Factor to decrease the mu if error was reduced after last update,
+        otherwise increase mu by the same factor. Defaults to ``1.2``
 
     error : {{``mse``}}
         Levenberg-Marquardt works only for quadratic functions.

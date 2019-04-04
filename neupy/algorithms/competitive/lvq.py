@@ -33,9 +33,9 @@ class LVQ(BaseNetwork):
     Notes
     -----
     - Input data needs to be normalized, because LVQ uses
-      Euclidian distance to find clusters.
+      Euclidean distance to find clusters.
 
-    - Training error is just a ratio of miscassified
+    - Training error is just a ratio of misclassified
       samples
 
     Parameters
@@ -68,7 +68,7 @@ class LVQ(BaseNetwork):
 
         The ``None`` value will distribute approximately equal
         number of subclasses per each class. It's approximately,
-        because in casses when ``n_subclasses % n_classes != 0``
+        because, for cases, when ``n_subclasses % n_classes != 0``
         there is no way to distribute equal number of subclasses
         per each class.
 
@@ -176,10 +176,10 @@ class LVQ(BaseNetwork):
                 # Since we have reminder left, it means that we cannot
                 # have an equal number of subclasses per each class,
                 # therefor we will add +1 to randomly selected class.
-                class_indeces = np.random.choice(self.n_classes, reminder,
+                class_indices = np.random.choice(self.n_classes, reminder,
                                                  replace=False)
 
-                for class_index in class_indeces:
+                for class_index in class_indices:
                     self.prototypes_per_class[class_index] += 1
 
         if len(self.prototypes_per_class) != self.n_classes:
@@ -235,8 +235,8 @@ class LVQ(BaseNetwork):
 
         if n_input_samples <= self.n_subclasses:
             raise ValueError("Number of training input samples should be "
-                             "greater than number of sublcasses. Training "
-                             "method recived {} input samples."
+                             "greater than number of subclasses. Training "
+                             "method received {} input samples."
                              "".format(n_input_samples))
 
         if not self.initialized:
@@ -244,10 +244,10 @@ class LVQ(BaseNetwork):
             expected_classes = list(range(self.n_classes))
 
             if target_classes != expected_classes:
-                raise ValueError("All classes should be integers from the "
-                                 "range [0, {}], but got the following "
-                                 "classes instead {}".format(
-                                    self.n_classes - 1, target_classes))
+                raise ValueError(
+                    "All classes should be integers from the range [0, {}], "
+                    "but got the following classes instead {}"
+                    "".format(self.n_classes - 1, target_classes))
 
             weights = []
             iterator = zip(target_classes, self.prototypes_per_class)
@@ -258,17 +258,17 @@ class LVQ(BaseNetwork):
                 is_valid_class /= n_samples_per_class
 
                 if n_samples_per_class <= n_prototypes:
-                    raise ValueError("Input data has {0} samples for class-{1}"
-                                     ". Number of samples per specified "
-                                     "class-{1} should be greater than {2}."
-                                     "".format(n_samples_per_class,
-                                               target_class, n_prototypes))
+                    raise ValueError(
+                        "Input data has {0} samples for class-{1}. Number "
+                        "of samples per specified class-{1} should be "
+                        "greater than {2}.".format(
+                            n_samples_per_class, target_class, n_prototypes))
 
-                class_weight_indeces = np.random.choice(
+                class_weight_indices = np.random.choice(
                     np.arange(n_input_samples), n_prototypes,
                     replace=False, p=is_valid_class)
 
-                class_weight = X_train[class_weight_indeces]
+                class_weight = X_train[class_weight_indices]
                 weights.extend(class_weight)
 
             self.weight = np.array(weights)

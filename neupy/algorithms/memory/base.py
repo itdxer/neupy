@@ -19,7 +19,7 @@ class DiscreteMemory(BaseSkeleton, Configurable):
     Parameters
     ----------
     mode : {{``sync``, ``async``}}
-        Indentify pattern recovery mode.
+        Specifies pattern recovery mode.
 
         - ``sync`` mode tries to recover pattern using all
           values from the input vector.
@@ -57,6 +57,6 @@ class DiscreteMemory(BaseSkeleton, Configurable):
         """
         if np.any(~np.isin(matrix, [0, 1])):
             raise ValueError(
-                "This network expects only descrete inputs. It mean that "
+                "This network expects only discrete inputs. It mean that "
                 "it's possible to can use only matrices with binary values "
                 "(0 and 1).")

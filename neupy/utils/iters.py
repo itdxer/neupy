@@ -24,14 +24,14 @@ def count_minibatches(inputs, batch_size):
     return int(math.ceil(count_samples(inputs) / batch_size))
 
 
-def apply_slices(inputs, indeces):
+def apply_slices(inputs, indices):
     if inputs is None:
         return inputs
 
     if isinstance(inputs, (list, tuple)):
-        return [apply_slices(input_, indeces) for input_ in inputs]
+        return [apply_slices(input_, indices) for input_ in inputs]
 
-    return inputs[indeces]
+    return inputs[indices]
 
 
 def minibatches(inputs, batch_size=None, shuffle=False):
@@ -58,12 +58,12 @@ def minibatches(inputs, batch_size=None, shuffle=False):
     n_batches = count_minibatches(inputs, batch_size)
 
     if shuffle:
-        indeces = np.arange(n_samples)
-        np.random.shuffle(indeces)
+        indices = np.arange(n_samples)
+        np.random.shuffle(indices)
 
         for index in range(n_batches):
             batch_slice = slice(index * batch_size, (index + 1) * batch_size)
-            yield apply_slices(inputs, indeces[batch_slice])
+            yield apply_slices(inputs, indices[batch_slice])
 
     elif n_batches != 1:
         for index in range(n_batches):
@@ -140,7 +140,7 @@ def apply_batches(function, inputs, batch_size, show_progressbar=False,
         have exactly the same number of rows.
 
     inputs : tuple, list
-        The arguemnts that will be provided to the function specified
+        The arguments that will be provided to the function specified
         in the ``function`` argument.
 
     batch_size : int
