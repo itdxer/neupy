@@ -252,7 +252,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -267,9 +267,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -299,8 +313,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -310,7 +324,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -377,7 +391,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -392,9 +406,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -439,8 +467,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -450,7 +478,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -488,7 +516,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -503,9 +531,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -535,8 +577,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -546,7 +588,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -583,7 +625,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -598,9 +640,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -640,8 +696,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -651,7 +707,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -689,7 +745,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>alpha</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd><p class="first last">Alpha parameter defines the decreasing rate
@@ -710,9 +766,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -753,8 +823,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -764,7 +834,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -807,7 +877,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -822,9 +892,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -856,8 +940,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -867,7 +951,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -889,9 +973,9 @@ if variables hasn’t been created yet.</p>
 <dl class="class">
 <dt id="neupy.layers.activations.Elu">
 <em class="property">class </em><span class="descclassname">neupy.layers.activations.</span><span class="descname">Elu</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/activations.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Layer with the exponensial linear unit (ELU) used as an activation
+<dd><p>Layer with the exponential linear unit (ELU) used as an activation
 function. It applies linear transformation when the <span class="docutils literal"><span class="pre">n_units</span></span>
-arameter specified and elu function after the transformation.
+parameter specified and elu function after the transformation.
 When <span class="docutils literal"><span class="pre">n_units</span></span> is not specified, only elu function will be
 applied to the input.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -905,7 +989,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -920,9 +1004,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -959,8 +1057,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -970,7 +1068,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -1021,7 +1119,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -1036,9 +1134,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -1088,8 +1200,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -1099,7 +1211,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -1156,7 +1268,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -1171,9 +1283,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -1203,8 +1329,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -1214,7 +1340,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>
@@ -1251,7 +1377,7 @@ output features that will be produced per sample after passing it
 through this layer. The <span class="docutils literal"><span class="pre">None</span></span> value means that layer will not have
 parameters and it will only apply activation function to the input
 without linear transformation output for the specified input value.
-Defaulst to <span class="docutils literal"><span class="pre">None</span></span>.</p>
+Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like, Tensorfow variable, scalar or Initializer</span></dt>
 <dd><p class="first last">Defines layer’s weights. Default initialization methods
@@ -1266,9 +1392,23 @@ The <span class="docutils literal"><span class="pre">None</span></span> value ex
 do not add it into parameters list.</p>
 </dd>
 <dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">Layer’s name. Can be used as a reference to specific layer. When
-value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be generated from
-the class name. Defaults to <span class="docutils literal"><span class="pre">None</span></span></p>
+<dd><p class="first">Layer’s name. Can be used as a reference to specific layer. Name
+Can be specified as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>String: Specified name will be used as a direct reference to
+the layer. For example, <cite>name=”fc”</cite></li>
+<li>Format string: Name pattern could be defined as a format string
+and specified field will be replaced with an index. For example,
+<cite>name=”fc{}”</cite> will be replaced with <cite>fc1</cite>, <cite>fc2</cite> and so on.
+A bit more complex formatting methods are acceptable, for
+example, <cite>name=”fc-{:&lt;03d}”</cite> will be converted to <cite>fc-001</cite>,
+<cite>fc-002</cite>, <cite>fc-003</cite> and so on.</li>
+<li><span class="docutils literal"><span class="pre">None</span></span>: When value specified as <span class="docutils literal"><span class="pre">None</span></span> than name will be
+generated from the class name.</li>
+</ul>
+</div></blockquote>
+<p class="last">Defaults to <span class="docutils literal"><span class="pre">None</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -1298,8 +1438,8 @@ if variables hasn’t been created yet.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="28%" />
+<col width="72%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>variable(value, name, shape=None, trainable=True)</strong></td>
@@ -1309,7 +1449,7 @@ if variables hasn’t been created yet.</p>
 <td>Computes expected output shape from the layer based on the specified input shape.</td>
 </tr>
 <tr class="row-odd"><td><strong>output(*inputs, **kwargs)</strong></td>
-<td>Propagetes input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propages through the network.</td>
+<td>Propagates input through the layer. The <span class="docutils literal"><span class="pre">kwargs</span></span>  variable might contain additional information that propagates through the network.</td>
 </tr>
 <tr class="row-even"><td><strong>activation_function(input)</strong></td>
 <td>Applies activation function to the input.</td>

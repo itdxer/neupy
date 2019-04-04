@@ -257,11 +257,11 @@ For instance, <span class="docutils literal"><span class="pre">Input(2)</span> <
 </ul>
 </dd>
 <dt><strong>mu</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Control invertion for J.T * J matrix, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
+<dd><p class="first last">Control inversion for J.T * J matrix, defaults to <span class="docutils literal"><span class="pre">0.1</span></span>.</p>
 </dd>
 <dt><strong>mu_update_factor</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Factor to decrease the mu if update decrese the error, otherwise
-increse mu by the same factor. Defaults to <span class="docutils literal"><span class="pre">1.2</span></span></p>
+<dd><p class="first last">Factor to decrease the mu if error was reduced after last update,
+otherwise increase mu by the same factor. Defaults to <span class="docutils literal"><span class="pre">1.2</span></span></p>
 </dd>
 <dt><strong>error</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">mse</span></span>}</span></dt>
 <dd><p class="first last">Levenberg-Marquardt works only for quadratic functions.
@@ -302,7 +302,7 @@ it. Defaults to <span class="docutils literal"><span class="pre">False</span></s
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Method requires all training data during propagation, which means
-it’s not allowed to use mini-batches.</li>
+it cannot be trained with mini-batches.</li>
 <li>Network minimizes only Mean Squared Error (MSE) loss function.</li>
 <li>Efficient for small training datasets, because it
 computes gradient per each sample separately.</li>

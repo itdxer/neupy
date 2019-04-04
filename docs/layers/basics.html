@@ -234,32 +234,30 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="basics">
-<span id="layers-basics"></span><h1><a class="toc-backref" href="#id2">Basics</a></h1>
+<span id="layers-basics"></span><h1><a class="toc-backref" href="#id1">Basics</a></h1>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#basics" id="id2">Basics</a><ul>
-<li><a class="reference internal" href="#join-layers" id="id3">Join layers</a></li>
-<li><a class="reference internal" href="#inline-operator" id="id4">Inline operator</a></li>
-<li><a class="reference internal" href="#input-layer" id="id5">Input layer</a></li>
-<li><a class="reference internal" href="#build-networks-from-the-code" id="id6">Build networks from the code</a></li>
+<li><a class="reference internal" href="#basics" id="id1">Basics</a><ul>
+<li><a class="reference internal" href="#join-layers" id="id2">Join layers</a></li>
+<li><a class="reference internal" href="#inline-operator" id="id3">Inline operator</a></li>
+<li><a class="reference internal" href="#input-layer" id="id4">Input layer</a></li>
+<li><a class="reference internal" href="#build-networks-from-the-code" id="id5">Build networks from the code</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mutlilayer-perceptron-mlp" id="id7">Mutlilayer Perceptron (MLP)</a></li>
-<li><a class="reference internal" href="#convolutional-neural-networks-cnn" id="id8">Convolutional Neural Networks (CNN)</a><ul>
-<li><a class="reference internal" href="#reshape" id="id9">Reshape</a></li>
-<li><a class="reference internal" href="#convolution" id="id10">Convolution</a></li>
-<li><a class="reference internal" href="#pooling" id="id11">Pooling</a></li>
+<li><a class="reference internal" href="#mutlilayer-perceptron-mlp" id="id6">Mutlilayer Perceptron (MLP)</a></li>
+<li><a class="reference internal" href="#convolutional-neural-networks-cnn" id="id7">Convolutional Neural Networks (CNN)</a><ul>
+<li><a class="reference internal" href="#reshape" id="id8">Reshape</a></li>
+<li><a class="reference internal" href="#convolution" id="id9">Convolution</a></li>
+<li><a class="reference internal" href="#pooling" id="id10">Pooling</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#parallel-connections" id="id12">Parallel connections</a></li>
-<li><a class="reference internal" href="#subnetworks" id="id13">Subnetworks</a></li>
-<li><a class="reference internal" href="#layer-definitions" id="id14">Layer definitions</a></li>
+<li><a class="reference internal" href="#parallel-connections" id="id11">Parallel connections</a></li>
 </ul>
 </div>
 <p>Layer is a building block for constructible neural networks. NeuPy has a simple and flexible framework that allows to construct complex neural networks easily.</p>
 <div class="section" id="join-layers">
-<h2><a class="toc-backref" href="#id3">Join layers</a></h2>
+<h2><a class="toc-backref" href="#id2">Join layers</a></h2>
 <p>Let’s start with basics. The most useful function to define relations between layers is <span class="docutils literal"><span class="pre">layers.join</span></span>. It accepts sequence of layers and joins them into the network.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -272,7 +270,7 @@
 </div>
 </div>
 <div class="section" id="inline-operator">
-<h2><a class="toc-backref" href="#id4">Inline operator</a></h2>
+<h2><a class="toc-backref" href="#id3">Inline operator</a></h2>
 <p>Also, NeuPy provides a special <strong>inline</strong> operator that helps to define sequential relations between layers.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -282,7 +280,7 @@
 <p>Code above does exactly the same as <span class="docutils literal"><span class="pre">join(Sigmoid(2),</span> <span class="pre">Sigmoid(1))</span></span>.</p>
 </div>
 <div class="section" id="input-layer">
-<h2><a class="toc-backref" href="#id5">Input layer</a></h2>
+<h2><a class="toc-backref" href="#id4">Input layer</a></h2>
 <p>In the network, shape of the expected input has to be specified explicitly. It’s possible to define expected input shape using the <a class="reference internal" href="../../apidocs/neupy.layers.base.html#neupy.layers.base.Input" title="neupy.layers.base.Input"><span class="xref py py-class docutils literal"><span class="pre">Input</span></span></a> layer.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Input</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -306,7 +304,7 @@
 </div>
 </div>
 <div class="section" id="build-networks-from-the-code">
-<h2><a class="toc-backref" href="#id6">Build networks from the code</a></h2>
+<h2><a class="toc-backref" href="#id5">Build networks from the code</a></h2>
 <p>For more complex networks, it’s possible to build them from the code. For example, we can dynamically specify depth of the network and build it in the loop.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -342,7 +340,7 @@
 <br></div>
 </div>
 <div class="section" id="mutlilayer-perceptron-mlp">
-<h1><a class="toc-backref" href="#id7">Mutlilayer Perceptron (MLP)</a></h1>
+<h1><a class="toc-backref" href="#id6">Mutlilayer Perceptron (MLP)</a></h1>
 <p>In this section, we are going to learn more about layers with activation function which are the most important building blocks for the MLP networks. Let’s consider the following example.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -375,7 +373,7 @@
 <p>Example above defines exactly the same architecture as before. We just split each layer with activation function into simple operations. Operation in the <span class="docutils literal"><span class="pre">Relu(500)</span></span> is the same as <span class="docutils literal"><span class="pre">Linear(500)</span> <span class="pre">&gt;&gt;</span> <span class="pre">Relu()</span></span>.</p>
 </div>
 <div class="section" id="convolutional-neural-networks-cnn">
-<h1><a class="toc-backref" href="#id8">Convolutional Neural Networks (CNN)</a></h1>
+<h1><a class="toc-backref" href="#id7">Convolutional Neural Networks (CNN)</a></h1>
 <p>NeuPy supports Convolutional Neural Networks. Let’s consider the following example.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -398,7 +396,7 @@
 </div>
 <p>There are a few new layers that we are going to explore in more details.</p>
 <div class="section" id="reshape">
-<h2><a class="toc-backref" href="#id9">Reshape</a></h2>
+<h2><a class="toc-backref" href="#id8">Reshape</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Reshape</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -415,7 +413,7 @@
 </div>
 </div>
 <div class="section" id="convolution">
-<h2><a class="toc-backref" href="#id10">Convolution</a></h2>
+<h2><a class="toc-backref" href="#id9">Convolution</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -432,7 +430,7 @@
 <p>Convolutional layer has a few other attributes that you can modify. You can check the <a class="reference internal" href="../../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolutional</span></span></a> layer’s documentation and find more information about its arguments.</p>
 </div>
 <div class="section" id="pooling">
-<h2><a class="toc-backref" href="#id11">Pooling</a></h2>
+<h2><a class="toc-backref" href="#id10">Pooling</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -449,7 +447,7 @@
 <br></div>
 </div>
 <div class="section" id="parallel-connections">
-<h1><a class="toc-backref" href="#id12">Parallel connections</a></h1>
+<h1><a class="toc-backref" href="#id11">Parallel connections</a></h1>
 <p>Any connection between layers in NeuPy is a <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">Directional Acyclic Graph (DAG)</a>. So far we’ve encountered only sequential connections which is just a simple case of DAG. In NeuPy, we are allowed to build much more complex relations between layers.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -495,90 +493,6 @@
 </pre></div>
 </div>
 <br></div>
-<div class="section" id="subnetworks">
-<span id="id1"></span><h1><a class="toc-backref" href="#id13">Subnetworks</a></h1>
-<p><strong>Subnetworks</strong> is a method that improves readability of the neural network architecture. Instead of explaining, it’s much easier to show the main advantage of this technique. Here is an example of the simple convolutional network.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">Input</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span>
-
-    <span class="n">Convolution</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
-    <span class="n">Relu</span><span class="p">(),</span>
-    <span class="n">BatchNorm</span><span class="p">(),</span>
-
-    <span class="n">Convolution</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
-    <span class="n">Relu</span><span class="p">(),</span>
-    <span class="n">BatchNorm</span><span class="p">(),</span>
-    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-
-    <span class="n">Convolution</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
-    <span class="n">Relu</span><span class="p">(),</span>
-    <span class="n">BatchNorm</span><span class="p">(),</span>
-    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-
-    <span class="n">Reshape</span><span class="p">(),</span>
-
-    <span class="n">Relu</span><span class="p">(</span><span class="mi">1024</span><span class="p">),</span>
-    <span class="n">BatchNorm</span><span class="p">(),</span>
-
-    <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>Does it look simple to you? Most likely not. However, this is a really simple neural network. It looks a bit complicated, because it contains a lot of simple layers that usually combined into one. For instance, non-linearity like <a class="reference internal" href="../../apidocs/neupy.layers.activations.html#neupy.layers.activations.Relu" title="neupy.layers.activations.Relu"><span class="xref py py-class docutils literal"><span class="pre">Relu</span></span></a> is usually built-in inside the <a class="reference internal" href="../../apidocs/neupy.layers.convolutions.html#neupy.layers.convolutions.Convolution" title="neupy.layers.convolutions.Convolution"><span class="xref py py-class docutils literal"><span class="pre">Convolution</span></span></a> layer. So instead of combining simple layers in one complicated, in NeuPy it’s better to use subnetworks. Here is an example on how to re-write network’s structure from the previous example in terms of subnetworks.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">Input</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-
-    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BatchNorm</span><span class="p">(),</span>
-    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BatchNorm</span><span class="p">(),</span>
-    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-
-    <span class="n">Convolution</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BatchNorm</span><span class="p">(),</span>
-    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-
-    <span class="n">Reshape</span><span class="p">(),</span>
-
-    <span class="n">Relu</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">BatchNorm</span><span class="p">(),</span>
-    <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>As you can see, we use an ability to organize sequence of simple layer in one small network. Each subnetwork defines a sequence of simple operations. You can think about subnetworks as a simple way to define more complicated layers. But instead of creating redundant classes or functions, that define complex layers, we can define everything in place. In addition, it improves the readability, because now everybody can see order of these simple operations inside the subnetwork.</p>
-</div>
-<div class="section" id="layer-definitions">
-<h1><a class="toc-backref" href="#id14">Layer definitions</a></h1>
-<p>It’s common that different papers might have different configurations for some layers, but they will refer to it in the same way. For example, saying that network uses convolutional layers, doesn’t tell us much about their configurations, since convolutional layer might have some paddings or initialization for weights might be different. In order to solve this problem, NeuPy allows to customize layer’s definition.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neupy</span> <span class="kn">import</span> <span class="n">init</span>
-<span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">Conv</span> <span class="o">=</span> <span class="n">Convolution</span><span class="o">.</span><span class="n">define</span><span class="p">(</span>
-    <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;SAME&#39;</span><span class="p">,</span>
-    <span class="n">weight</span><span class="o">=</span><span class="n">init</span><span class="o">.</span><span class="n">XavierNormal</span><span class="p">(),</span>
-    <span class="n">bias</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c1"># no bias</span>
-<span class="p">)</span>
-<span class="n">BN</span> <span class="o">=</span> <span class="n">BatchNorm</span><span class="o">.</span><span class="n">define</span><span class="p">(</span>
-    <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">network</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span>
-    <span class="n">Input</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
-
-    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
-    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
-    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-
-    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
-    <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">(),</span>
-    <span class="n">MaxPooling</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-
-    <span class="n">Reshape</span><span class="p">(),</span>
-    <span class="n">Softmax</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
 
     <div class="postmeta">
         

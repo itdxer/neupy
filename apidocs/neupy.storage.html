@@ -285,13 +285,11 @@ in the specified source. Defaults to <span class="docutils literal"><span class=
 <dt><strong>load_by</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}</span></dt>
 <dd><p class="first">Defines strategy that will be used during parameter loading</p>
 <ul class="simple">
-<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
-using their names.</li>
-<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
-using exect order of layers.</li>
-<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
-layer trying to do it first using the same names and then
-matching them sequentialy.</li>
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers using their relative position.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - First, method tries to match layers using
+their names. If that doesn’t work, then layer’s relative position
+will be used.</li>
 </ul>
 <p class="last">Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
 </dd>
@@ -380,13 +378,11 @@ in the specified source. Defaults to <span class="docutils literal"><span class=
 <dt><strong>load_by</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}</span></dt>
 <dd><p class="first">Defines strategy that will be used during parameter loading</p>
 <ul class="simple">
-<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
-using their names.</li>
-<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
-using exect order of layers.</li>
-<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
-layer trying to do it first using the same names and then
-matching them sequentialy.</li>
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers using their relative position.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - First, method tries to match layers using
+their names. If that doesn’t work, then layer’s relative position
+will be used.</li>
 </ul>
 <p class="last">Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
 </dd>
@@ -473,13 +469,11 @@ in the specified source. Defaults to <span class="docutils literal"><span class=
 <dt><strong>load_by</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}</span></dt>
 <dd><p class="first">Defines strategy that will be used during parameter loading</p>
 <ul class="simple">
-<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
-using their names.</li>
-<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
-using exect order of layers.</li>
-<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
-layer trying to do it first using the same names and then
-matching them sequentialy.</li>
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers using their relative position.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - First, method tries to match layers using
+their names. If that doesn’t work, then layer’s relative position
+will be used.</li>
 </ul>
 <p class="last">Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
 </dd>
@@ -560,13 +554,11 @@ in the specified source. Defaults to <span class="docutils literal"><span class=
 <dt><strong>load_by</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}</span></dt>
 <dd><p class="first">Defines strategy that will be used during parameter loading</p>
 <ul class="simple">
-<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
-using their names.</li>
-<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
-using exect order of layers.</li>
-<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
-layer trying to do it first using the same names and then
-matching them sequentialy.</li>
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers using their relative position.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - First, method tries to match layers using
+their names. If that doesn’t work, then layer’s relative position
+will be used.</li>
 </ul>
 <p class="last">Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
 </dd>
@@ -619,13 +611,11 @@ in the specified source. Defaults to <span class="docutils literal"><span class=
 <dt><strong>load_by</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{<span class="docutils literal"><span class="pre">names</span></span>, <span class="docutils literal"><span class="pre">order</span></span>, <span class="docutils literal"><span class="pre">names_or_order</span></span>}</span></dt>
 <dd><p class="first">Defines strategy that will be used during parameter loading</p>
 <ul class="simple">
-<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers in the network with stored layer
-using their names.</li>
-<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers in the network with stored layer
-using exect order of layers.</li>
-<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - Matches layers in the network with stored
-layer trying to do it first using the same names and then
-matching them sequentialy.</li>
+<li><span class="docutils literal"><span class="pre">names</span></span> - Matches layers using their names.</li>
+<li><span class="docutils literal"><span class="pre">order</span></span> - Matches layers using their relative position.</li>
+<li><span class="docutils literal"><span class="pre">names_or_order</span></span> - First, method tries to match layers using
+their names. If that doesn’t work, then layer’s relative position
+will be used.</li>
 </ul>
 <p class="last">Defaults to <span class="docutils literal"><span class="pre">names_or_order</span></span>.</p>
 </dd>

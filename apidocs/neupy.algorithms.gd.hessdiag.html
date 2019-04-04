@@ -238,17 +238,16 @@
 <dl class="class">
 <dt id="neupy.algorithms.gd.hessdiag.HessianDiagonal">
 <em class="property">class </em><span class="descclassname">neupy.algorithms.gd.hessdiag.</span><span class="descname">HessianDiagonal</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessdiag.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Hissian diagonal is a Hessian algorithm approximation which require
-only computation of hessian matrix diagonal elements and makes it
-invertion much easier and faster.</p>
+<dd><p>Algorithm that uses calculates only diagonal values from the Hessian matrix
+and uses it instead of the Hessian matrix.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>min_eigval</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Set up minimum eigenvalue for Hessian diagonale matrix. After a few
-iteration elements will be extremly small and matrix inverse
+<dd><p class="first last">Set up minimum eigenvalue for Hessian diagonal matrix. After a few
+iteration elements will be extremely small and matrix inverse
 produce huge number in hessian diagonal elements. This
 parameter control diagonal elements size. Defaults to <span class="docutils literal"><span class="pre">1e-2</span></span>.</p>
 </dd>
@@ -326,7 +325,7 @@ it. Defaults to <span class="docutils literal"><span class="pre">False</span></s
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Method requires all training data during propagation, which means
-it’s not allowed to use mini-batches.</li>
+it cannot be trained with mini-batches.</li>
 </ul>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

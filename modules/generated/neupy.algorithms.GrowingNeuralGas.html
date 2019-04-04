@@ -243,10 +243,10 @@
 in the paper, but they help to speed up training.</p>
 <ul class="simple">
 <li>The <span class="docutils literal"><span class="pre">n_start_nodes</span></span> parameter provides possibility to increase
-number of nodes during initialization step. It’s usefull when
+number of nodes during initialization step. It’s useful when
 algorithm takes a lot of time building up large amount of neurons.</li>
 <li>The <span class="docutils literal"><span class="pre">min_distance_for_update</span></span> parameter allows to speed up
-training when some data samples has eurons very close to them. The
+training when some data samples has neurons very close to them. The
 <span class="docutils literal"><span class="pre">min_distance_for_update</span></span> parameter controls threshold for the
 minimum distance for which we will want to update weights.</li>
 </ul>
@@ -297,7 +297,7 @@ will be exceeded. Defaults to <span class="docutils literal"><span class="pre">1
 </dd>
 <dt><strong>min_distance_for_update</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd><p class="first last">Parameter controls for which neurons we want to apply updates.
-In case if euclidian distance between data sample and closest
+In case if euclidean distance between data sample and closest
 neurons will be less than the <span class="docutils literal"><span class="pre">min_distance_for_update</span></span> value than
 update would be skipped for this data sample. Setting value to zero
 will disable effect provided by this parameter. Defaults to <span class="docutils literal"><span class="pre">0</span></span>.</p>
@@ -330,8 +330,8 @@ it. Defaults to <span class="docutils literal"><span class="pre">False</span></s
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Unlike other algorithms this network doesn’t make predictions.
-Intead, it learns topological structure of the data in form of
-the graph. After that training, stucture of the network can be
+Instead, it learns topological structure of the data in form of
+the graph. After that training, structure of the network can be
 extracted from the <span class="docutils literal"><span class="pre">graph</span></span> attribute.</li>
 <li>In order to speed up training, it might be useful to increase
 the <span class="docutils literal"><span class="pre">n_start_nodes</span></span> parameter.</li>
@@ -412,7 +412,7 @@ it is equal to <span class="docutils literal"><span class="pre">0</span></span>.
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><strong>train(X_train, epochs=100)</strong></td>
-<td>Network learns topological structure of the data. Learned topolog is stored in the <span class="docutils literal"><span class="pre">graph</span></span> attribute.</td>
+<td>Network learns topological structure of the data. Learned structure will be stored in the <span class="docutils literal"><span class="pre">graph</span></span> attribute.</td>
 </tr>
 <tr class="row-even"><td><strong>fit(*args, **kwargs)</strong></td>
 <td>Alias to the <span class="docutils literal"><span class="pre">train</span></span> method.</td>

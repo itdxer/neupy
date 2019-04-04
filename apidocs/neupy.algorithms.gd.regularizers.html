@@ -241,11 +241,11 @@
 <dd><p>Wraps regularization function and uses it in order to apply
 regularization per each parameter in the network.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorfow</span> <span class="k">as</span> <span class="nn">tf</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.algorithms</span> <span class="k">import</span> <span class="n">regularizer</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy</span> <span class="k">import</span> <span class="n">algorithms</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@define_regularizer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@algorithms</span><span class="o">.</span><span class="n">define_regularizer</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">l2</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">decay_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">decay_rate</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="gp">...</span>
@@ -277,7 +277,7 @@ has during the training. Defaults to <span class="docutils literal"><span class=
 </dd>
 <dt><strong>exclude</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
 <dd><p class="first last">List of parameter names that has to be excluded from the
-regularization. Defauts to <span class="docutils literal"><span class="pre">['bias']</span></span>.</p>
+regularization. Defaults to <span class="docutils literal"><span class="pre">['bias']</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -327,7 +327,7 @@ has during the training. Defaults to <span class="docutils literal"><span class=
 </dd>
 <dt><strong>exclude</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
 <dd><p class="first last">List of parameter names that has to be excluded from the
-regularization. Defauts to <span class="docutils literal"><span class="pre">['bias']</span></span>.</p>
+regularization. Defaults to <span class="docutils literal"><span class="pre">['bias']</span></span>.</p>
 </dd>
 </dl>
 </td>
@@ -378,7 +378,7 @@ has during the training. Defaults to <span class="docutils literal"><span class=
 </dd>
 <dt><strong>exclude</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
 <dd><p class="first last">List of parameter names that has to be excluded from the
-regularization. Defauts to <span class="docutils literal"><span class="pre">['bias']</span></span>.</p>
+regularization. Defaults to <span class="docutils literal"><span class="pre">['bias']</span></span>.</p>
 </dd>
 </dl>
 </td>

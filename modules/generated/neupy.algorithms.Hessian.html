@@ -240,7 +240,7 @@
 <em class="property">class </em><span class="descclassname">neupy.algorithms.</span><span class="descname">Hessian</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/algorithms/gd/hessian.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Hessian gradient decent optimization, also known as Newton’s method. This
 algorithm uses second-order derivative (hessian matrix) in order to
-choose correct step during the training itration. Because of this,
+choose correct step during the training iteration. Because of this,
 method doesn’t have <span class="docutils literal"><span class="pre">step</span></span> parameter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -321,7 +321,7 @@ it. Defaults to <span class="docutils literal"><span class="pre">False</span></s
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>Method requires all training data during propagation, which means
-it’s not allowed to use mini-batches.</li>
+it cannot be trained with mini-batches.</li>
 <li>This method calculates full hessian matrix which means it will compute
 matrix with NxN parameters, where N = number of parameters in the
 network.</li>

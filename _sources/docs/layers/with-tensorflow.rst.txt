@@ -1,3 +1,5 @@
+.. _with-tensorflow:
+
 Mixing NeuPy with Tensorflow
 ============================
 

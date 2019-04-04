@@ -431,7 +431,7 @@ be stored in the <span class="docutils literal"><span class="pre">filepath</span
 <dl class="function">
 <dt id="neupy.layers.graph.join">
 <span class="descclassname">neupy.layers.graph.</span><span class="descname">join</span><span class="sig-paren">(</span><em>*networks</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/graph.py"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>Sequentialy combines layers and networks into single network.
+<dd><p>Sequentially combines layers and networks into single network.
 Function will go sequentially over layers/networks and
 combine output layers from the one network that it picks
 to the input layers from the next network in the sequence.</p>
@@ -534,6 +534,40 @@ from the <span class="docutils literal"><span class="pre">left_graph</span></spa
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neupy.layers.graph.repeat">
+<span class="descclassname">neupy.layers.graph.</span><span class="descname">repeat</span><span class="sig-paren">(</span><em>network_or_layer</em>, <em>n</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/layers/graph.py"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Function copies input <cite>n - 1</cite> times and connects everything in sequential
+order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>network_or_layer</strong> <span class="classifier-delimiter">:</span> <span class="classifier">network or layer</span></dt>
+<dd><p class="first last">Layer or network (connection of layers).</p>
+</dd>
+<dt><strong>n</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Number of times input should be replicated.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neupy.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span> <span class="o">=</span> <span class="n">Conv</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="n">Relu</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">BN</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span>
+<span class="go">&lt;unknown&gt; -&gt; [... 3 layers ...] -&gt; (?, ?, ?, 32)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repeat</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">&lt;unknown&gt; -&gt; [... 15 layers ...] -&gt; (?, ?, ?, 32)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

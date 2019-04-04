@@ -106,7 +106,7 @@ Before using these algorithms you must understand that not all of them are suita
 Loss functions
 --------------
 
-NeuPy has many different :ref:`loss functions <cheatsheet-error-function>`. These loss functions can be specified specified as a string.
+NeuPy has many different loss functions. These loss functions can be specified specified as a string.
 
 .. code-block:: python
 

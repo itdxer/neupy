@@ -294,7 +294,7 @@
 <td>Hessian gradient decent optimization, also known as Newton’s method.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.HessianDiagonal.html#neupy.algorithms.HessianDiagonal" title="neupy.algorithms.HessianDiagonal"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.HessianDiagonal</span></span></a></td>
-<td>Hissian diagonal is a Hessian algorithm approximation which require only computation of hessian matrix diagonal elements and makes it invertion much easier and faster.</td>
+<td>Algorithm that uses calculates only diagonal values from the Hessian matrix and uses it instead of the Hessian matrix.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.RPROP.html#neupy.algorithms.RPROP" title="neupy.algorithms.RPROP"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.RPROP</span></span></a></td>
 <td>Resilient backpropagation (RPROP) is an optimization algorithm for supervised learning.</td>
@@ -451,7 +451,7 @@
 <td>Kohonen Neural Network used for unsupervised learning.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.Instar.html#neupy.algorithms.Instar" title="neupy.algorithms.Instar"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.Instar</span></span></a></td>
-<td>Instar is a simple unsupervised Neural Network algortihm which detects associations.</td>
+<td>Instar is a simple unsupervised Neural Network algorithm which detects associations.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.algorithms.HebbRule.html#neupy.algorithms.HebbRule" title="neupy.algorithms.HebbRule"><span class="xref py py-obj docutils literal"><span class="pre">neupy.algorithms.HebbRule</span></span></a></td>
 <td>Neural Network with Hebbian Learning.</td>
@@ -507,7 +507,7 @@
 <td>Layer with the leaky rectifier (Leaky ReLu) used as an activation function.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Elu.html#neupy.layers.Elu" title="neupy.layers.Elu"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Elu</span></span></a></td>
-<td>Layer with the exponensial linear unit (ELU) used as an activation function.</td>
+<td>Layer with the exponential linear unit (ELU) used as an activation function.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.PRelu.html#neupy.layers.PRelu" title="neupy.layers.PRelu"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.PRelu</span></span></a></td>
 <td>Layer with the parametrized ReLu used as an activation function.</td>
@@ -659,7 +659,7 @@
 <td>Layer transposes input tensor.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.Embedding.html#neupy.layers.Embedding" title="neupy.layers.Embedding"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.Embedding</span></span></a></td>
-<td>Embedding layer accepts indeces as an input and returns rows from the weight matrix associated with these indeces.</td>
+<td>Embedding layer accepts indices as an input and returns rows from the weight matrix associated with these indices.</td>
 </tr>
 </tbody>
 </table>
@@ -674,10 +674,13 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.join.html#neupy.layers.join" title="neupy.layers.join"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.join</span></span></a>(*networks)</td>
-<td>Sequentialy combines layers and networks into single network.</td>
+<td>Sequentially combines layers and networks into single network.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.layers.parallel.html#neupy.layers.parallel" title="neupy.layers.parallel"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.parallel</span></span></a>(*networks)</td>
 <td>Merges all networks/layers into single network without joining input and output layers together.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.layers.repeat.html#neupy.layers.repeat" title="neupy.layers.repeat"><span class="xref py py-obj docutils literal"><span class="pre">neupy.layers.repeat</span></span></a>(network_or_layer,&nbsp;n)</td>
+<td>Function copies input <cite>n - 1</cite> times and connects everything in sequential order.</td>
 </tr>
 </tbody>
 </table>
@@ -741,7 +744,7 @@
 <td>Initialize parameter sampling from the normal distribution.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../modules/generated/neupy.init.Uniform.html#neupy.init.Uniform" title="neupy.init.Uniform"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.Uniform</span></span></a></td>
-<td>Initialize parameter sampling from the uniformal distribution.</td>
+<td>Initialize parameter sampling from the uniform distribution.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="../modules/generated/neupy.init.Orthogonal.html#neupy.init.Orthogonal" title="neupy.init.Orthogonal"><span class="xref py py-obj docutils literal"><span class="pre">neupy.init.Orthogonal</span></span></a></td>
 <td>Initialize matrix with orthogonal basis.</td>

@@ -258,13 +258,13 @@ Defaults to <span class="docutils literal"><span class="pre">0.2</span></span>.<
 <dd><p class="first last">Number of outputs in the  network.</p>
 </dd>
 <dt><strong>n_unconditioned</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Number of unconditioned units in neraul networks. All these
+<dd><p class="first last">Number of unconditioned units in neural networks. All these
 units wouldn’t update during the training procedure.
 Unconditioned should be the first feature in the dataset.</p>
 </dd>
 <dt><strong>weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
 <dd><p class="first last">Neural network weights.
-Value defined manualy should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
+Value defined manually should have shape <span class="docutils literal"><span class="pre">(n_inputs,</span> <span class="pre">n_outputs)</span></span>.
 Defaults to <span class="docutils literal"><span class="pre">None</span></span> which means that all unconditional
 weights will be equal to <span class="docutils literal"><span class="pre">1</span></span>. Other weights equal to <span class="docutils literal"><span class="pre">0</span></span>.</p>
 </dd>
@@ -304,7 +304,7 @@ it. Defaults to <span class="docutils literal"><span class="pre">False</span></s
 <ul class="simple">
 <li>Network always generates weights that contains <span class="docutils literal"><span class="pre">0</span></span>
 weight for the conditioned stimulus and <span class="docutils literal"><span class="pre">1</span></span> for the other.
-Such initialization helps to controll your default state
+Such initialization helps to control your default state
 for the feature learning.</li>
 </ul>
 <p class="rubric">Examples</p>

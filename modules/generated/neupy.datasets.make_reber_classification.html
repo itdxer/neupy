@@ -237,10 +237,10 @@
 <h1>neupy.datasets.make_reber_classification</h1>
 <dl class="function">
 <dt id="neupy.datasets.make_reber_classification">
-<span class="descclassname">neupy.datasets.</span><span class="descname">make_reber_classification</span><span class="sig-paren">(</span><em>n_samples</em>, <em>invalid_size=0.5</em>, <em>lenrange=(3</em>, <em>14)</em>, <em>return_indeces=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/datasets/reber.py"><span class="viewcode-link">[source]</span></a></dt>
+<span class="descclassname">neupy.datasets.</span><span class="descname">make_reber_classification</span><span class="sig-paren">(</span><em>n_samples</em>, <em>invalid_size=0.5</em>, <em>lenrange=(3</em>, <em>14)</em>, <em>return_indices=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/itdxer/neupy/tree/master/neupy/datasets/reber.py"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Generate random dataset for Reber grammar classification.
 Invalid words contains the same letters as at Reber grammar, but
-they are build whithout grammar rules.</p>
+they are build without grammar rules.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -257,7 +257,7 @@ Value must be between <span class="docutils literal"><span class="pre">0</span><
 <dd><p class="first last">Length of each word will be bounded by the two numbers
 specified in this range. Defaults to <span class="docutils literal"><span class="pre">(3,</span> <span class="pre">14)</span></span>.</p>
 </dd>
-<dt><strong>return_indeces</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dt><strong>return_indices</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
 <dd><p class="first last">If <span class="docutils literal"><span class="pre">True</span></span>, each word will be converted to array where each
 letter converted to the index. Defaults to <span class="docutils literal"><span class="pre">False</span></span>.</p>
 </dd>
@@ -285,7 +285,7 @@ letter converted to the index. Defaults to <span class="docutils literal"><span 
 <span class="go">array([0, 1, 0, 1, 1, 1, 0, 0, 0, 1])</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">make_reber_classification</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="mi">4</span><span class="p">,</span> <span class="n">invalid_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">return_indeces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="mi">4</span><span class="p">,</span> <span class="n">invalid_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">return_indices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
 <span class="go">array([array([1, 3, 1, 4]),</span>
 <span class="go">       array([0, 3, 0, 3, 0, 4, 3, 0, 4, 4]),</span>
