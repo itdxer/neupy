@@ -295,3 +295,8 @@ class RepeatArchitectureTestCase(BaseTestCase):
         input_layer = layers.Relu(10)
         output_layer = layers.repeat(input_layer, n=1)
         self.assertIs(output_layer, input_layer)
+
+    def test_repeat_with_name_patterns(self):
+        network = layers.repeat(layers.Relu(10, name='rl{}'), n=4)
+        layer_names = [layer.name for layer in network.layers]
+        self.assertSequenceEqual(layer_names, ['rl1', 'rl2', 'rl3', 'rl4'])

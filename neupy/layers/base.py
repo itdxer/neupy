@@ -1,6 +1,7 @@
 import re
 import copy
 import types
+import string
 import inspect
 from functools import partial
 from collections import OrderedDict, defaultdict
@@ -18,16 +19,33 @@ from neupy.layers.graph import BaseGraph, make_one_if_possible
 __all__ = ('BaseLayer', 'Identity', 'Input')
 
 
-def generate_layer_name(layer):
-    if not hasattr(generate_layer_name, 'counters'):
-        generate_layer_name.counters = defaultdict(int)
-
+def create_name_pattern_from_layer_name(layer):
     classname = layer.__class__.__name__
-    generate_layer_name.counters[classname] += 1
-    layer_id = generate_layer_name.counters[classname]
-
     layer_name = re.sub(r'(?<!^)(?=[A-Z][a-z_])', '-', classname)
-    return "{}-{}".format(layer_name.lower(), layer_id)
+    return layer_name.lower() + "-{}"
+
+
+def format_name_if_specified_as_pattern(name):
+    if not hasattr(format_name_if_specified_as_pattern, 'counters'):
+        format_name_if_specified_as_pattern.counters = defaultdict(lambda: 1)
+
+    formatter = string.Formatter()
+    variables = [val[1] for val in formatter.parse(name) if val[1] is not None]
+
+    if len(variables) == 0:
+        return name
+
+    if len(variables) >= 2:
+        raise ValueError(
+            "Provided pattern has more than one field specified. "
+            "Pattern: {}".format(name))
+
+    layer_id = format_name_if_specified_as_pattern.counters[name]
+    formatted_name = name.format(layer_id)
+
+    # Increment only after string was successfully formatted
+    format_name_if_specified_as_pattern.counters[name] += 1
+    return formatted_name
 
 
 class BaseLayer(BaseGraph):
@@ -37,9 +55,23 @@ class BaseLayer(BaseGraph):
     Parameters
     ----------
     name : str or None
-        Layer's name. Can be used as a reference to specific layer. When
-        value specified as ``None`` than name will be generated from
-        the class name. Defaults to ``None``
+        Layer's name. Can be used as a reference to specific layer. Name
+        Can be specified as:
+
+            - String: Specified name will be used as a direct reference to
+              the layer. For example, `name="fc"`
+
+            - Format string: Name pattern could be defined as a format string
+              and specified field will be replaced with an index. For example,
+              `name="fc{{}}"` will be replaced with `fc1`, `fc2` and so on.
+              A bit more complex formatting methods are acceptable, for
+              example, `name="fc-{{:<03d}}"` will be converted to `fc-001`,
+              `fc-002`, `fc-003` and so on.
+
+            - ``None``: When value specified as ``None`` than name will be
+              generated from the class name.
+
+        Defaults to ``None``.
 
     Methods
     -------
@@ -51,8 +83,8 @@ class BaseLayer(BaseGraph):
         specified input shape.
 
     output(*inputs, **kwargs)
-        Propagetes input through the layer. The ``kwargs``  variable
-        might contain additional information that propages through the
+        Propagates input through the layer. The ``kwargs``  variable
+        might contain additional information that propagates through the
         network.
 
     Attributes
@@ -69,7 +101,9 @@ class BaseLayer(BaseGraph):
         self.original_name = name
 
         if name is None:
-            name = generate_layer_name(layer=self)
+            name = create_name_pattern_from_layer_name(layer=self)
+
+        name = format_name_if_specified_as_pattern(name)
 
         self.variables = OrderedDict()
         self.name = name
@@ -91,7 +125,7 @@ class BaseLayer(BaseGraph):
         # Explicit TensorShape transformation not only ensures
         # that we have right type in the output, but also copies
         # value stored in the `_input_shape` in order to make sure
-        # that no inplace update can effect original value
+        # that no in-place update can effect original value
         return tf.TensorShape(self._input_shape)
 
     @input_shape.setter
@@ -164,7 +198,7 @@ class BaseLayer(BaseGraph):
         params['name'] = self.original_name
 
         copied_layer = self.__class__(**params)
-        # Input shape can change and it cannot be controled from
+        # Input shape can change and it cannot be controlled from
         # the __init__ method
         copied_layer.input_shape = self.input_shape
 

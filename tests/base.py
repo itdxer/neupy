@@ -2,14 +2,13 @@ import pickle
 import inspect
 import logging
 import unittest
-from collections import defaultdict
 
 import numpy as np
 import tensorflow as tf
 
 from neupy import utils, layers, init
 from neupy.utils import tensorflow_eval, tensorflow_session, shape_to_tuple
-from neupy.layers.base import generate_layer_name
+from neupy.layers.base import format_name_if_specified_as_pattern
 
 from helpers import vectors_for_testing
 
@@ -40,8 +39,8 @@ class BaseTestCase(unittest.TestCase):
             logging.disable(logging.CRITICAL)
 
         # Clean identifiers map for each test
-        if hasattr(generate_layer_name, 'counters'):
-            generate_layer_name.counters = defaultdict(int)
+        if hasattr(format_name_if_specified_as_pattern, 'counters'):
+            del format_name_if_specified_as_pattern.counters
 
         utils.reproducible(seed=self.random_seed)
 

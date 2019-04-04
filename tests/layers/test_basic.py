@@ -140,7 +140,30 @@ class LayerNameTestCase(BaseTestCase):
                 return input
 
         layer_3 = abcDef()
-        self.assertEqual(layer_3.name, 'abc-def-1')
+        self.assertEqual(layer_3.name, 'abc-def-2')
+
+    def test_layer_name_using_pattern(self):
+        layer1 = layers.Relu(name='rl{}')
+        self.assertEqual(layer1.name, 'rl1')
+
+        layer2 = layers.Relu(name='rl{}')
+        self.assertEqual(layer2.name, 'rl2')
+
+        layer3 = layers.Relu(name='relu-{}a')
+        self.assertEqual(layer3.name, 'relu-1a')
+
+        layer4 = layers.Relu(name='rl{}')
+        self.assertEqual(layer4.name, 'rl3')
+
+    def test_layer_name_using_complex_pattern(self):
+        layer = layers.Relu(name='rl{:>04d}')
+        self.assertEqual(layer.name, 'rl0001')
+
+    def test_layer_name_using_invalid_pattern(self):
+        error_message = "Provided pattern has more than one field specified"
+
+        with self.assertRaisesRegexp(ValueError, error_message):
+            layers.Relu(name='relu-{}-{}')
 
 
 class LayerCopyTestCase(BaseTestCase):
@@ -182,3 +205,10 @@ class LayerCopyTestCase(BaseTestCase):
 
         deepcopied_relu = copy.deepcopy(relu)
         self.assertIsNot(relu.weight, deepcopied_relu.weight)
+
+    def test_copy_layer_name_with_pattern_name(self):
+        relu = layers.Relu(10, name='rl{}')
+        self.assertEqual(relu.name, 'rl1')
+
+        copied_relu = copy.copy(relu)
+        self.assertEqual(copied_relu.name, 'rl2')
