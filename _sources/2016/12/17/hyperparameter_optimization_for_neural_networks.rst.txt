@@ -293,7 +293,8 @@ And for the last step, we need to define parameter selection procedure. First, w
 .. code-block:: python
 
     import numpy as np
-    from sklearn.gaussian_process import GaussianProcess
+    from sklearn.gaussian_process import GaussianProcessRegressor
+    from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 
     def vector_2d(array):
         return np.array(array).reshape((-1, 1))
@@ -304,14 +305,14 @@ And for the last step, we need to define parameter selection procedure. First, w
         x_test = vector_2d(x_test)
 
         # Train gaussian process
-        gp = GaussianProcess(corr='squared_exponential',
-                             theta0=1e-1, thetaL=1e-3, thetaU=1)
+        kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
+        gp = GaussianProcessRegressor(kernel, n_restarts_optimizer=100)
         gp.fit(x_train, y_train)
 
         # Get mean and standard deviation for each possible
         # number of hidden units
-        y_mean, y_var = gp.predict(x_test, eval_MSE=True)
-        y_std = np.sqrt(vector_2d(y_var))
+        y_mean, y_std = gp.predict(x_test, return_std=True)
+        y_std = y_std.reshape((-1, 1))
 
         return y_mean, y_std
 
@@ -320,7 +321,7 @@ Next, we need to apply to the predicted output Expected Improvement (EI) and fin
 .. code-block:: python
 
     def next_parameter_by_ei(y_min, y_mean, y_std, x_choices):
-        # Calculate expecte improvement from 95% confidence interval
+        # Calculate expected improvement from 95% confidence interval
         expected_improvement = y_min - (y_mean - 1.96 * y_std)
         expected_improvement[expected_improvement < 0] = 0
 

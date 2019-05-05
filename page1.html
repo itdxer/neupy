@@ -1216,7 +1216,8 @@
 </div>
 <p>And for the last step, we need to define parameter selection procedure. First, we need to define a function that performs Gaussian Process regression and returns mean and standard deviation of the prediction for the specified input vector.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.gaussian_process</span> <span class="kn">import</span> <span class="n">GaussianProcess</span>
+<span class="kn">from</span> <span class="nn">sklearn.gaussian_process</span> <span class="kn">import</span> <span class="n">GaussianProcessRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.gaussian_process.kernels</span> <span class="kn">import</span> <span class="n">RBF</span><span class="p">,</span> <span class="n">ConstantKernel</span> <span class="k">as</span> <span class="n">C</span>
 
 <span class="k">def</span> <span class="nf">vector_2d</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -1227,21 +1228,21 @@
     <span class="n">x_test</span> <span class="o">=</span> <span class="n">vector_2d</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
 
     <span class="c1"># Train gaussian process</span>
-    <span class="n">gp</span> <span class="o">=</span> <span class="n">GaussianProcess</span><span class="p">(</span><span class="n">corr</span><span class="o">=</span><span class="s1">'squared_exponential'</span><span class="p">,</span>
-                         <span class="n">theta0</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">,</span> <span class="n">thetaL</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">thetaU</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">))</span> <span class="o">*</span> <span class="n">RBF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">))</span>
+    <span class="n">gp</span> <span class="o">=</span> <span class="n">GaussianProcessRegressor</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">n_restarts_optimizer</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="n">gp</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
     <span class="c1"># Get mean and standard deviation for each possible</span>
     <span class="c1"># number of hidden units</span>
-    <span class="n">y_mean</span><span class="p">,</span> <span class="n">y_var</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">eval_MSE</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">y_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vector_2d</span><span class="p">(</span><span class="n">y_var</span><span class="p">))</span>
+    <span class="n">y_mean</span><span class="p">,</span> <span class="n">y_std</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">return_std</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">y_std</span> <span class="o">=</span> <span class="n">y_std</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">y_mean</span><span class="p">,</span> <span class="n">y_std</span>
 </pre></div>
 </div>
 <p>Next, we need to apply to the predicted output Expected Improvement (EI) and find out next optimal step.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="k">def</span> <span class="nf">next_parameter_by_ei</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_mean</span><span class="p">,</span> <span class="n">y_std</span><span class="p">,</span> <span class="n">x_choices</span><span class="p">):</span>
-    <span class="c1"># Calculate expecte improvement from 95% confidence interval</span>
+    <span class="c1"># Calculate expected improvement from 95% confidence interval</span>
     <span class="n">expected_improvement</span> <span class="o">=</span> <span class="n">y_min</span> <span class="o">-</span> <span class="p">(</span><span class="n">y_mean</span> <span class="o">-</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">y_std</span><span class="p">)</span>
     <span class="n">expected_improvement</span><span class="p">[</span><span class="n">expected_improvement</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
