@@ -189,16 +189,18 @@ I've been doing some experiments with other image as well, and there are a few p
 There are two main components in the art style generation procedure, namely: image processing pipeline and GNG. Let's look at problem with GNG network. It can be illustrated with the following image.
 
 .. figure:: images/horses.png
+    :width: 100%
     :align: center
     :alt: Horse image generated using Growing Neural Gas in NeuPy
 
-If you compare horses you will notice that horse on the right image looks a bit skinnier than the left one. It happened, because neurons in the GNG network are not able to rich edges of the image. After one training pass over the full dataset each neuron is getting pulled from many directions and over the training process it sattels somewhere in the middle, in order to be as close as possible to every sample that pulls it. The more neurons you add to the network the closer it will get to the edge.
+If you compare horses you will notice that horse on the right image looks a bit skinnier than the left one. It happened, because neurons in the GNG network are not able to rich edges of the image. After one training pass over the full dataset each neuron is getting pulled from many directions and over the training process it settles somewhere in the middle, in order to be as close as possible to every sample that pulls it. The more neurons you add to the network the closer it will get to the edge.
 
 Another problem related to the image binarization, the most difficult step in our image processing pipeline. It's difficult, because each binarization method holds certain set of assumption that can easily fail for different images and there is no general way to do it. You don't have such a difficulty with the network. It can give you pretty decent results for different images using the same configurations. The only thing that you typically need to control is the maximum number of neurons in the network. The more neuron you allow network to use the better quality of the image it produces.
 
 In this article, I used global binarization method for image processing. This type of binarization generates single threshold for all pixels in the image, which can cause problems. Let's look at the image below.
 
 .. figure:: images/camera-man.png
+    :width: 100%
     :align: center
     :alt: Man with camera in the image generated using Growing Neural Gas in NeuPy
 

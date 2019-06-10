@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Create unique text-style with SOFM" href="../../../2017/12/17/sofm_text_style.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Create unique text-style with SOFM" href="../../../2017/12/17/sofm_text_style.html" /><link rel="prev" title="Earthquakes in the Landscape of Neural Network" href="../../../2019/06/10/earthquakes_in_neural_network_landscape.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.7.1',
@@ -49,7 +49,6 @@
         });
     </script>
     <style media="screen" type="text/css">
-        img { max-width: 800px !important; }
         img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
         table { background-color: white; }
         table.docutils.citation  { background-color: inherit; }
@@ -386,13 +385,13 @@
 <p>I’ve been doing some experiments with other image as well, and there are a few problems that I’ve encountered.</p>
 <p>There are two main components in the art style generation procedure, namely: image processing pipeline and GNG. Let’s look at problem with GNG network. It can be illustrated with the following image.</p>
 <div class="figure align-center">
-<img alt="Horse image generated using Growing Neural Gas in NeuPy" src="../../../_images/horses.png" />
+<a class="reference internal image-reference" href="../../../_images/horses.png"><img alt="Horse image generated using Growing Neural Gas in NeuPy" src="../../../_images/horses.png" style="width: 100%;" /></a>
 </div>
-<p>If you compare horses you will notice that horse on the right image looks a bit skinnier than the left one. It happened, because neurons in the GNG network are not able to rich edges of the image. After one training pass over the full dataset each neuron is getting pulled from many directions and over the training process it sattels somewhere in the middle, in order to be as close as possible to every sample that pulls it. The more neurons you add to the network the closer it will get to the edge.</p>
+<p>If you compare horses you will notice that horse on the right image looks a bit skinnier than the left one. It happened, because neurons in the GNG network are not able to rich edges of the image. After one training pass over the full dataset each neuron is getting pulled from many directions and over the training process it settles somewhere in the middle, in order to be as close as possible to every sample that pulls it. The more neurons you add to the network the closer it will get to the edge.</p>
 <p>Another problem related to the image binarization, the most difficult step in our image processing pipeline. It’s difficult, because each binarization method holds certain set of assumption that can easily fail for different images and there is no general way to do it. You don’t have such a difficulty with the network. It can give you pretty decent results for different images using the same configurations. The only thing that you typically need to control is the maximum number of neurons in the network. The more neuron you allow network to use the better quality of the image it produces.</p>
 <p>In this article, I used global binarization method for image processing. This type of binarization generates single threshold for all pixels in the image, which can cause problems. Let’s look at the image below.</p>
 <div class="figure align-center">
-<img alt="Man with camera in the image generated using Growing Neural Gas in NeuPy" src="../../../_images/camera-man.png" />
+<a class="reference internal image-reference" href="../../../_images/camera-man.png"><img alt="Man with camera in the image generated using Growing Neural Gas in NeuPy" src="../../../_images/camera-man.png" style="width: 100%;" /></a>
 </div>
 <p>You can see that that there are some building in the background in the left image, but there is none in the right one. It’s hard to capture multiple object using single threshold, especially when they have different shades. For more complex cases you might try to use local thresholding methods.</p>
 </div>
@@ -465,7 +464,7 @@
                 <a href="../../../tags/image_processing.html">image processing</a>, <a href="../../../tags/unsupervised.html">unsupervised</a>, <a href="../../../tags/art.html">art</a></span>
         </div>
         </div><ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../../../2019/06/10/earthquakes_in_neural_network_landscape.html">Earthquakes in the Landscape of Neural Network</a></li>
             <li class="right"><a href="../../../2017/12/17/sofm_text_style.html">Create unique text-style with SOFM</a> &raquo; </li>
         </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2018/03/26/making_art_with_growing_neural_gas";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>

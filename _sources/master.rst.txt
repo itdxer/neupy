@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2019/06/10/earthquakes_in_neural_network_landscape
    2018/03/26/making_art_with_growing_neural_gas
    2017/12/17/sofm_text_style
    2017/12/13/sofm_art

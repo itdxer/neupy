@@ -1,0 +1,372 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="NeuPy is a Python library for Artificial Neural Networks. NeuPy supports many different types of Neural Networks from a simple perceptron to deep learning models.">
+        <meta name="viewport" content="width=device-width">
+        <title>Earthquakes in the Landscape of Neural Network &mdash; NeuPy</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/favicon.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Making Art with Growing Neural Gas" href="../../../2018/03/26/making_art_with_growing_neural_gas.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script><script type="text/javascript" src="../../../_static/js/google_analytics.js"></script><script type="text/javascript" src="../../../_static/js/script.js"></script><script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script>
+    <style media="screen" type="text/css">
+        img[src="../_images/mnist-code-sample-home.png"] { max-width: 600px !important; }
+        table { background-color: white; }
+        table.docutils.citation  { background-color: inherit; }
+        div.highlight { margin-bottom: 20px !important; }
+
+        .limited-width { max-width: 800px; margin: auto; }
+        .docutils { width: 100%; }
+        a .docutils.literal {
+            background-color: inherit !important;
+            padding: 0px !important;
+            color: #3bbc46 !important;
+        }
+        .docutils td { padding: 10px; }
+        .section { word-wrap:break-word; }
+        .descname { font-weight: bold; }
+        .highlight-python + .figure { margin-top: 20px; }
+        .dataframe { text-align: center !important; width: 100%; margin: 10px 0 10px 0; }
+        .dataframe td { padding: 5px; }
+
+        .math .gd { color: #000 !important; } /* Generic.Deleted */
+        .math .m { color: #000 !important; } /* Literal.Number */
+        .math .s { color: #000 !important; } /* Literal.String */
+        .math .mf { color: #000 !important; } /* Literal.Number.Float */
+        .math .mh { color: #000 !important; } /* Literal.Number.Hex */
+        .math .mi { color: #000 !important; } /* Literal.Number.Integer */
+        .math .mo { color: #000 !important; } /* Literal.Number.Oct */
+        .math .sc { color: #000 !important; } /* Literal.String.Char */
+        .math .s2 { color: #000 !important; } /* Literal.String.Double */
+        .math .si { color: #000 !important; } /* Literal.String.Interpol */
+        .math .sx { color: #000 !important; } /* Literal.String.Other */
+        .math .s1 { color: #000 !important; } /* Literal.String.Single */
+        .math .ss { color: #000 !important; } /* Literal.String.Symbol */
+        .math .il { color: #000 !important; } /* Literal.Number.Integer.Long */
+
+        /* Background for class and function names */
+        dt[id^="neupy."] {
+            background-color: #e6edf2;
+            border: 1px solid #f8fafb;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        div[id^="module-neupy."] h1 {
+            display: none;
+        }
+
+        /* Search input field */
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            display: block;
+        }
+        .box {
+          padding-bottom: 50px;
+        }
+        .search-input-container {
+          width: 100%;
+          vertical-align: middle;
+          white-space: nowrap;
+          position: relative;
+        }
+        .search-input-container input#search {
+          width: 100%;
+          height: 50px;
+          padding-left: 45px;
+
+          float: left;
+          outline: none;
+          border: 1px solid #ddd;
+
+          box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+
+          font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+          font-size: 12pt;
+        }
+        .search-input-container .icon {
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-left: 17px;
+          margin-top: 13px;
+          z-index: 1;
+          color: #93a4ad;
+        }
+
+        .docutils.field-list, .docutils.footnote {
+            background-color: inherit;
+        }
+        .large-font {
+            font-size: 1.4em !important;
+        }
+        .right-tag {
+            float: right;
+            margin-left: 36px !important;
+            margin-right: 0px !important;
+        }
+        .short-description {
+            /* We hidde description inside of the article */
+            display: none;
+        }
+        .short-description img {
+            max-height: 160px;
+            max-width: 40% !important;
+            margin-left: 8px;
+        }
+        #results-list ul.search {
+            padding: 0;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        #results-list .short-description {
+            /* We show description text in the archive */
+            display: block !important;
+        }
+        #results-list li p {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        #results-list li {
+            background-color: #fff !important;
+            margin-bottom: 10px;
+            display: block !important;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+        #results-list span.tag {
+            display: inline-block;
+            padding: 3px 4px;
+            margin-right: 8px;
+            position: relative;
+            top: -2px;
+
+            background: #888;
+            color: #fff;
+
+            font-size: 0.75em;
+            font-weight: 600;
+            line-height: 1;
+            text-transform: uppercase;
+
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+        }
+    </style></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+        <div>
+          <h1><a href="../../../pages/home.html">NeuPy</a></h1>
+          <h2>Neural Networks in Python</h2>
+        </div>
+    </header>
+    <nav role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../archive.html">Articles</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../docs/tutorials.html">Tutorials</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/documentation.html">Documentation</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/cheatsheet.html">Cheat sheet</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../pages/model_zoo.html">Model Zoo</a>
+        </li>
+      </ul>
+    </nav>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>June 10, 2019</span>
+        </div>
+    <div class="section" id="earthquakes-in-the-landscape-of-neural-network">
+<h1>Earthquakes in the Landscape of Neural Network</h1>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/animation.gif"><img alt="Animation - Earthquakes in Neural Network Landscape" src="../../../_images/animation.gif" style="width: 100%;" /></a>
+</div>
+<div class="short-description">
+    <p>
+    In this article, I want to direct your attention to the less known properties of one, quite famous, technique in the deep learning. I want to show you how beautiful and interesting could be a concept that typically left behind because of all more exciting ideas in this area.
+    </p>
+    <br clear="right">
+</div><div class="section" id="introduction">
+<h2>Introduction</h2>
+<p>Artificial neural networks have been proven to be a very powerful tool for solving a wide variety of problems. Large number of researchers and engineers put their time and effort to develop the field, although there is still a lot to discover. And because of that, field evolves so quickly that large number of architectures and techniques that were popular just a few years ago, now is a part of the history. But not everything gets outdated and certain techniques prove to be useful to such an extent that it’s hard to imagine deep learning without them.</p>
+<p>In this article, I want to direct your attention to the less known properties of one, quite famous, technique in the deep learning. I want to show you how beautiful and interesting could be a concept that typically left behind because of all more exciting ideas in this area.</p>
+</div>
+<div class="section" id="what-can-you-see">
+<h2>What can you see?</h2>
+<p>Until now, I haven’t explained this mysterious “earthquake” phenomena and I would like to keep it like this for a little longer. I want to encourage you to focus on the properties of this phenomena and see whether you can recognize something that, most likely, is known to you.</p>
+<p>As I mentioned earlier, certain clues could be revealed from the animation. In order to simplify things, we can focus our attention on a single frame and see what we can find.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/animation-frozen.png"><img alt="Single frame of the earthquake animation" src="../../../_images/animation-frozen.png" style="width: 100%;" /></a>
+</div>
+<p>Some of you should be familiar with the graph like this. There we can see three axes, namely <span class="math notranslate nohighlight">\(W_1\)</span>, <span class="math notranslate nohighlight">\(W_2\)</span> and Loss. Two of the axes specify different parameters/weights of the network, namely <span class="math notranslate nohighlight">\(W_1\)</span> and <span class="math notranslate nohighlight">\(W_2\)</span>. The last axis shows a loss associated with each possible pair of parameters <span class="math notranslate nohighlight">\(W_1\)</span> and <span class="math notranslate nohighlight">\(W_2\)</span>. That’s how neural network’s loss landscape looks like. Typically, during the training, we start with some fixed values <span class="math notranslate nohighlight">\(W_1\)</span>, <span class="math notranslate nohighlight">\(W_2\)</span> and, with the help of an algorithm, like gradient descent, we navigate around landscape trying to find weights associated with lowest value on this surface. Assuming that this part is clear, one question still remains: Why does the loss landscape changes on the animation?</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/animation-fast.gif"><img alt="Single animation - Earthquakes in Neural Network Landscape" src="../../../_images/animation-fast.gif" style="width: 100%;" /></a>
+</div>
+<p>Let’s think what does this change represent. For each fixed pair of weights <span class="math notranslate nohighlight">\(W_1\)</span>, <span class="math notranslate nohighlight">\(W_2\)</span> the loss value, associated with them, changes. And from this perspective it shouldn’t be that surprising, since we will never expect network to have exactly the same loss associated with a fixed set of weights. And at this point I would like to stop, since we’re getting pretty close to the answer.</p>
+<p>I would encourage you to take a moment, think about what we’ve observed so far from the animation and guess what might produce this effect on the loss landscape. I suggest you to do it now, because next section contains an explanation of this phenomena.</p>
+</div>
+<div class="section" id="explanation">
+<h2>Explanation</h2>
+<p>The animation shows how the neural network’s loss landscape looks like during the training with mini-batches. It’s quite common to think of a surface as a static landscape where we navigate during the training, trying to find weights that minimize desirable loss function. This statement might be considered as true only in case of the full-batch training, when all the available data samples are used at the same time during the training. But for most of the deep learning problems, that statement is false. During the training, we navigate in dynamically changing environment. For each training iteration, we take a set of input samples, propagate them thought the network and estimate gradient which we will use to adjust network’s weights.</p>
+<p>It might be easier to visualize training using contour plots. The same 3D animation could be represented in the following way:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/animation-contour-fast.gif"><img alt="Animation contour plot - Earthquakes in Neural Network Landscape" src="../../../_images/animation-contour-fast.gif" style="width: 100%;" /></a>
+</div>
+<p>Animation above shows only the way the loss landscape changes when we use different mini-batches, but it doesn’t show us its effect on the training. We can extend this animation with gradient vectors.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/animation-train-contour-fast.gif"><img alt="Contour plot for the mini-batch training with gradient descent algorithm" src="../../../_images/animation-train-contour-fast.gif" style="width: 100%;" /></a>
+</div>
+<p>Animation above alternates between two steps, namely training iteration and mini-batch changing. Training iteration shows static landscape and vector shows how the weights have changed after the update. Next training iteration requires different mini-batch and this changeover is visualized by the smooth transition between two landscapes. In reality, this change is not smooth, but animation helps us to notice the effect of that change. The bigger the difference between two losses the more noticeable will be transition between two landscapes.</p>
+<p>After completing multiple training iterations, we can see that the overall path looks a bit noisy. During each iteration gradient point towards the direction that minimizes the loss but continuous changes in the loss landscape makes it quite difficult to find a stable direction. This problem could be minimized with algorithms that accumulate information about a gradient over time. If you want to learn more about that you can check ![this article](<a class="reference external" href="http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html">http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html</a>).</p>
+</div>
+<div class="section" id="mathematical-perspective">
+<h2>Mathematical perspective</h2>
+<p>Unlike in mathematical optimization, in neural networks, we don’t know what function we want to optimize. It sounds a bit strange, but that’s true. Each mini-batch creates a different loss landscape and during each iteration we optimize different function. With random shuffling and reasonably large mini-batch size, it’s quite unlikely that we will see exactly the same loss landscape twice during the training. It sounds even a bit surreal, if you think about it. We move towards the minimum of the function which we most likely won’t see ever again and somehow optimization algorithm arrives at a solution that works incredibly well for a target task, e.g. image classification.</p>
+<p>Most of the loss functions used in deep learning calculate loss independently per each input sample and the overall loss will be just an average of these losses. Notice, that this property helps us to obtain gradient very easily, since the gradient of the average is the average of the gradients per each individual addend.</p>
+<div class="math notranslate nohighlight">
+\[\nabla E = \nabla (\frac{1}{N}\sum_{i=0}^N{e_i}) = \frac{1}{N}\sum_{i=0}^N{\nabla e_i}\]</div>
+<p>where, N is the number of samples in a mini-batch, E is a total loss, <span class="math notranslate nohighlight">\(e_i\)</span> is a loss associated with i-th input sample.</p>
+<p>We can think that during the training we randomly sample loss landscapes and use average loss landscape in order to estimate the gradient. For example, we can take 9 random input samples and create loss landscape per each individual sample. By averaging these landscapes, we can obtain new landscape.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/avg-9-sample-loss.png"><img alt="Loss landscape per each individual sample and one loss averaged over 9 landscapes" src="../../../_images/avg-9-sample-loss.png" style="width: 100%;" /></a>
+</div>
+<p>On the graph above, you can notice that 9 loss landscapes have linear contours and the averaged loss landscape doesn’t have this property. Each individual loss landscape has been obtained from a cross entropy loss function and simple logistic regression as a base network architecture. It could be easily shown that each individual loss is <em>nearly</em> piecewise linear function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+    L(x, y) &amp;=
+    - y \cdot ln(\frac{1}{1 + e^{-x^T w}}) - (1 - y) \cdot ln(1 - \frac{1}{1 + e^{-x^T w}}) &amp; \\ &amp;=
+    (1 - y) \cdot x^T w + ln(1 + e^{-x^T w})
+\end{align*}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(x\)</span> is an input vector, <span class="math notranslate nohighlight">\(y \in \{0, 1\}\)</span> is a target class and <span class="math notranslate nohighlight">\(w\)</span> is a vector with network’s parameters.</p>
+<p>Obtained result could be separated into 2 parts. The first part is just a linear transformation of the input <span class="math notranslate nohighlight">\(x\)</span>. The second part is a logarithm, but it behaves like a linear function when the absolute value of the <span class="math notranslate nohighlight">\(x^T w\)</span> is reasonably large.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/log1p-exp-func.png"><img alt="Log exponent plus one function" src="../../../_images/log1p-exp-func.png" style="width: 100%;" /></a>
+</div>
+</div>
+<div class="section" id="statistical-perspective">
+<h2>Statistical perspective</h2>
+<p>We can also think about mini-batch training in terms of the loss landscape sampling. In statistics, random sampling helps us to derive properties of the entire population using summary statistics. For example, we might estimate expected value from the population by calculating average over a random sample. Obviously, the smaller sample we get, the less certain we’re about our estimation. And the same is true (or rather nearly true) for loss landscape sampling. This effect was demonstrated on the first animation:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/animation.gif"><img alt="Loss landscape for different mini-batches" src="../../../_images/animation.gif" style="width: 100%;" /></a>
+</div>
+<p>I used mini-batch of size 10 for the graph on the left and size 100 for the graph on the right. We can see that “earthquake” effect is stronger for the left graph, where mini-batch size is smaller. Basically, estimation of the loss landscape, produced by small mini-batch, has quite large variance and it could be observed from the animation.</p>
+<p>I want to make one disclaimer about sampling. It’s not quite the same as I’ve defined it for the statistical inference. Training dataset is already a sample from a population and each mini-batch is a sample from this sample. In addition to that, each mini-batch is not sampled independently. Typically, before each training epoch, we shuffle samples in our dataset and divide them into mini-batches. Propagation of the first mini-batch has an impact on the data distribution in the next mini-batch. For example, imagine simple problem where we try to classify 0 and 1 digits (binary classification on binary digits). In addition, we can imagine that in our training dataset, there are as many 0s as 1s. Imagine that in the first mini-batch we have more 1s than 0s. It means that in the rest of the training dataset we have more 0s than 1s and for the next mini-batch, we’re more likely to get more 0s than 1s, since probability was skewed by the first mini-batch. Whether it’s good, bad or shouldn’t matter, might be a separate topic for a different article, but the fact is that this sampling is not purely random.</p>
+</div>
+<div class="section" id="final-words">
+<h2>Final words</h2>
+<p>In my opinion, term earthquake fits very naturally into a general intuition about neural network training. If you think about loss landscape as an area with mountains and valleys then earthquake represents shakes and displacement of that land. Magnitude of that earthquake could be measured with a size of the mini-batch. And navigation in this environment could be compared to the training with momentum.</p>
+</div>
+<div class="section" id="code">
+<h2>Code</h2>
+<p>All the code, that has been used to generate graphs and animations for this article, could be found on Github.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Yurii Shevchuk</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/visualization.html">visualization</a>, <a href="../../../tags/backpropagation.html">backpropagation</a></span>
+        </div>
+        </div><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../../../2018/03/26/making_art_with_growing_neural_gas.html">Making Art with Growing Neural Gas</a> &raquo; </li>
+        </ul><div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "neupy";    var disqus_identifier = "2019/06/10/earthquakes_in_neural_network_landscape";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></article><aside class="sidebar"><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+          <div class="box">
+            <div class="search-input-container">
+                <span class="icon"><i class="fa fa-search"></i></span>
+                <input type="search" name="q" id="search" placeholder="Search..." />
+            </div>
+          </div>
+    </form>
+</div></section><section><div class="widget">
+    <h1>Install NeuPy</h1>
+    <div class="highligh-bash">
+        <div class="highlight">
+            <pre>pip install neupy</pre>
+        </div>
+    </div>
+    <p>
+        <div>Learn more about NeuPy reading <a href="../../../docs/tutorials.html">tutorials</a> and <a href="../../../pages/documentation.html">documentation</a>.</div>
+    </p>
+</div></section><section><div class="widget">
+    <h1>Issues and feature requests</h1>
+    <p>
+        If you find a bug or want to suggest a new feature feel free to
+        <a href="https://github.com/itdxer/neupy/issues/new">create an issue</a>
+        on Github
+    </p>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2015 - 2019, Yurii Shevchuk. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
