@@ -66,7 +66,7 @@ Animation above shows only the way the loss landscape changes when we use differ
 
 Animation above alternates between two steps, namely training iteration and mini-batch changing. Training iteration shows static landscape and vector shows how the weights have changed after the update. Next training iteration requires different mini-batch and this changeover is visualized by the smooth transition between two landscapes. In reality, this change is not smooth, but animation helps us to notice the effect of that change. The bigger the difference between two losses the more noticeable will be transition between two landscapes.
 
-After completing multiple training iterations, we can see that the overall path looks a bit noisy. During each iteration gradient point towards the direction that minimizes the loss but continuous changes in the loss landscape makes it quite difficult to find a stable direction. This problem could be minimized with algorithms that accumulate information about a gradient over time. If you want to learn more about that you can check ![this article](http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html).
+After completing multiple training iterations, we can see that the overall path looks a bit noisy. During each iteration gradient point towards the direction that minimizes the loss but continuous changes in the loss landscape makes it quite difficult to find a stable direction. This problem could be minimized with algorithms that accumulate information about a gradient over time. If you want to learn more about that you can check `this article <http://neupy.com/2015/07/04/visualize_backpropagation_algorithms.html>`_.
 
 Mathematical perspective
 ------------------------
