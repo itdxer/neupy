@@ -72,7 +72,7 @@ def plot_error_per_epoch(train, valid, ax, logx=False):
     ax.set_xlabel('Number of training epochs passed')
 
 
-def plot_optimizer_errors(optimizer, logx=False, show=True, **figkwargs):
+def plot_optimizer_errors(optimizer, logx=False, show=True, pause=False, **figkwargs):
     if 'figsize' not in figkwargs:
         figkwargs['figsize'] = (12, 8)
 
@@ -98,4 +98,4 @@ def plot_optimizer_errors(optimizer, logx=False, show=True, **figkwargs):
         plot_error_per_epoch(train, valid, logx=logx, ax=axes[1])
 
     if show:
-        plt.show()
+        plt.show(block=pause)
