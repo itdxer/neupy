@@ -1,6 +1,9 @@
 import pkgutil
 import warnings
 import importlib
+import numpy
+
+from PIL import Image
 
 import matplotlib.pyplot as plt
 
@@ -72,7 +75,7 @@ def plot_error_per_epoch(train, valid, ax, logx=False):
     ax.set_xlabel('Number of training epochs passed')
 
 
-def plot_optimizer_errors(optimizer, logx=False, show=True, **figkwargs):
+def plot_optimizer_errors(optimizer, logx=False, show=True, image=False, **figkwargs):
     if 'figsize' not in figkwargs:
         figkwargs['figsize'] = (12, 8)
 
@@ -99,3 +102,38 @@ def plot_optimizer_errors(optimizer, logx=False, show=True, **figkwargs):
 
     if show:
         plt.show()
+
+    if image:
+        return figure_to_image(fig)
+
+
+
+def figure_to_data(figure):
+    """
+    @brief Convert a Matplotlib figure to a 4D numpy array with RGBA channels and return it
+    @param figure - a matplotlib figure
+    @return a numpy 3D array of RGBA values
+    """
+    # draw the renderer
+    figure.canvas.draw()
+
+    # Get the RGBA buffer from the figure
+    w, h = figure.canvas.get_width_height()
+    np_array = numpy.fromstring(fig.canvas.tostring_argb(), dtype=numpy.uint8)
+    np_array.shape = (w, h, 4)
+
+    # canvas.tostring_argb give pixmap in ARGB mode. Roll the ALPHA channel to have it in RGBA mode
+    np_array = numpy.roll(np_array, 3, axis=2)
+    return np_array
+
+
+def figure_to_image(figure):
+    """
+    @brief Convert a Matplotlib figure to a PIL Image in RGBA format and return it
+    @param fig a matplotlib figure
+    @return a Python Imaging Library ( PIL ) image
+    """
+    # put the figure pixmap into a numpy array
+    buf = figure_to_data(figure)
+    w, h, d = buf.shape
+    return Image.fromstring("RGBA", (w, h), buf.tostring())

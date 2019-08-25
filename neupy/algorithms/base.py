@@ -210,11 +210,12 @@ class BaseNetwork(BaseSkeleton):
     def score(self, X, y):
         raise NotImplementedError()
 
-    def plot_errors(self, logx=False, show=True, **figkwargs):
+    def plot_errors(self, logx=False, show=True, image=False, **figkwargs):
         return plot_optimizer_errors(
             optimizer=self,
             logx=logx,
             show=show,
+            image=image,
             **figkwargs
         )
 
