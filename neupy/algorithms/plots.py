@@ -76,6 +76,8 @@ def plot_error_per_epoch(train, valid, ax, logx=False):
 
 
 def plot_optimizer_errors(optimizer, logx=False, show=True, image=False, **figkwargs):
+    if image:
+        show=False
     if 'figsize' not in figkwargs:
         figkwargs['figsize'] = (12, 8)
 
@@ -119,7 +121,7 @@ def figure_to_data(figure):
 
     # Get the RGBA buffer from the figure
     w, h = figure.canvas.get_width_height()
-    np_array = numpy.fromstring(fig.canvas.tostring_argb(), dtype=numpy.uint8)
+    np_array = numpy.fromstring(figure.canvas.tostring_argb(), dtype=numpy.uint8)
     np_array.shape = (w, h, 4)
 
     # canvas.tostring_argb give pixmap in ARGB mode. Roll the ALPHA channel to have it in RGBA mode
@@ -136,4 +138,4 @@ def figure_to_image(figure):
     # put the figure pixmap into a numpy array
     buf = figure_to_data(figure)
     w, h, d = buf.shape
-    return Image.fromstring("RGBA", (w, h), buf.tostring())
+    return Image.frombytes("RGBA", (w, h), buf.tostring())
