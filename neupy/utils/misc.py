@@ -1,11 +1,14 @@
 import os
+import sys
 import random
+from contextlib import contextmanager
 
-import tensorflow as tf
+import six
 import numpy as np
+import tensorflow as tf
 
 
-__all__ = ('as_tuple', 'AttributeKeyDict', 'reproducible')
+__all__ = ('as_tuple', 'AttributeKeyDict', 'reproducible', 'extend_error_message_if_fails')
 
 
 def as_tuple(*values):
@@ -82,3 +85,17 @@ class AttributeKeyDict(dict):
 
     def __reduce__(self):
         return (self.__class__, (dict(self),))
+
+
+@contextmanager
+def extend_error_message_if_fails(error_message):
+    try:
+        yield
+    except Exception as exception:
+        original_message = str(exception).rstrip('.')
+        modified_exception = exception.__class__(original_message + ". " + error_message)
+
+        if hasattr(sys, 'last_traceback') and six.PY3:
+            modified_exception = modified_exception.with_traceback(sys.last_traceback)
+
+        raise modified_exception

@@ -244,6 +244,7 @@ Other layers
     neupy.layers.Reshape
     neupy.layers.Transpose
     neupy.layers.Embedding
+    neupy.layers.Apply
 
 Operations
 ~~~~~~~~~~

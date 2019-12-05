@@ -1,7 +1,6 @@
 import math
 
 import numpy as np
-from numpy.core.umath_tests import inner1d
 
 
 __all__ = ('pdf_between_data',)
@@ -37,7 +36,7 @@ def pdf_between_data(train_data, X, std):
     for i, input_row in enumerate(X):
         inputs = np.tile(input_row, (n_train_samples, 1))
         class_difference = (train_data - inputs)
-        total_distance = inner1d(class_difference, class_difference)
+        total_distance = np.inner(class_difference, class_difference)
         results[:, i] = np.exp(-total_distance / variance) / const
 
     return results

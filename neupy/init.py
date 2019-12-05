@@ -150,7 +150,7 @@ class Normal(Initializer):
             set_numpy_seed(self.seed)
             return np.random.normal(loc=self.mean, scale=self.std, size=shape)
 
-        return tf.random_normal(
+        return tf.random.normal(
             mean=self.mean, stddev=self.std,
             shape=shape, seed=self.seed)
 

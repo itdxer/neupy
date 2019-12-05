@@ -35,8 +35,7 @@ class ElementwiseTestCase(BaseTestCase):
             layers.Input(2),
             layers.Input(1),
         )
-        error_message = "layer have incompatible shapes"
-        with self.assertRaisesRegexp(LayerConnectionError, error_message):
+        with self.assertRaisesRegexp(LayerConnectionError, "have incompatible shapes"):
             layers.join(inputs, layers.Elementwise('add'))
 
     def test_elementwise_in_network(self):

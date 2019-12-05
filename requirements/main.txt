@@ -1,7 +1,7 @@
 # Core
 numpy>=1.13.3
 scipy>=0.19.0
-tensorflow>=1.10.1,<1.14.0
+tensorflow>=1.10.1,<1.16.0
 
 # Storage
 h5py
