@@ -16,7 +16,7 @@ from neupy.utils import as_tuple, tf_utils
 from neupy.layers.graph import BaseGraph, make_one_if_possible
 
 
-__all__ = ('BaseLayer', 'Identity', 'Input')
+__all__ = ('BaseLayer', 'Identity', 'Input', 'Apply')
 
 
 def create_name_pattern_from_layer_name(layer):
@@ -250,6 +250,36 @@ class Identity(BaseLayer):
 
     def output(self, input, **kwargs):
         return input
+
+
+class Apply(Identity):
+    """
+    Applies function to the input without changing its dimension.
+
+    Parameters
+    ----------
+    function: function or lambda
+        Function that takes one variable as an input and could be applied to it
+        without changing its dimension.
+
+    {BaseLayer.name}
+
+    Methods
+    -------
+    {BaseLayer.Methods}
+
+    Attributes
+    ----------
+    {BaseLayer.Attributes}
+    """
+    function = Property(expected_type=types.FunctionType)
+
+    def __init__(self, function, name=None):
+        super(Apply, self).__init__(name=name)
+        self.function = function
+
+    def output(self, input, **kwargs):
+        return self.function(input)
 
 
 class Input(BaseLayer):
