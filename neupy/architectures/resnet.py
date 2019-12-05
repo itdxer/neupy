@@ -1,66 +1,44 @@
+import math
+
 from neupy import layers
 from neupy.utils import function_name_scope
 
 
-__all__ = ('resnet50',)
+__all__ = ('resnet50', 'ResidualUnit', 'ResidualBlock')
 
 
 @function_name_scope
-def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
-                 name=None):
-
+def ResidualUnit(n_filters, n_bottleneck_filters, stride=1, rate=1, has_branch=False, name=''):
     def bn_name(index):
         return 'bn' + name + '_branch' + index
 
     def conv_name(index):
         return 'res' + name + '_branch' + index
 
-    n_output_filters = 4 * n_input_filters
     main_branch = layers.join(
         # The main purpose of this 1x1 convolution layer is to
         # reduce number of filters. For instance, for the tensor with
         # 256 filters it can be reduced to 64. This trick allows to
         # reduce computation by factor of 4.
-        layers.Convolution(
-            size=(1, 1, n_input_filters),
-            stride=stride,
-            bias=None,
-            name=conv_name('2a'),
-        ),
+        layers.Convolution(size=(1, 1, n_bottleneck_filters), stride=stride, bias=None, name=conv_name('2a')),
         layers.BatchNorm(name=bn_name('2a')),
         layers.Relu(),
 
-        # This convolution layer applies 3x3 filter in order to
-        # extract features.
-        layers.Convolution(
-            (3, 3, n_input_filters),
-            padding='same',
-            dilation=rate,
-            bias=None,
-            name=conv_name('2b'),
-        ),
+        # This convolution layer applies 3x3 filter in order to extract features.
+        layers.Convolution((3, 3, n_bottleneck_filters), padding=1, dilation=rate, bias=None, name=conv_name('2b')),
         layers.BatchNorm(name=bn_name('2b')),
         layers.Relu(),
 
         # Last layer reverses operations of the first layer. In this
         # case we increase number of filters. For instance, from previously
         # obtained 64 filters we can increase it back to the 256 filters
-        layers.Convolution(
-            (1, 1, n_output_filters),
-            bias=None,
-            name=conv_name('2c')
-        ),
+        layers.Convolution((1, 1, n_filters), bias=None, name=conv_name('2c')),
         layers.BatchNorm(name=bn_name('2c')),
     )
 
     if has_branch:
         residual_branch = layers.join(
-            layers.Convolution(
-                (1, 1, n_output_filters),
-                stride=stride,
-                bias=None,
-                name=conv_name('1'),
-            ),
+            layers.Convolution((1, 1, n_filters), stride=stride, bias=None, name=conv_name('1')),
             layers.BatchNorm(name=bn_name('1')),
         )
     else:
@@ -74,9 +52,19 @@ def ResidualUnit(n_input_filters, stride=1, rate=1, has_branch=False,
         # the residual connection is to build shortcuts for the
         # gradient during backpropagation.
         (main_branch | residual_branch),
-        layers.Elementwise(),
+        layers.Elementwise('add'),
         layers.Relu(),
     )
+
+
+@function_name_scope
+def ResidualBlock(n_bottleneck_filters, n_units, name_prefix, stride=1, rate=1):
+    block = ResidualUnit(n_filters, stride=stride, has_branch=True)
+
+    for units_index in range(n_units - 1):
+        block >>= ResidualUnit(n_filters, rate=rate, name=name_prefix)
+
+    return block
 
 
 def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
@@ -173,46 +161,19 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
     resnet = layers.join(
         layers.Input(input_shape),
 
-        # Convolutional layer reduces image's height and width by a factor
-        # of 2 (because of the stride)
+        # Convolutional layer reduces image's height and width by a factor of 2 (because of the stride)
         # from (3, 224, 224) to (64, 112, 112)
-        layers.Convolution(
-            (7, 7, 64), stride=2, bias=None,
-            padding='same', name='conv1'
-        ),
+        layers.Convolution((7, 7, 64), stride=2, bias=None, padding='same', name='conv1'),
         layers.BatchNorm(name='bn_conv1'),
         layers.Relu(),
 
-        # Stride equal two 2 reduces image size by a factor of two
-        # from (64, 112, 112) to (64, 56, 56)
+        # Stride equal two 2 reduces image size by a factor of two from (64, 112, 112) to (64, 56, 56)
         layers.MaxPooling((3, 3), stride=2, padding="same"),
 
-        # The branch option applies extra convolution x+ batch
-        # normalization transformations to the residual
-        ResidualUnit(64, name='2a', has_branch=True),
-        ResidualUnit(64, name='2b'),
-        ResidualUnit(64, name='2c'),
-
-        # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(128, stride=strides[0], name='3a', has_branch=True),
-        ResidualUnit(128, rate=rates[0], name='3b'),
-        ResidualUnit(128, rate=rates[0], name='3c'),
-        ResidualUnit(128, rate=rates[0], name='3d'),
-
-        # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(256, rate=rates[0], name='4a',
-                     stride=strides[1], has_branch=True),
-        ResidualUnit(256, rate=rates[1], name='4b'),
-        ResidualUnit(256, rate=rates[1], name='4c'),
-        ResidualUnit(256, rate=rates[1], name='4d'),
-        ResidualUnit(256, rate=rates[1], name='4e'),
-        ResidualUnit(256, rate=rates[1], name='4f'),
-
-        # When stride=2 reduces width and hight by factor of 2
-        ResidualUnit(512, rate=rates[1], name='5a',
-                     stride=strides[2], has_branch=True),
-        ResidualUnit(512, rate=rates[2], name='5b'),
-        ResidualUnit(512, rate=rates[2], name='5c'),
+        ResidualBlock(256, 64, n_units=3, stride=1, name_prefix='2'),
+        ResidualBlock(512, 128, n_units=4, stride=strides[0], rate=rates[0], name_prefix='3'),
+        ResidualBlock(1024, 256, n_units=6, stride=strides[1], rate=rates[1], name_prefix='4'),
+        ResidualBlock(2048, 512, n_units=3, stride=strides[2], rate=rates[2], name_prefix='5'),
     )
 
     if include_global_pool:

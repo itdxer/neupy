@@ -3,6 +3,7 @@ cache: pip
 python:
   - "2.7"
   - "3.6"
+  - "3.7"
 
 install:
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
@@ -34,7 +35,7 @@ before_script:
 
 script:
   - pytest --cov=neupy
-  - flake8 neupy
+  - flake8 --max-line-length=120 neupy
 
 after_success:
   - pip install codecov
