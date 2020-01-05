@@ -75,14 +75,18 @@ class LevenbergMarquardt(BaseOptimizer):
     {BaseOptimizer.network}
 
     mu : float
-        Control inversion for J.T * J matrix, defaults to ``0.1``.
+        Control inversion for J.T * J matrix, defaults to ``0.01``.
+
+    min_mu : float
+        Minimum possible mu value. ``mu`` will never be less than ``min_mu``.
+        Defaults to ``1e-7``.
 
     mu_update_factor : float
         Factor to decrease the mu if error was reduced after last update,
         otherwise increase mu by the same factor. Defaults to ``1.2``
 
     error : {{``mse``}}
-        Levenberg-Marquardt works only for quadratic functions.
+        Levenberg-Marquardt works only for the mean squared error (MSE) function.
         Defaults to ``mse``.
 
     {BaseOptimizer.show_epoch}
@@ -119,6 +123,7 @@ class LevenbergMarquardt(BaseOptimizer):
     :network:`BaseOptimizer` : BaseOptimizer algorithm.
     """
     mu = BoundedProperty(default=0.01, minval=0)
+    min_mu = BoundedProperty(default=1e-7, minval=0)
     mu_update_factor = BoundedProperty(default=1.2, minval=1)
     loss = ChoiceProperty(default='mse', choices={'mse': objectives.mse})
 
@@ -141,9 +146,8 @@ class LevenbergMarquardt(BaseOptimizer):
         new_mu = tf.where(
             tf.less(last_error, error_func),
             mu * self.mu_update_factor,
-            mu / self.mu_update_factor,
+            tf.math.maximum(mu / self.mu_update_factor, self.min_mu),
         )
-
         err_for_each_sample = flatten((self.target - training_outputs) ** 2)
 
         variables = self.network.variables
@@ -171,5 +175,4 @@ class LevenbergMarquardt(BaseOptimizer):
             last_error = self.errors.train[-1]
             self.variables.last_error.load(last_error, tensorflow_session())
 
-        return super(LevenbergMarquardt, self).one_training_update(
-            X_train, y_train)
+        return super(LevenbergMarquardt, self).one_training_update(X_train, y_train)
