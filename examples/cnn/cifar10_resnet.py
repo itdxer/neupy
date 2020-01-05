@@ -43,8 +43,7 @@ def ResidualUnit(n_filters, stride=1, has_branch=False, name=''):
     return join(
         # For the output from two branches we just combine results  with simple elementwise sum operation.
         # The main purpose of the residual connection is to build shortcuts for the gradient during backpropagation.
-        (main_branch | residual_branch),
-        Elementwise('add', name='add-residual' + name),
+        (main_branch | residual_branch) >> Elementwise('add', name='add-residual' + name),
         # Division helps to reduce variance introduced by the residual connection
         # Apply(lambda x: x / math.sqrt(2), name='scale'),
         Relu(),
@@ -65,7 +64,7 @@ if __name__ == '__main__':
     x_train, x_test, y_train, y_test = read_cifar10()
 
     x_train, x_test = asfloat(x_train) / 255., asfloat(x_test) / 255.
-    mean = x_train.mean(axis=(0, 1, 2)).reshape(1, 1, 1, -1)
+    mean = np.mean(x_train, axis=0)
     x_train -= mean
     x_test -= mean
 

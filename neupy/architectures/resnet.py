@@ -1,4 +1,4 @@
-import math
+import string
 
 from neupy import layers
 from neupy.utils import function_name_scope
@@ -16,10 +16,9 @@ def ResidualUnit(n_filters, n_bottleneck_filters, stride=1, rate=1, has_branch=F
         return 'res' + name + '_branch' + index
 
     main_branch = layers.join(
-        # The main purpose of this 1x1 convolution layer is to
-        # reduce number of filters. For instance, for the tensor with
-        # 256 filters it can be reduced to 64. This trick allows to
-        # reduce computation by factor of 4.
+        # The main purpose of this 1x1 convolution layer is to reduce number of filters. For instance,
+        # for the tensor with 256 filters it can be reduced to 64. This trick allows to  reduce computation
+        # by factor of 4.
         layers.Convolution(size=(1, 1, n_bottleneck_filters), stride=stride, bias=None, name=conv_name('2a')),
         layers.BatchNorm(name=bn_name('2a')),
         layers.Relu(),
@@ -42,7 +41,7 @@ def ResidualUnit(n_filters, n_bottleneck_filters, stride=1, rate=1, has_branch=F
             layers.BatchNorm(name=bn_name('1')),
         )
     else:
-        # Empty list defines residual connection, meaning that
+        # Identity specifies residual connection, meaning that
         # output from this branch would be equal to its input
         residual_branch = layers.Identity('residual-' + name)
 
@@ -51,24 +50,35 @@ def ResidualUnit(n_filters, n_bottleneck_filters, stride=1, rate=1, has_branch=F
         # with simple elementwise sum operation. The main purpose of
         # the residual connection is to build shortcuts for the
         # gradient during backpropagation.
-        (main_branch | residual_branch),
-        layers.Elementwise('add'),
+        (main_branch | residual_branch) >> layers.Elementwise('add', name='add-residual-' + name),
         layers.Relu(),
     )
 
 
 @function_name_scope
-def ResidualBlock(n_bottleneck_filters, n_units, name_prefix, stride=1, rate=1):
-    block = ResidualUnit(n_filters, stride=stride, has_branch=True)
+def ResidualBlock(n_filters, n_bottleneck_filters, n_units, name_prefix, stride=1, prev_rate=1, new_rate=1):
+    if not 1 <= n_units <= len(string.ascii_lowercase):
+        raise ValueError(
+            "Expected 1 <= n_units <= {}, but got n_units={} instead".format(len(string.ascii_lowercase), n_units)
+        )
+
+    letters = iter(string.ascii_lowercase)
+    block = ResidualUnit(
+        n_filters,
+        n_bottleneck_filters,
+        stride=stride,
+        rate=prev_rate,
+        has_branch=True,
+        name=name_prefix + next(letters),
+    )
 
     for units_index in range(n_units - 1):
-        block >>= ResidualUnit(n_filters, rate=rate, name=name_prefix)
+        block >>= ResidualUnit(n_filters, n_bottleneck_filters, rate=new_rate, name=name_prefix + next(letters))
 
     return block
 
 
-def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
-             in_out_ratio=32):
+def resnet50(input_shape=(224, 224, 3), include_global_pool=True, in_out_ratio=32):
     """
     ResNet50 network architecture with random parameters. Parameters
     can be loaded using ``neupy.storage`` module.
@@ -86,7 +96,7 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
 
     in_out_ratio : {4, 8, 16, 32}
         Every layer that applies strides reduces height and width per every
-        image. There are 5 of these layers in Resnet and at the end each
+        image. There are 5 of these layers in ResNet and at the end each
         dimensions gets reduced by ``32``. For example, 224x224 image
         will be reduced to 7x7 image patches. This parameter specifies
         what level of reduction we want to obtain after we've propagated
@@ -171,9 +181,9 @@ def resnet50(input_shape=(224, 224, 3), include_global_pool=True,
         layers.MaxPooling((3, 3), stride=2, padding="same"),
 
         ResidualBlock(256, 64, n_units=3, stride=1, name_prefix='2'),
-        ResidualBlock(512, 128, n_units=4, stride=strides[0], rate=rates[0], name_prefix='3'),
-        ResidualBlock(1024, 256, n_units=6, stride=strides[1], rate=rates[1], name_prefix='4'),
-        ResidualBlock(2048, 512, n_units=3, stride=strides[2], rate=rates[2], name_prefix='5'),
+        ResidualBlock(512, 128, n_units=4, stride=strides[0], prev_rate=1, new_rate=rates[0], name_prefix='3'),
+        ResidualBlock(1024, 256, n_units=6, stride=strides[1], prev_rate=rates[0], new_rate=rates[1], name_prefix='4'),
+        ResidualBlock(2048, 512, n_units=3, stride=strides[2], prev_rate=rates[1], new_rate=rates[2], name_prefix='5'),
     )
 
     if include_global_pool:

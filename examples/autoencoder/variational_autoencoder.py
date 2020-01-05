@@ -49,7 +49,7 @@ class GaussianSample(BaseLayer):
         return mu_shape
 
     def output(self, mu, sigma, **kwargs):
-        return mu + tf.exp(sigma) * tf.random_normal(tf.shape(mu))
+        return mu + tf.exp(sigma) * tf.random.normal(tf.shape(mu))
 
 
 class Collect(Identity):

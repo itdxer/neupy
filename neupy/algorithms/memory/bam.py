@@ -1,7 +1,6 @@
 import random
 
 import numpy as np
-from numpy.core.umath_tests import inner1d
 
 from neupy.utils import format_data
 from neupy.exceptions import NotTrained
@@ -20,7 +19,7 @@ def sign2bin(matrix):
 
 
 def hopfield_energy(weight, X, y):
-    return -0.5 * inner1d(X.dot(weight), y)
+    return -0.5 * np.inner(X.dot(weight), y)
 
 
 class DiscreteBAM(DiscreteMemory):

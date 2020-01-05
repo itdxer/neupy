@@ -271,6 +271,20 @@ class Apply(Identity):
     Attributes
     ----------
     {BaseLayer.Attributes}
+<<<<<<< HEAD
+=======
+
+    Examples
+    --------
+    >>> from neupy.layers import *
+    >>> network = Input(5) >> Apply(lambda x: x / 2)
+
+    Creating custom activation function
+
+    >>> import tensorflow as tf
+    >>> from neupy.layers import *
+    >>> network = Input(5) >> Linear(4) >> Apply(tf.hard_sigmoid)
+>>>>>>> 7061d7642827a51b2d7c1d29d0770d668509c64d
     """
     function = Property(expected_type=types.FunctionType)
 

@@ -79,7 +79,7 @@ class Elementwise(BaseLayer):
             if not shape.is_compatible_with(first_shape):
                 formatted_shapes = tf_utils.shape_to_tuple(input_shapes)
                 raise LayerConnectionError(
-                    "Input shapes to the `{}` layer have incompatible shapes. "
+                    "The `{}` layer's inputs have incompatible shapes"
                     "Input shapes: {}, Layer: {}"
                     "".format(self.name, formatted_shapes, self))
 

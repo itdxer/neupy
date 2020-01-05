@@ -11,7 +11,7 @@ import neupy
 from neupy.core.docs import shared_docs
 from neupy.layers.graph import LayerGraph
 from neupy.algorithms.base import BaseNetwork
-from neupy.utils import asfloat, tf_utils
+from neupy.utils import asfloat, tf_utils, extend_error_message_if_fails
 
 
 __all__ = (
@@ -51,8 +51,7 @@ def extract_network(instance):
 
 def load_layer_parameter(layer, layer_data):
     """
-    Set layer parameters to the values specified in the
-    stored data
+    Set layer parameters to the values specified in the stored data
     """
     session = tf_utils.tensorflow_session()
 
@@ -65,7 +64,12 @@ def load_layer_parameter(layer, layer_data):
                 "instance of the tf.Variable, but current value equal to {}. "
                 "Layer: {}".format(param_name, layer.name, parameter, layer))
 
-        parameter.load(asfloat(param_data['value']), session)
+        error_message = (
+            "Exception occured while updating parameter `{param_name}` in the `{layer.name}` layer. "
+            "Layer: {layer!r}".format(param_name=param_name, layer=layer)
+        )
+        with extend_error_message_if_fails(error_message):
+            parameter.load(asfloat(param_data['value']), session)
 
 
 def load_dict_by_names(layers_conn, layers_data, ignore_missing=False):
@@ -75,7 +79,7 @@ def load_dict_by_names(layers_conn, layers_data, ignore_missing=False):
     Raises
     ------
     ParameterLoaderError
-        In case if it's impossible to load parameters from data
+        In case if it's impossible to load parameters from data.
 
     Returns
     -------

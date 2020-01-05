@@ -13,13 +13,10 @@ import tensorflow as tf
 
 from neupy.core.config import ConfigurableABC, DumpableObject
 from neupy.exceptions import LayerConnectionError
-from neupy.utils import as_tuple, tf_utils, iters
+from neupy.utils import as_tuple, tf_utils, iters, extend_error_message_if_fails
 
 
-__all__ = (
-    'BaseGraph', 'LayerGraph',
-    'join', 'parallel', 'merge', 'repeat',
-)
+__all__ = ('BaseGraph', 'LayerGraph', 'join', 'parallel', 'merge', 'repeat')
 
 
 def make_one_if_possible(shape):
@@ -452,22 +449,12 @@ class LayerGraph(BaseGraph):
     def pass_through_the_layer(self, layer, method, *args, **kwargs):
         layer_method = getattr(layer, method)
 
-        try:
+        error_message = (
+            "Exception occurred while propagating data through the method `{method}`. "
+            "Layer: {layer!r}".format(method=method, layer=layer)
+        )
+        with extend_error_message_if_fails(error_message):
             return layer_method(*args, **kwargs)
-        except Exception as exception:
-            modified_exception = exception.__class__(
-                "{original_message}. Exception occurred while propagating "
-                "data through the method `{method}`. Layer: {layer!r}".format(
-                    original_message=str(exception).strip('.'),
-                    method=method, layer=layer
-                )
-            )
-
-            if hasattr(sys, 'last_traceback') and six.PY3:
-                modified_exception = modified_exception.with_traceback(
-                    sys.last_traceback)
-
-            raise modified_exception
 
     def propagate_forward(self, inputs, method, **kwargs):
         backward_graph = self.backward_graph

@@ -135,7 +135,7 @@ class GaussianNoise(Identity):
         if not training:
             return input_value
 
-        noise = tf.random_normal(
+        noise = tf.random.normal(
             shape=tf.shape(input_value),
             mean=self.mean,
             stddev=self.std)

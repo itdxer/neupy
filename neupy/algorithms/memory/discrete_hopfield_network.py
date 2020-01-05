@@ -2,7 +2,6 @@ import math
 import random
 
 import numpy as np
-from numpy.core.umath_tests import inner1d
 
 from neupy.utils import format_data
 from neupy.core.properties import Property
@@ -17,7 +16,7 @@ def bin2sign(matrix):
 
 
 def hopfield_energy(weight, X, output_data):
-    return -0.5 * inner1d(X.dot(weight), output_data)
+    return -0.5 * np.inner(X.dot(weight), output_data)
 
 
 class DiscreteHopfieldNetwork(DiscreteMemory):
