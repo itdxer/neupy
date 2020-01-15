@@ -94,12 +94,12 @@ class GaussianNoise(Identity):
 
     Parameters
     ----------
+    mean : float
+        Mean of the gaussian noise. Defaults to ``0``.
+
     std : float
         Standard deviation of the gaussian noise. Values needs to
         be greater than zero. Defaults to ``1``.
-
-    mean : float
-        Mean of the gaussian noise. Defaults to ``0``.
 
     {Identity.name}
 
@@ -126,7 +126,7 @@ class GaussianNoise(Identity):
     mean = NumberProperty()
     std = NumberProperty(minval=0)
 
-    def __init__(self, mean=1, std=0, name=None):
+    def __init__(self, mean=0, std=1, name=None):
         super(GaussianNoise, self).__init__(name=name)
         self.mean = mean
         self.std = std
@@ -135,11 +135,7 @@ class GaussianNoise(Identity):
         if not training:
             return input_value
 
-        noise = tf.random.normal(
-            shape=tf.shape(input_value),
-            mean=self.mean,
-            stddev=self.std)
-
+        noise = tf.random.normal(shape=tf.shape(input_value), mean=self.mean, stddev=self.std)
         return input_value + noise
 
 

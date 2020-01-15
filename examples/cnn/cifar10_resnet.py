@@ -5,7 +5,7 @@ from sklearn import metrics
 from sklearn.preprocessing import OneHotEncoder
 
 from neupy.layers import *
-from neupy import algorithms
+from neupy import algorithms, storage
 from neupy.architectures.resnet import ResidualBlock
 from neupy.utils import asfloat, function_name_scope
 from load_cifar10 import read_cifar10
@@ -44,8 +44,6 @@ def ResidualUnit(n_filters, stride=1, has_branch=False, name=''):
         # For the output from two branches we just combine results  with simple elementwise sum operation.
         # The main purpose of the residual connection is to build shortcuts for the gradient during backpropagation.
         (main_branch | residual_branch) >> Elementwise('add', name='add-residual' + name),
-        # Division helps to reduce variance introduced by the residual connection
-        # Apply(lambda x: x / math.sqrt(2), name='scale'),
         Relu(),
     )
 
@@ -69,19 +67,24 @@ if __name__ == '__main__':
     x_test -= mean
 
     y_train, y_test = one_hot_encoder(y_train, y_test)
+    network = join(
+        Input((32, 32, 3)),
 
-    network = algorithms.Adam(
-        [
-            Input((32, 32, 3)),
+        ResidualBlock(16, n_units=3, stride=1, name_prefix='1'),
+        ResidualBlock(32, n_units=3, stride=2, name_prefix='2'),
+        ResidualBlock(64, n_units=3, stride=2, name_prefix='3'),
 
-            ResidualBlock(16, n_units=3, stride=1, name_prefix='1'),
-            ResidualBlock(32, n_units=3, stride=2, name_prefix='2'),
-            ResidualBlock(64, n_units=3, stride=2, name_prefix='3'),
-
-            GlobalPooling('avg'),
-            Softmax(10),
-        ],
-
+        GlobalPooling('avg'),
+        Softmax(10, name="softmax"),
+    )
+    optimizer = algorithms.Adam(
+        network,
+        regularizer=algorithms.l2(
+            decay_rate=1e-4,
+            include={Convolution: "weight"},
+            verbose=True,
+        ),
+        step=0.001,
         # step=algorithms.step_decay(
         #     initial_value=0.001,
         #     # Parameter controls step redution frequency. The larger
@@ -90,20 +93,20 @@ if __name__ == '__main__':
         #     # data we have 500 mini-batches.
         #     reduction_freq=5 * 500,
         # ),
-        regularizer=algorithms.l2(0.0001),
-
-        loss='categorical_crossentropy',
         batch_size=32,
+        loss='categorical_crossentropy',
         shuffle_data=True,
         verbose=True,
     )
+    storage.save_pickle(network, "models/model.pickle")
 
-    for _ in range(30):
-        network.train(x_train, y_train, epochs=1)
-        y_predict = network.predict(x_test)
+    for epoch in range(30):
+        optimizer.train(x_train, y_train, batch_size=32, epochs=1)
+        storage.save_pickle(network, "models/model-{:0>2}.pickle".format(epoch))
+        y_predict = optimizer.predict(x_test)
         print('test mean:', np.mean(y_predict.argmax(axis=1) == y_test.argmax(axis=1)))
 
-    y_predicted = network.predict(x_test).argmax(axis=1)
+    y_predicted = optimizer.predict(x_test).argmax(axis=1)
     y_test_labels = np.asarray(y_test.argmax(axis=1)).reshape(len(y_test))
 
     print(metrics.classification_report(y_test_labels, y_predicted))

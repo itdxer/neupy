@@ -19,14 +19,14 @@ class Adam(GradientDescent):
     ----------
     beta1 : float
         Decay rate. Value need to be between ``0`` and ``1``.
-        Defaults to ``0.95``.
+        Defaults to ``0.9``.
 
     beta2 : float
         Decay rate. Value need to be between ``0`` and ``1``.
-        Defaults to ``0.95``.
+        Defaults to ``0.999``.
 
     epsilon : float
-        Value need to be greater than ``0``. Defaults to ``1e-5``.
+        Value need to be greater than ``0``. Defaults to ``1e-7``.
 
     step : float
         Learning rate, defaults to ``0.001``.

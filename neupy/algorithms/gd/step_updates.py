@@ -7,16 +7,8 @@ __all__ = ('step_decay', 'exponential_decay', 'polynomial_decay')
 
 
 def init_variables(initial_value, iteration=0, name='step'):
-    iteration = tf.Variable(
-        asfloat(iteration),
-        dtype=tf.float32,
-        name='iteration',
-    )
-    step = tf.Variable(
-        asfloat(initial_value),
-        dtype=tf.float32,
-        name=name,
-    )
+    iteration = tf.Variable(asfloat(iteration), dtype=tf.float32, name='iteration')
+    step = tf.Variable(asfloat(initial_value), dtype=tf.float32, name=name)
     return step, iteration
 
 

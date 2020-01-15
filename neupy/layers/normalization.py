@@ -33,14 +33,14 @@ class BatchNorm(Identity):
     epsilon : float
         Epsilon is a positive constant that adds to the standard
         deviation to prevent the division by zero.
-        Defaults to ``1e-5``.
+        Defaults to ``1e-3``.
 
     alpha : float
         Coefficient for the exponential moving average of
         batch-wise means and standard deviations computed during
         training; the closer to one, the more it will depend on
         the last batches seen. Value needs to be between ``0`` and ``1``.
-        Defaults to ``0.1``.
+        Defaults to ``0.01``.
 
     gamma : array-like, Tensorfow variable, scalar or Initializer
         Scale. Default initialization methods you can
@@ -123,7 +123,7 @@ class BatchNorm(Identity):
     running_mean = ParameterProperty()
     running_inv_std = ParameterProperty()
 
-    def __init__(self, axes=None, alpha=0.1, beta=0, gamma=1, epsilon=1e-5,
+    def __init__(self, axes=None, alpha=0.01, beta=0, gamma=1, epsilon=1e-3,
                  running_mean=0, running_inv_std=1, name=None):
 
         super(BatchNorm, self).__init__(name=name)
@@ -157,8 +157,7 @@ class BatchNorm(Identity):
         if any(axis >= input_shape.ndims for axis in self.axes):
             raise LayerConnectionError(
                 "Batch normalization cannot be applied over one of "
-                "the axis, because input has only {} dimensions. Layer: {}"
-                "".format(input_shape.ndims, self))
+                "the axis, because input has only {} dimensions. Layer: {}".format(input_shape.ndims, self))
 
         parameter_shape = tuple([
             input_shape[axis].value if axis not in self.axes else 1
@@ -171,8 +170,7 @@ class BatchNorm(Identity):
             raise WeightInitializationError(
                 "Cannot create variables for batch normalization, because "
                 "input has unknown dimension #{} (0-based indices). "
-                "Input shape: {}, Layer: {}".format(
-                    unknown_dim_index, input_shape, self))
+                "Input shape: {}, Layer: {}".format(unknown_dim_index, input_shape, self))
 
         self.input_shape = input_shape
         self.running_mean = self.variable(
@@ -183,13 +181,8 @@ class BatchNorm(Identity):
             value=self.running_inv_std, shape=parameter_shape,
             name='running_inv_std', trainable=False)
 
-        self.gamma = self.variable(
-            value=self.gamma, name='gamma',
-            shape=parameter_shape)
-
-        self.beta = self.variable(
-            value=self.beta, name='beta',
-            shape=parameter_shape)
+        self.gamma = self.variable(value=self.gamma, name='gamma', shape=parameter_shape)
+        self.beta = self.variable(value=self.beta, name='beta', shape=parameter_shape)
 
     def output(self, input, training=False):
         input = tf.convert_to_tensor(input, dtype=tf.float32)
@@ -199,10 +192,7 @@ class BatchNorm(Identity):
             inv_std = self.running_inv_std
         else:
             alpha = asfloat(self.alpha)
-            mean = tf.reduce_mean(
-                input, self.axes,
-                keepdims=True, name="mean",
-            )
+            mean = tf.reduce_mean(input, self.axes, keepdims=True, name="mean")
             variance = tf.reduce_mean(
                 tf.squared_difference(input, tf.stop_gradient(mean)),
                 self.axes,
@@ -213,15 +203,11 @@ class BatchNorm(Identity):
 
             tf.add_to_collection(
                 tf.GraphKeys.UPDATE_OPS,
-                self.running_inv_std.assign(
-                    asfloat(1 - alpha) * self.running_inv_std + alpha * inv_std
-                )
+                self.running_inv_std.assign(asfloat(1 - alpha) * self.running_inv_std + alpha * inv_std),
             )
             tf.add_to_collection(
                 tf.GraphKeys.UPDATE_OPS,
-                self.running_mean.assign(
-                    asfloat(1 - alpha) * self.running_mean + alpha * mean
-                )
+                self.running_mean.assign(asfloat(1 - alpha) * self.running_mean + alpha * mean),
             )
 
         normalized_value = (input - mean) * inv_std
@@ -303,7 +289,8 @@ class LocalResponseNorm(Identity):
             depth_radius=self.depth_radius,
             bias=self.k,
             alpha=self.alpha,
-            beta=self.beta)
+            beta=self.beta,
+        )
 
 
 class GroupNorm(Identity):
@@ -384,13 +371,8 @@ class GroupNorm(Identity):
 
         parameter_shape = (1, 1, 1, n_channels)
 
-        self.gamma = self.variable(
-            value=self.gamma, name='gamma',
-            shape=parameter_shape)
-
-        self.beta = self.variable(
-            value=self.beta, name='beta',
-            shape=parameter_shape)
+        self.gamma = self.variable(value=self.gamma, name='gamma', shape=parameter_shape)
+        self.beta = self.variable(value=self.beta, name='beta', shape=parameter_shape)
 
     def get_output_shape(self, input_shape):
         input_shape = tf.TensorShape(input_shape)
@@ -423,9 +405,7 @@ class GroupNorm(Identity):
         dims = [input_shape[i] for i in range(4)]
         n_samples, height, width, n_channels = dims
 
-        input = tf.reshape(input, [
-            n_samples, height, width, n_groups, n_channels // n_groups])
-
+        input = tf.reshape(input, [n_samples, height, width, n_groups, n_channels // n_groups])
         mean, variance = tf.nn.moments(input, [1, 2, 4], keep_dims=True)
         input = (input - mean) / tf.sqrt(variance + self.epsilon)
         input = tf.reshape(input, input_shape)

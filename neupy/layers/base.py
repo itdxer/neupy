@@ -154,9 +154,7 @@ class BaseLayer(BaseGraph):
             layer_name=self.name,
             parameter_name=name.replace('_', '-'))
 
-        self.variables[name] = tf_utils.create_variable(
-            value, layer_name, shape, trainable)
-
+        self.variables[name] = tf_utils.create_variable(value, layer_name, shape, trainable)
         return self.variables[name]
 
     def _repr_arguments(self, *args, **kwargs):
