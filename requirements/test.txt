@@ -1,6 +1,6 @@
 scikit-learn>=0.18.0
 pandas>=0.23.0
-Pillow==3.0.0
+Pillow==9.0.0
 
 -r main.txt
 
