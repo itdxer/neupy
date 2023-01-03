@@ -13,6 +13,9 @@
 .. _Coverage: https://codecov.io/gh/itdxer/neupy
 
 
+ \:warning: **The library is no longer being actively maintained, please consider this before using it for your project** :warning:
+
+
 .. raw:: html
 
     <div align="center">
