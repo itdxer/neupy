@@ -1,7 +1,7 @@
 # Main
 # Install numpy, scipy, tensorflow from conda
 matplotlib==1.5.1
-Pillow==3.0.0
+Pillow==9.3.0
 graphviz==0.5.1
 
 progressbar2==3.34.3
